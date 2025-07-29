@@ -16,7 +16,7 @@ export function TradeForm({ trade, onSave, onCancel, onDelete }: TradeFormProps)
     accountType: 'NISA' as AccountType,
     stockName: '手動入力',
     stockCode: '',
-    tradeType: '現物売' as TradeType,
+    tradeType: '現物買' as TradeType,
     quantity: '1',
     unitPrice: '1',
     amount: '1',
@@ -68,11 +68,11 @@ export function TradeForm({ trade, onSave, onCancel, onDelete }: TradeFormProps)
     }
 
     // 任意項目のバリデーション（入力がある場合のみ）
-    if (formData.quantity && (isNaN(Number(formData.quantity)) || Number(formData.quantity) <= 0)) {
-      newErrors.quantity = '正の数値を入力してください';
+    if (formData.quantity && (isNaN(Number(formData.quantity)) || Number(formData.quantity) < 0)) {
+      newErrors.quantity = '0以上の数値を入力してください';
     }
-    if (formData.unitPrice && (isNaN(Number(formData.unitPrice)) || Number(formData.unitPrice) <= 0)) {
-      newErrors.unitPrice = '正の数値を入力してください';
+    if (formData.unitPrice && (isNaN(Number(formData.unitPrice)) || Number(formData.unitPrice) < 0)) {
+      newErrors.unitPrice = '0以上の数値を入力してください';
     }
     if (formData.amount && isNaN(Number(formData.amount))) {
       newErrors.amount = '数値を入力してください';
@@ -196,6 +196,7 @@ export function TradeForm({ trade, onSave, onCancel, onDelete }: TradeFormProps)
             </select>
           </div>
 
+
           <div className="form-group">
             <label htmlFor="quantity">数量</label>
             <input
@@ -204,7 +205,7 @@ export function TradeForm({ trade, onSave, onCancel, onDelete }: TradeFormProps)
               name="quantity"
               value={formData.quantity}
               onChange={handleInputChange}
-              min="1"
+              min="0"
               step="1"
               className={errors.quantity ? 'error' : ''}
             />
@@ -220,7 +221,7 @@ export function TradeForm({ trade, onSave, onCancel, onDelete }: TradeFormProps)
               value={formData.unitPrice}
               onChange={handleInputChange}
               min="0"
-              step="0.01"
+              step="1"
               className={errors.unitPrice ? 'error' : ''}
             />
             {errors.unitPrice && <span className="error-message">{errors.unitPrice}</span>}
@@ -234,7 +235,7 @@ export function TradeForm({ trade, onSave, onCancel, onDelete }: TradeFormProps)
               name="amount"
               value={formData.amount}
               onChange={handleInputChange}
-              step="0.01"
+              step="1"
               className={errors.amount ? 'error' : ''}
             />
             {errors.amount && <span className="error-message">{errors.amount}</span>}
@@ -248,7 +249,7 @@ export function TradeForm({ trade, onSave, onCancel, onDelete }: TradeFormProps)
               name="averageAcquisitionPrice"
               value={formData.averageAcquisitionPrice}
               onChange={handleInputChange}
-              step="0.01"
+              step="1"
               className={errors.averageAcquisitionPrice ? 'error' : ''}
             />
             {errors.averageAcquisitionPrice && <span className="error-message">{errors.averageAcquisitionPrice}</span>}
@@ -262,7 +263,7 @@ export function TradeForm({ trade, onSave, onCancel, onDelete }: TradeFormProps)
               name="realizedProfitLoss"
               value={formData.realizedProfitLoss}
               onChange={handleInputChange}
-              step="0.01"
+              step="1"
               className={errors.realizedProfitLoss ? 'error' : ''}
             />
             {errors.realizedProfitLoss && <span className="error-message">{errors.realizedProfitLoss}</span>}

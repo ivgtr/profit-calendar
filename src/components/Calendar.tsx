@@ -11,8 +11,14 @@ interface CalendarProps {
 
 export function Calendar({ onDateSelect, onMonthChange, monthlyTrades = new Map(), isLoading = false }: CalendarProps) {
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
 
+
+  // 初期化時に今日の日付を選択
+  useEffect(() => {
+    const today = new Date();
+    onDateSelect?.(today);
+  }, [onDateSelect]);
 
   // 月が変更された時の通知
   useEffect(() => {
@@ -56,7 +62,11 @@ export function Calendar({ onDateSelect, onMonthChange, monthlyTrades = new Map(
   };
 
   const handleToday = () => {
-    setCurrentDate(new Date());
+    const today = new Date();
+    setCurrentDate(today);
+    setSelectedDate(today);
+    onMonthChange?.(today);
+    onDateSelect?.(today);
   };
 
   const formatCurrency = (amount: number) => {

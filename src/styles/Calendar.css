@@ -178,4 +178,8 @@
   .day-summary {
     font-size: 0.7rem;
   }
+
+  .trade-count {
+    display: none;
+  }
 }
