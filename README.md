@@ -4,9 +4,7 @@
 
 ## 🔗 デモ
 
-**Live Demo**: [https://username.github.io/profit-calendar/](https://username.github.io/profit-calendar/)
-
-> **注意**: 実際のGitHubユーザー名に置き換えてください
+**Live Demo**: [https://ivgtr.github.io/profit-calendar/](https://ivgtr.github.io/profit-calendar/)
 
 ## 🚀 特徴
 
@@ -45,7 +43,7 @@
 
 ```bash
 # リポジトリをクローン
-git clone https://github.com/your-username/profit-calendar.git
+git clone https://github.com/ivgtr/profit-calendar.git
 cd profit-calendar
 
 # 依存関係をインストール
