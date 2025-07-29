@@ -618,3 +618,6 @@ class Database {
 
 // シングルトンインスタンス
 export const db = new Database();
+
+// Database クラスもエクスポート
+export { Database };

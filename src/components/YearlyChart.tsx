@@ -10,7 +10,7 @@ import {
   ChartOptions,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
-import { DatabaseService } from '../services/database';
+import { Database } from '../services/database';
 import '../styles/YearlyChart.css';
 
 // Chart.jsのコンポーネントを登録
@@ -24,7 +24,7 @@ ChartJS.register(
 );
 
 interface YearlyChartProps {
-  databaseService: DatabaseService;
+  databaseService: Database;
   isDbReady: boolean;
 }
 
@@ -53,7 +53,7 @@ export function YearlyChart({ databaseService, isDbReady }: YearlyChartProps) {
       if (periodType === '12months') {
         // 月別データ
         const monthlyData = await databaseService.getYearlyMonthlyProfits(currentYear);
-        const items: ChartDataItem[] = monthlyData.map(d => ({
+        const items: ChartDataItem[] = monthlyData.map((d: any) => ({
           label: `${d.month}月`,
           totalProfit: d.totalProfit,
           spotProfit: d.spotProfit,
@@ -65,7 +65,7 @@ export function YearlyChart({ databaseService, isDbReady }: YearlyChartProps) {
         // 日別データ
         const days = periodType === '7days' ? 7 : 30;
         const dailyData = await databaseService.getDailyProfits(days);
-        const items: ChartDataItem[] = dailyData.map(d => ({
+        const items: ChartDataItem[] = dailyData.map((d: any) => ({
           label: `${d.date.getMonth() + 1}/${d.date.getDate()}`,
           totalProfit: d.totalProfit,
           spotProfit: d.spotProfit,
@@ -135,7 +135,9 @@ export function YearlyChart({ databaseService, isDbReady }: YearlyChartProps) {
         beginAtZero: true,
         grid: {
           color: 'rgba(255, 255, 255, 0.1)',
-          drawBorder: false,
+        },
+        border: {
+          display: false,
         },
         ticks: {
           display: false,
@@ -144,7 +146,9 @@ export function YearlyChart({ databaseService, isDbReady }: YearlyChartProps) {
       x: {
         grid: {
           display: false,
-          drawBorder: false,
+        },
+        border: {
+          display: false,
         },
         ticks: {
           color: '#999',
