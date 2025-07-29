@@ -101,12 +101,13 @@
 }
 
 .save-button {  
-  background-color: #28a745;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
 }
 
 .save-button:hover {
-  background-color: #218838;
+  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+  transform: translateY(-1px);
 }
 
 .save-button:disabled {

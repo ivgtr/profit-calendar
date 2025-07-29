@@ -36,8 +36,8 @@
 
 .nav-button {
   background: #ffffff;
-  color: #333;
-  border: 2px solid #333;
+  color: #667eea;
+  border: 2px solid #667eea;
   border-radius: 50%;
   width: 45px;
   height: 45px;
@@ -48,19 +48,19 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.15);
 }
 
 .nav-button:hover {
-  background: #333;
+  background: #667eea;
   color: white;
   transform: translateY(-2px) scale(1.05);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.25);
 }
 
 .nav-button:active {
   transform: translateY(0) scale(0.95);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 5px rgba(102, 126, 234, 0.2);
 }
 
 .no-data {

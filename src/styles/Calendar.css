@@ -21,8 +21,8 @@
 
 .nav-button {
   background: #ffffff;
-  color: #333;
-  border: 2px solid #333;
+  color: #667eea;
+  border: 2px solid #667eea;
   border-radius: 8px;
   width: 40px;
   height: 40px;
@@ -33,38 +33,38 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.15);
 }
 
 .nav-button:hover {
-  background: #333;
+  background: #667eea;
   color: white;
   transform: translateY(-2px) scale(1.05);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.25);
 }
 
 .nav-button:active {
   transform: translateY(0) scale(0.95);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 5px rgba(102, 126, 234, 0.2);
 }
 
 .today-button {
   padding: 8px 16px;
-  border: 2px solid #0066cc;
+  border: 2px solid #764ba2;
   background: white;
-  color: #0066cc;
+  color: #764ba2;
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
   font-weight: 600;
-  box-shadow: 0 2px 8px rgba(0, 102, 204, 0.15);
+  box-shadow: 0 2px 8px rgba(118, 75, 162, 0.15);
 }
 
 .today-button:hover {
-  background: #0066cc;
+  background: #764ba2;
   color: white;
   transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(0, 102, 204, 0.25);
+  box-shadow: 0 4px 15px rgba(118, 75, 162, 0.25);
 }
 
 .calendar-grid {
