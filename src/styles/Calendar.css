@@ -19,19 +19,52 @@
   font-size: 1.5rem;
 }
 
-.nav-button,
-.today-button {
-  padding: 8px 16px;
-  border: 1px solid #ddd;
-  background: white;
-  border-radius: 4px;
+.nav-button {
+  background: #ffffff;
+  color: #333;
+  border: 2px solid #333;
+  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  font-size: 1.1rem;
+  font-weight: bold;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
-.nav-button:hover,
+.nav-button:hover {
+  background: #333;
+  color: white;
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+}
+
+.nav-button:active {
+  transform: translateY(0) scale(0.95);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.today-button {
+  padding: 8px 16px;
+  border: 2px solid #0066cc;
+  background: white;
+  color: #0066cc;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(0, 102, 204, 0.15);
+}
+
 .today-button:hover {
-  background: #f5f5f5;
+  background: #0066cc;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 102, 204, 0.25);
 }
 
 .calendar-grid {
@@ -119,6 +152,21 @@
 @media (max-width: 768px) {
   .calendar {
     padding: 10px;
+  }
+
+  .calendar-header {
+    gap: 15px;
+  }
+
+  .nav-button {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+  }
+
+  .today-button {
+    padding: 6px 12px;
+    font-size: 0.9rem;
   }
 
   .calendar-day {
