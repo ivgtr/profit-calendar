@@ -7,13 +7,14 @@ interface HeaderProps {
   onOpenTradeFormModal: () => void;
   onOpenBulkDeleteModal: () => void;
   onOpenMonthlyReportModal: () => void;
+  onOpenYearlyChartModal: () => void;
   onOpenUserGuideModal: () => void;
   onOpenTermsModal: () => void;
   onOpenPrivacyModal: () => void;
   onOpenDisclaimerModal: () => void;
 }
 
-export function Header({ onOpenImportModal, onOpenHistoryModal, onOpenTradeFormModal, onOpenBulkDeleteModal, onOpenMonthlyReportModal, onOpenUserGuideModal, onOpenTermsModal, onOpenPrivacyModal, onOpenDisclaimerModal }: HeaderProps) {
+export function Header({ onOpenImportModal, onOpenHistoryModal, onOpenTradeFormModal, onOpenBulkDeleteModal, onOpenMonthlyReportModal, onOpenYearlyChartModal, onOpenUserGuideModal, onOpenTermsModal, onOpenPrivacyModal, onOpenDisclaimerModal }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -73,6 +74,14 @@ export function Header({ onOpenImportModal, onOpenHistoryModal, onOpenTradeFormM
                 >
                   <span className="menu-icon">📊</span>
                   月別レポート
+                </button>
+                
+                <button 
+                  className="menu-item"
+                  onClick={() => handleMenuItemClick(onOpenYearlyChartModal)}
+                >
+                  <span className="menu-icon">📈</span>
+                  年間推移グラフ
                 </button>
                 
                 <hr className="menu-divider" />

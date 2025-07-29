@@ -8,6 +8,7 @@ import { TradeForm } from './components/TradeForm';
 import { BulkDeleteTrades } from './components/BulkDeleteTrades';
 import { MonthlyProfit } from './components/MonthlyProfit';
 import { MonthlyReport } from './components/MonthlyReport';
+import { YearlyChart } from './components/YearlyChart';
 import { TermsOfService } from './components/TermsOfService';
 import { PrivacyPolicy } from './components/PrivacyPolicy';
 import { Disclaimer } from './components/Disclaimer';
@@ -37,6 +38,7 @@ function App() {
   const [isTradeFormModalOpen, setIsTradeFormModalOpen] = useState(false);
   const [isBulkDeleteModalOpen, setIsBulkDeleteModalOpen] = useState(false);
   const [isMonthlyReportModalOpen, setIsMonthlyReportModalOpen] = useState(false);
+  const [isYearlyChartModalOpen, setIsYearlyChartModalOpen] = useState(false);
   const [isUserGuideModalOpen, setIsUserGuideModalOpen] = useState(false);
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
   const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
@@ -228,6 +230,7 @@ function App() {
         onOpenTradeFormModal={() => handleOpenTradeForm()}
         onOpenBulkDeleteModal={() => setIsBulkDeleteModalOpen(true)}
         onOpenMonthlyReportModal={() => setIsMonthlyReportModalOpen(true)}
+        onOpenYearlyChartModal={() => setIsYearlyChartModalOpen(true)}
         onOpenUserGuideModal={() => setIsUserGuideModalOpen(true)}
         onOpenTermsModal={() => setIsTermsModalOpen(true)}
         onOpenPrivacyModal={() => setIsPrivacyModalOpen(true)}
@@ -425,6 +428,19 @@ function App() {
         <MonthlyReport 
           currentMonth={currentMonth} 
           refreshTrigger={dataVersion} 
+          isDbReady={isDbReady} 
+        />
+      </Modal>
+
+      {/* 年間推移グラフモーダル */}
+      <Modal
+        isOpen={isYearlyChartModalOpen}
+        onClose={() => setIsYearlyChartModalOpen(false)}
+        title=""
+        size="large"
+      >
+        <YearlyChart 
+          databaseService={db} 
           isDbReady={isDbReady} 
         />
       </Modal>

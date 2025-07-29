@@ -1,0 +1,244 @@
+.yearly-chart-container {
+  background: #1a1a1a;
+  color: #ffffff;
+  border-radius: 16px;
+  padding: 24px;
+  min-height: 500px;
+}
+
+.chart-header-section {
+  margin-bottom: 20px;
+}
+
+.chart-title {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.chart-title h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.period-label {
+  color: #999;
+  font-size: 0.9rem;
+}
+
+.period-selector {
+  display: flex;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 4px;
+  border-radius: 12px;
+}
+
+.period-button {
+  flex: 1;
+  padding: 8px 16px;
+  border: none;
+  background: transparent;
+  color: #999;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.period-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.period-button.active {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.chart-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.profit-summary {
+  text-align: left;
+}
+
+.profit-label {
+  color: #999;
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+}
+
+.profit-amount {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.profit-amount.positive {
+  color: #3490dc;
+}
+
+.profit-amount.negative {
+  color: #ef4444;
+}
+
+.chart-wrapper {
+  height: 200px;
+  margin: 20px 0;
+}
+
+.investment-summary {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.summary-label {
+  color: #999;
+  font-size: 0.95rem;
+}
+
+.summary-value {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.summary-value.positive {
+  color: #3490dc;
+}
+
+.summary-value.negative {
+  color: #ef4444;
+}
+
+.summary-bars {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bar-wrapper {
+  width: 100%;
+  height: 24px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.bar {
+  height: 100%;
+  border-radius: 12px;
+  transition: width 0.5s ease;
+}
+
+.investment-bar {
+  background: #ef4444;
+}
+
+.return-bar {
+  background: #3490dc;
+}
+
+.year-navigation {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.year-nav-button {
+  padding: 8px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: transparent;
+  color: #999;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.year-nav-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: #666;
+}
+
+.no-data {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  .yearly-chart-container {
+    padding: 16px;
+  }
+
+  .chart-title h2 {
+    font-size: 1.3rem;
+  }
+
+  .period-selector {
+    flex-wrap: wrap;
+  }
+
+  .period-button {
+    font-size: 0.8rem;
+    padding: 6px 12px;
+  }
+
+  .profit-amount {
+    font-size: 1.5rem;
+  }
+
+  .chart-wrapper {
+    height: 160px;
+  }
+
+  .investment-summary {
+    padding: 16px;
+  }
+
+  .summary-value {
+    font-size: 1rem;
+  }
+
+  .year-navigation {
+    gap: 12px;
+  }
+
+  .year-nav-button {
+    font-size: 0.8rem;
+    padding: 6px 12px;
+  }
+}

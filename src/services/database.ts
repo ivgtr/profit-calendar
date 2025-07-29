@@ -178,6 +178,143 @@ class Database {
     return this.getTradesByDateRange(startOfDay, endOfDay);
   }
 
+  // 年間の月別収益データを取得
+  async getYearlyMonthlyProfits(year: number): Promise<{
+    month: number;
+    totalProfit: number;
+    spotProfit: number;
+    marginProfit: number;
+    tradeCount: number;
+  }[]> {
+    if (!this.db) {
+      throw new Error('データベースが初期化されていません');
+    }
+
+    const results: {
+      month: number;
+      totalProfit: number;
+      spotProfit: number;
+      marginProfit: number;
+      tradeCount: number;
+    }[] = [];
+
+    // 1月から12月まで順番に処理
+    for (let month = 1; month <= 12; month++) {
+      const startDate = new Date(year, month - 1, 1);
+      const endDate = new Date(year, month, 0, 23, 59, 59, 999);
+
+      const transaction = this.db.transaction(['trades'], 'readonly');
+      const store = transaction.objectStore('trades');
+      const index = store.index('date');
+      const range = IDBKeyRange.bound(startDate, endDate);
+
+      const trades = await new Promise<Trade[]>((resolve, reject) => {
+        const trades: Trade[] = [];
+        const request = index.openCursor(range);
+
+        request.onsuccess = (event) => {
+          const cursor = (event.target as IDBRequest).result;
+          if (cursor) {
+            trades.push(cursor.value);
+            cursor.continue();
+          } else {
+            resolve(trades);
+          }
+        };
+
+        request.onerror = () => reject(new Error('取引の取得に失敗しました'));
+      });
+
+      // 月別収益を計算
+      let spotProfit = 0;
+      let marginProfit = 0;
+      let tradeCount = 0;
+
+      trades.forEach(trade => {
+        if (['売却', '現物売'].includes(trade.tradeType)) {
+          spotProfit += trade.realizedProfitLoss;
+          tradeCount++;
+        } else if (['返済売', '返済買'].includes(trade.tradeType)) {
+          marginProfit += trade.realizedProfitLoss;
+          tradeCount++;
+        }
+      });
+
+      results.push({
+        month,
+        totalProfit: spotProfit + marginProfit,
+        spotProfit,
+        marginProfit,
+        tradeCount
+      });
+    }
+
+    return results;
+  }
+
+  // 日別収益データを取得
+  async getDailyProfits(days: number): Promise<{
+    date: Date;
+    totalProfit: number;
+    spotProfit: number;
+    marginProfit: number;
+    tradeCount: number;
+  }[]> {
+    if (!this.db) {
+      throw new Error('データベースが初期化されていません');
+    }
+
+    const endDate = new Date();
+    endDate.setHours(23, 59, 59, 999);
+    
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - days + 1);
+    startDate.setHours(0, 0, 0, 0);
+
+    const trades = await this.getTradesByDateRange(startDate, endDate);
+    
+    // 日付ごとに集計
+    const dailyMap = new Map<string, {
+      date: Date;
+      totalProfit: number;
+      spotProfit: number;
+      marginProfit: number;
+      tradeCount: number;
+    }>();
+
+    // 全ての日付を初期化
+    for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+      const dateKey = d.toISOString().split('T')[0];
+      dailyMap.set(dateKey, {
+        date: new Date(d),
+        totalProfit: 0,
+        spotProfit: 0,
+        marginProfit: 0,
+        tradeCount: 0
+      });
+    }
+
+    // 取引データを集計
+    trades.forEach(trade => {
+      const dateKey = trade.date.toISOString().split('T')[0];
+      const dayData = dailyMap.get(dateKey);
+      
+      if (dayData) {
+        if (['売却', '現物売'].includes(trade.tradeType)) {
+          dayData.spotProfit += trade.realizedProfitLoss;
+          dayData.totalProfit += trade.realizedProfitLoss;
+          dayData.tradeCount++;
+        } else if (['返済売', '返済買'].includes(trade.tradeType)) {
+          dayData.marginProfit += trade.realizedProfitLoss;
+          dayData.totalProfit += trade.realizedProfitLoss;
+          dayData.tradeCount++;
+        }
+      }
+    });
+
+    return Array.from(dailyMap.values()).sort((a, b) => a.date.getTime() - b.date.getTime());
+  }
+
   // 全ての取引を取得
   async getAllTrades(): Promise<Trade[]> {
     const db = this.getDB();
