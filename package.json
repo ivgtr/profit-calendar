@@ -3,8 +3,8 @@
   "private": false,
   "version": "1.0.0",
   "type": "module",
-  "description": "デイトレーダー向けの取引収益管理カレンダーアプリ",
-  "keywords": ["trading", "calendar", "profit", "daytrader", "japanese", "react"],
+  "description": "取引収益管理カレンダーアプリ",
+  "keywords": ["trading", "calendar", "profit", "finance", "japanese", "react"],
   "author": "",
   "license": "MIT",
   "repository": {
