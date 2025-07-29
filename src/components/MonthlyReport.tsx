@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { db } from '../services/database';
 import { Trade } from '../types/Trade';
+import { Tooltip } from './Tooltip';
+import { TOOLTIPS } from '../constants/tooltips';
 import '../styles/MonthlyReport.css';
 
 interface MonthlyReportProps {
@@ -80,7 +82,6 @@ interface MonthlyStats {
     informationRatio: number;
     treynorRatio: number;
     maxConsecutiveLosses: number;
-    avgHoldingTime: number;
     profitabilityIndex: number;
     riskReturnRatio: number;
     consistencyIndex: number;
@@ -146,8 +147,20 @@ const calculateRiskAnalysis = (dailyProfits: number[]) => {
 
 
 const calculateStreakAnalysis = (trades: Trade[]) => {
-  const sortedTrades = [...trades].sort((a, b) => a.date.getTime() - b.date.getTime());
+  // 日別で損益を集約
+  const dailyProfits = new Map<string, number>();
   
+  trades.forEach(trade => {
+    const dateKey = trade.date.toISOString().split('T')[0];
+    const currentProfit = dailyProfits.get(dateKey) || 0;
+    dailyProfits.set(dateKey, currentProfit + trade.realizedProfitLoss);
+  });
+
+  // 日付順でソート
+  const sortedDays = Array.from(dailyProfits.entries())
+    .sort(([dateA], [dateB]) => dateA.localeCompare(dateB))
+    .map(([date, profit]) => ({ date, profit }));
+
   let currentStreak = 0;
   let currentStreakType: 'win' | 'loss' | 'none' = 'none';
   let longestWinStreak = 0;
@@ -157,8 +170,8 @@ const calculateStreakAnalysis = (trades: Trade[]) => {
   const winStreaks: number[] = [];
   const lossStreaks: number[] = [];
 
-  sortedTrades.forEach((trade, index) => {
-    const isWin = trade.realizedProfitLoss > 0;
+  sortedDays.forEach((day, index) => {
+    const isWin = day.profit > 0;
     
     if (isWin) {
       tempWinStreak++;
@@ -166,19 +179,29 @@ const calculateStreakAnalysis = (trades: Trade[]) => {
         lossStreaks.push(tempLossStreak);
         tempLossStreak = 0;
       }
-    } else {
+    } else if (day.profit < 0) {
       tempLossStreak++;
       if (tempWinStreak > 0) {
         winStreaks.push(tempWinStreak);
         tempWinStreak = 0;
+      }
+    } else {
+      // ブレイクイーブンの場合はストリークをリセット
+      if (tempWinStreak > 0) {
+        winStreaks.push(tempWinStreak);
+        tempWinStreak = 0;
+      }
+      if (tempLossStreak > 0) {
+        lossStreaks.push(tempLossStreak);
+        tempLossStreak = 0;
       }
     }
 
     longestWinStreak = Math.max(longestWinStreak, tempWinStreak);
     longestLossStreak = Math.max(longestLossStreak, tempLossStreak);
 
-    // 現在のストリーク（最後の取引から）
-    if (index === sortedTrades.length - 1) {
+    // 現在のストリーク（最新の日から）
+    if (index === sortedDays.length - 1) {
       if (tempWinStreak > 0) {
         currentStreak = tempWinStreak;
         currentStreakType = 'win';
@@ -188,6 +211,14 @@ const calculateStreakAnalysis = (trades: Trade[]) => {
       }
     }
   });
+
+  // 最後のストリークも配列に追加
+  if (tempWinStreak > 0 && !winStreaks.includes(tempWinStreak)) {
+    winStreaks.push(tempWinStreak);
+  }
+  if (tempLossStreak > 0 && !lossStreaks.includes(tempLossStreak)) {
+    lossStreaks.push(tempLossStreak);
+  }
 
   const avgWinStreak = winStreaks.length > 0 ? 
     winStreaks.reduce((sum, s) => sum + s, 0) / winStreaks.length : 0;
@@ -199,8 +230,8 @@ const calculateStreakAnalysis = (trades: Trade[]) => {
     currentStreakType,
     longestWinStreak,
     longestLossStreak,
-    avgWinStreak,
-    avgLossStreak
+    avgWinStreak: Math.round(avgWinStreak * 10) / 10,
+    avgLossStreak: Math.round(avgLossStreak * 10) / 10
   };
 };
 
@@ -319,8 +350,6 @@ const calculateAdvancedMetrics = (trades: Trade[], dailyProfits: number[]) => {
     }
   });
 
-  // 平均保有時間（仮想的な値 - 実際の実装では取引開始時刻が必要）
-  const avgHoldingTime = 2.5; // 時間単位
 
   // 収益性指数
   const totalProfit = trades.filter(t => t.realizedProfitLoss > 0)
@@ -339,7 +368,6 @@ const calculateAdvancedMetrics = (trades: Trade[], dailyProfits: number[]) => {
     informationRatio: 0, // ベンチマークが必要
     treynorRatio: 0, // ベータが必要
     maxConsecutiveLosses,
-    avgHoldingTime,
     profitabilityIndex,
     riskReturnRatio: totalLoss > 0 ? totalProfit / totalLoss : 0,
     consistencyIndex
@@ -702,30 +730,42 @@ export function MonthlyReport({ currentMonth, refreshTrigger, isDbReady }: Month
       <div className="stats-section">
         <h3>🎯 リスク分析</h3>
         <div className="stats-grid">
-          <div className="stat-card">
-            <div className="stat-label">最大ドローダウン</div>
-            <div className="stat-value loss">-{formatCurrency(stats.riskAnalysis.maxDrawdown)}円</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-label">DD率</div>
-            <div className="stat-value loss">{stats.riskAnalysis.maxDrawdownPercent.toFixed(1)}%</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-label">シャープレシオ</div>
-            <div className="stat-value">{stats.riskAnalysis.sharpeRatio.toFixed(3)}</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-label">VaR(95%)</div>
-            <div className="stat-value loss">{formatCurrency(stats.riskAnalysis.valueAtRisk95)}円</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-label">ボラティリティ</div>
-            <div className="stat-value">{formatCurrency(stats.riskAnalysis.volatility)}円</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-label">リカバリーファクター</div>
-            <div className="stat-value">{stats.riskAnalysis.recoveryFactor.toFixed(2)}</div>
-          </div>
+          <Tooltip content={TOOLTIPS.maxDrawdown}>
+            <div className="stat-card">
+              <div className="stat-label">最大ドローダウン</div>
+              <div className="stat-value loss">-{formatCurrency(stats.riskAnalysis.maxDrawdown)}円</div>
+            </div>
+          </Tooltip>
+          <Tooltip content={TOOLTIPS.maxDrawdownPercent}>
+            <div className="stat-card">
+              <div className="stat-label">DD率</div>
+              <div className="stat-value loss">{stats.riskAnalysis.maxDrawdownPercent.toFixed(1)}%</div>
+            </div>
+          </Tooltip>
+          <Tooltip content={TOOLTIPS.sharpeRatio}>
+            <div className="stat-card">
+              <div className="stat-label">シャープレシオ</div>
+              <div className="stat-value">{stats.riskAnalysis.sharpeRatio.toFixed(3)}</div>
+            </div>
+          </Tooltip>
+          <Tooltip content={TOOLTIPS.var95}>
+            <div className="stat-card">
+              <div className="stat-label">VaR(95%)</div>
+              <div className="stat-value loss">{formatCurrency(stats.riskAnalysis.valueAtRisk95)}円</div>
+            </div>
+          </Tooltip>
+          <Tooltip content={TOOLTIPS.volatility}>
+            <div className="stat-card">
+              <div className="stat-label">ボラティリティ</div>
+              <div className="stat-value">{formatCurrency(stats.riskAnalysis.volatility)}円</div>
+            </div>
+          </Tooltip>
+          <Tooltip content={TOOLTIPS.recoveryFactor}>
+            <div className="stat-card">
+              <div className="stat-label">リカバリーファクター</div>
+              <div className="stat-value">{stats.riskAnalysis.recoveryFactor.toFixed(2)}</div>
+            </div>
+          </Tooltip>
         </div>
       </div>
 
@@ -734,31 +774,41 @@ export function MonthlyReport({ currentMonth, refreshTrigger, isDbReady }: Month
       <div className="stats-section">
         <h3>🔥 ストリーク分析</h3>
         <div className="stats-grid">
-          <div className="stat-card highlight">
-            <div className="stat-label">現在のストリーク</div>
-            <div className={`stat-value ${stats.streakAnalysis.currentStreakType === 'win' ? 'profit' : stats.streakAnalysis.currentStreakType === 'loss' ? 'loss' : ''}`}>
-              {stats.streakAnalysis.currentStreak > 0 ? 
-                `${stats.streakAnalysis.currentStreakType === 'win' ? '連勝' : '連敗'} ${stats.streakAnalysis.currentStreak}回` : 
-                'なし'
-              }
+          <Tooltip content={TOOLTIPS.currentStreak}>
+            <div className="stat-card highlight">
+              <div className="stat-label">現在のストリーク</div>
+              <div className={`stat-value ${stats.streakAnalysis.currentStreakType === 'win' ? 'profit' : stats.streakAnalysis.currentStreakType === 'loss' ? 'loss' : ''}`}>
+                {stats.streakAnalysis.currentStreak > 0 ? 
+                  `${stats.streakAnalysis.currentStreakType === 'win' ? '連勝' : '連敗'} ${stats.streakAnalysis.currentStreak}日` : 
+                  'なし'
+                }
+              </div>
             </div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-label">最長連勝</div>
-            <div className="stat-value profit">{stats.streakAnalysis.longestWinStreak}回</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-label">最長連敗</div>
-            <div className="stat-value loss">{stats.streakAnalysis.longestLossStreak}回</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-label">平均連勝</div>
-            <div className="stat-value">{stats.streakAnalysis.avgWinStreak.toFixed(1)}回</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-label">平均連敗</div>
-            <div className="stat-value">{stats.streakAnalysis.avgLossStreak.toFixed(1)}回</div>
-          </div>
+          </Tooltip>
+          <Tooltip content={TOOLTIPS.longestWinStreak}>
+            <div className="stat-card">
+              <div className="stat-label">最長連勝</div>
+              <div className="stat-value profit">{stats.streakAnalysis.longestWinStreak}日</div>
+            </div>
+          </Tooltip>
+          <Tooltip content={TOOLTIPS.longestLossStreak}>
+            <div className="stat-card">
+              <div className="stat-label">最長連敗</div>
+              <div className="stat-value loss">{stats.streakAnalysis.longestLossStreak}日</div>
+            </div>
+          </Tooltip>
+          <Tooltip content={TOOLTIPS.avgWinStreak}>
+            <div className="stat-card">
+              <div className="stat-label">平均連勝</div>
+              <div className="stat-value">{stats.streakAnalysis.avgWinStreak.toFixed(1)}日</div>
+            </div>
+          </Tooltip>
+          <Tooltip content={TOOLTIPS.avgLossStreak}>
+            <div className="stat-card">
+              <div className="stat-label">平均連敗</div>
+              <div className="stat-value">{stats.streakAnalysis.avgLossStreak.toFixed(1)}日</div>
+            </div>
+          </Tooltip>
         </div>
       </div>
 
@@ -838,30 +888,36 @@ export function MonthlyReport({ currentMonth, refreshTrigger, isDbReady }: Month
       <div className="stats-section">
         <h3>🧮 高度な指標</h3>
         <div className="stats-grid">
-          <div className="stat-card">
-            <div className="stat-label">ソルティノレシオ</div>
-            <div className="stat-value">{stats.advancedMetrics.sortinoRatio.toFixed(3)}</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-label">最大連続損失</div>
-            <div className="stat-value loss">{stats.advancedMetrics.maxConsecutiveLosses}回</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-label">収益性指数</div>
-            <div className="stat-value">{stats.advancedMetrics.profitabilityIndex.toFixed(2)}</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-label">一貫性指標</div>
-            <div className="stat-value">{formatPercentage(stats.advancedMetrics.consistencyIndex * 100)}</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-label">平均保有時間</div>
-            <div className="stat-value">{stats.advancedMetrics.avgHoldingTime.toFixed(1)}時間</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-label">リスクリターン比</div>
-            <div className="stat-value">{stats.advancedMetrics.riskReturnRatio.toFixed(2)}</div>
-          </div>
+          <Tooltip content={TOOLTIPS.sortinoRatio}>
+            <div className="stat-card">
+              <div className="stat-label">ソルティノレシオ</div>
+              <div className="stat-value">{stats.advancedMetrics.sortinoRatio.toFixed(3)}</div>
+            </div>
+          </Tooltip>
+          <Tooltip content={TOOLTIPS.maxConsecutiveLosses}>
+            <div className="stat-card">
+              <div className="stat-label">最大連続損失</div>
+              <div className="stat-value loss">{stats.advancedMetrics.maxConsecutiveLosses}回</div>
+            </div>
+          </Tooltip>
+          <Tooltip content={TOOLTIPS.profitabilityIndex}>
+            <div className="stat-card">
+              <div className="stat-label">収益性指数</div>
+              <div className="stat-value">{stats.advancedMetrics.profitabilityIndex.toFixed(2)}</div>
+            </div>
+          </Tooltip>
+          <Tooltip content={TOOLTIPS.consistencyIndex}>
+            <div className="stat-card">
+              <div className="stat-label">一貫性指標</div>
+              <div className="stat-value">{formatPercentage(stats.advancedMetrics.consistencyIndex * 100)}</div>
+            </div>
+          </Tooltip>
+          <Tooltip content={TOOLTIPS.riskReturnRatio}>
+            <div className="stat-card">
+              <div className="stat-label">リスクリターン比</div>
+              <div className="stat-value">{stats.advancedMetrics.riskReturnRatio.toFixed(2)}</div>
+            </div>
+          </Tooltip>
         </div>
       </div>
     </div>

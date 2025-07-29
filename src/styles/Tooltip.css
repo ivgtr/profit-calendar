@@ -1,0 +1,132 @@
+.tooltip-container {
+  position: relative;
+  display: block;
+  width: 100%;
+  cursor: help;
+}
+
+.tooltip {
+  position: absolute;
+  z-index: 10000;
+  opacity: 1;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.tooltip-content {
+  background-color: rgba(0, 0, 0, 0.95);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  font-size: 0.85rem;
+  line-height: 1.4;
+  max-width: 280px;
+  min-width: 200px;
+  white-space: normal;
+  word-wrap: break-word;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.tooltip-arrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+/* Top position */
+.tooltip-top {
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 5px;
+}
+
+.tooltip-top .tooltip-arrow {
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid rgba(0, 0, 0, 0.95);
+}
+
+/* Bottom position */
+.tooltip-bottom {
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 5px;
+}
+
+.tooltip-bottom .tooltip-arrow {
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid rgba(0, 0, 0, 0.95);
+}
+
+/* Left position */
+.tooltip-left {
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-right: 5px;
+}
+
+.tooltip-left .tooltip-arrow {
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 5px solid rgba(0, 0, 0, 0.95);
+}
+
+/* Right position */
+.tooltip-right {
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-left: 5px;
+}
+
+.tooltip-right .tooltip-arrow {
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-right: 5px solid rgba(0, 0, 0, 0.95);
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .tooltip-content {
+    max-width: 240px;
+    min-width: 180px;
+    font-size: 0.8rem;
+    padding: 6px 10px;
+  }
+  
+  .tooltip-container {
+    cursor: pointer;
+  }
+  
+  /* モバイルでは基本的に下に表示 */
+  .tooltip-top {
+    bottom: auto;
+    top: 100%;
+    margin-top: 5px;
+    margin-bottom: 0;
+  }
+  
+  .tooltip-top .tooltip-arrow {
+    top: auto;
+    bottom: 100%;
+    border-top: none;
+    border-bottom: 5px solid rgba(0, 0, 0, 0.95);
+  }
+}
