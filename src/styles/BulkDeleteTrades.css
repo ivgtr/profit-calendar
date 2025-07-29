@@ -125,6 +125,18 @@
   margin-bottom: 8px;
 }
 
+.warning-message ul {
+  list-style-type: disc;
+  margin: 12px 0;
+  color: var(--text-primary);
+  text-align: left;
+}
+
+.warning-message li {
+  margin: 6px 0;
+  line-height: 1.4;
+}
+
 .action-buttons {
   display: flex;
   justify-content: center;

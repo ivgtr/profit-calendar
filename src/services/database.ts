@@ -426,6 +426,71 @@ class Database {
     return count;
   }
 
+  // 全データと設定を削除して完全初期化
+  async resetAll(): Promise<void> {
+    const db = this.getDB();
+    const transaction = db.transaction([STORES.TRADES, STORES.IMPORT_HISTORY, STORES.IMPORT_TRADE_RELATIONS], 'readwrite');
+    const tradesStore = transaction.objectStore(STORES.TRADES);
+    const importHistoryStore = transaction.objectStore(STORES.IMPORT_HISTORY);
+    const relationsStore = transaction.objectStore(STORES.IMPORT_TRADE_RELATIONS);
+    
+    // 全ての IndexedDB データを削除
+    await Promise.all([
+      new Promise<void>((resolve, reject) => {
+        const request = tradesStore.clear();
+        request.onsuccess = () => resolve();
+        request.onerror = () => reject(new Error('取引データの削除に失敗しました'));
+      }),
+      new Promise<void>((resolve, reject) => {
+        const request = importHistoryStore.clear();
+        request.onsuccess = () => resolve();
+        request.onerror = () => reject(new Error('インポート履歴の削除に失敗しました'));
+      }),
+      new Promise<void>((resolve, reject) => {
+        const request = relationsStore.clear();
+        request.onsuccess = () => resolve();
+        request.onerror = () => reject(new Error('インポート関連データの削除に失敗しました'));
+      })
+    ]);
+    
+    // LocalStorage の設定データも削除
+    this.clearLocalStorageSettings();
+  }
+
+  // LocalStorage の設定データを削除
+  private clearLocalStorageSettings(): void {
+    const keysToRemove = [
+      'profit-calendar-theme',
+      'profit-calendar-settings',
+      'profit-calendar-user-preferences',
+      'profit-calendar-last-backup',
+      'claude-theme', // テーマ設定
+    ];
+    
+    keysToRemove.forEach(key => {
+      try {
+        localStorage.removeItem(key);
+      } catch (error) {
+        console.warn(`LocalStorage key "${key}" の削除に失敗:`, error);
+      }
+    });
+    
+    // テーマ関連のCSS変数もリセット
+    const root = document.documentElement;
+    const cssVariables = [
+      '--bg-primary', '--bg-secondary', '--bg-tertiary', '--bg-modal',
+      '--text-primary', '--text-secondary', '--text-tertiary', '--text-inverse',
+      '--accent-primary', '--accent-primaryHover', '--accent-secondary', '--accent-secondaryHover',
+      '--status-profit', '--status-loss', '--status-warning', '--status-info',
+      '--border-primary', '--border-secondary',
+      '--shadow-primary', '--shadow-secondary'
+    ];
+    
+    cssVariables.forEach(variable => {
+      root.style.removeProperty(variable);
+    });
+  }
+
   // 月間収益を取得
   async getMonthlyProfit(year: number, month: number): Promise<{
     totalProfit: number;

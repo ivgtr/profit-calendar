@@ -4,6 +4,7 @@ import { db } from '../services/database';
 import { Trade, ImportResult, CSVSummary } from '../types/Trade';
 import { ImportHistory, ImportTradeRelation } from '../types/ImportHistory';
 import { v4 as uuidv4 } from 'uuid';
+import { Modal } from './Modal';
 import '../styles/CSVImporter.css';
 
 interface CSVImporterProps {
@@ -231,66 +232,66 @@ export function CSVImporter({ onImportComplete }: CSVImporterProps) {
         </div>
       )}
 
-      {showPreview && previewTrades.length > 0 && (
-        <div className="preview-modal">
-          <div className="preview-content">
-            <h3>インポートプレビュー</h3>
-            <p>{previewTrades.length}件の取引データが見つかりました</p>
-            
-            <div className="preview-table-container">
-              <table className="preview-table">
-                <thead>
-                  <tr>
-                    <th>約定日</th>
-                    <th>銘柄名</th>
-                    <th>取引</th>
-                    <th>数量</th>
-                    <th>損益</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {previewTrades.slice(0, 10).map((trade, index) => (
-                    <tr key={index}>
-                      <td>{trade.date.toLocaleDateString('ja-JP')}</td>
-                      <td>{trade.stockName}</td>
-                      <td>{trade.tradeType}</td>
-                      <td>{trade.quantity.toLocaleString()}</td>
-                      <td className={trade.realizedProfitLoss >= 0 ? 'profit' : 'loss'}>
-                        {trade.realizedProfitLoss >= 0 ? '+' : ''}
-                        {trade.realizedProfitLoss.toLocaleString()}円
-                      </td>
-                    </tr>
-                  ))}
-                  {previewTrades.length > 10 && (
-                    <tr>
-                      <td colSpan={5} className="more-rows">
-                        他 {previewTrades.length - 10} 件
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-
-            <div className="preview-actions">
-              <button 
-                onClick={handleConfirmImport} 
-                disabled={isImporting}
-                className="confirm-button"
-              >
-                インポート実行
-              </button>
-              <button 
-                onClick={handleRejectImport} 
-                disabled={isImporting}
-                className="reject-button"
-              >
-                キャンセル
-              </button>
-            </div>
-          </div>
+      <Modal
+        isOpen={showPreview && previewTrades.length > 0}
+        onClose={handleRejectImport}
+        title="インポートプレビュー"
+        size="large"
+      >
+        <p>{previewTrades.length}件の取引データが見つかりました</p>
+        
+        <div className="preview-table-container">
+          <table className="preview-table">
+            <thead>
+              <tr>
+                <th>約定日</th>
+                <th>銘柄名</th>
+                <th>取引</th>
+                <th>数量</th>
+                <th>損益</th>
+              </tr>
+            </thead>
+            <tbody>
+              {previewTrades.slice(0, 10).map((trade, index) => (
+                <tr key={index}>
+                  <td>{trade.date.toLocaleDateString('ja-JP')}</td>
+                  <td>{trade.stockName}</td>
+                  <td>{trade.tradeType}</td>
+                  <td>{trade.quantity.toLocaleString()}</td>
+                  <td className={trade.realizedProfitLoss >= 0 ? 'profit' : 'loss'}>
+                    {trade.realizedProfitLoss >= 0 ? '+' : ''}
+                    {trade.realizedProfitLoss.toLocaleString()}円
+                  </td>
+                </tr>
+              ))}
+              {previewTrades.length > 10 && (
+                <tr>
+                  <td colSpan={5} className="more-rows">
+                    他 {previewTrades.length - 10} 件
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
-      )}
+
+        <div className="preview-actions">
+          <button 
+            onClick={handleConfirmImport} 
+            disabled={isImporting}
+            className="confirm-button"
+          >
+            インポート実行
+          </button>
+          <button 
+            onClick={handleRejectImport} 
+            disabled={isImporting}
+            className="reject-button"
+          >
+            キャンセル
+          </button>
+        </div>
+      </Modal>
     </div>
   );
 }
