@@ -7,6 +7,7 @@ import { ImportHistoryList } from './components/ImportHistoryList';
 import { TradeForm } from './components/TradeForm';
 import { BulkDeleteTrades } from './components/BulkDeleteTrades';
 import { MonthlyProfit } from './components/MonthlyProfit';
+import { MonthlyReport } from './components/MonthlyReport';
 import { TermsOfService } from './components/TermsOfService';
 import { PrivacyPolicy } from './components/PrivacyPolicy';
 import { Disclaimer } from './components/Disclaimer';
@@ -35,6 +36,7 @@ function App() {
   const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
   const [isTradeFormModalOpen, setIsTradeFormModalOpen] = useState(false);
   const [isBulkDeleteModalOpen, setIsBulkDeleteModalOpen] = useState(false);
+  const [isMonthlyReportModalOpen, setIsMonthlyReportModalOpen] = useState(false);
   const [isUserGuideModalOpen, setIsUserGuideModalOpen] = useState(false);
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
   const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
@@ -225,6 +227,7 @@ function App() {
         onOpenHistoryModal={() => setIsHistoryModalOpen(true)}
         onOpenTradeFormModal={() => handleOpenTradeForm()}
         onOpenBulkDeleteModal={() => setIsBulkDeleteModalOpen(true)}
+        onOpenMonthlyReportModal={() => setIsMonthlyReportModalOpen(true)}
         onOpenUserGuideModal={() => setIsUserGuideModalOpen(true)}
         onOpenTermsModal={() => setIsTermsModalOpen(true)}
         onOpenPrivacyModal={() => setIsPrivacyModalOpen(true)}
@@ -410,6 +413,20 @@ function App() {
         size="medium"
       >
         <BulkDeleteTrades onComplete={handleBulkDeleteComplete} />
+      </Modal>
+
+      {/* 月別レポートモーダル */}
+      <Modal
+        isOpen={isMonthlyReportModalOpen}
+        onClose={() => setIsMonthlyReportModalOpen(false)}
+        title=""
+        size="large"
+      >
+        <MonthlyReport 
+          currentMonth={currentMonth} 
+          refreshTrigger={dataVersion} 
+          isDbReady={isDbReady} 
+        />
       </Modal>
 
       {/* 使い方ガイドモーダル */}
