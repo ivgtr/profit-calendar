@@ -10,6 +10,7 @@ interface HeaderProps {
   onOpenYearlyChartModal: () => void;
   onOpenUserGuideModal: () => void;
   onOpenThemeSettingsModal: () => void;
+  onOpenBackupRestoreModal: () => void;
   onOpenTermsModal: () => void;
   onOpenPrivacyModal: () => void;
   onOpenDisclaimerModal: () => void;
@@ -17,7 +18,7 @@ interface HeaderProps {
 
 type MenuCategory = 'main' | 'data' | 'analytics' | 'settings' | 'legal';
 
-export function Header({ onOpenImportModal, onOpenHistoryModal, onOpenTradeFormModal, onOpenBulkDeleteModal, onOpenMonthlyReportModal, onOpenYearlyChartModal, onOpenUserGuideModal, onOpenThemeSettingsModal, onOpenTermsModal, onOpenPrivacyModal, onOpenDisclaimerModal }: HeaderProps) {
+export function Header({ onOpenImportModal, onOpenHistoryModal, onOpenTradeFormModal, onOpenBulkDeleteModal, onOpenMonthlyReportModal, onOpenYearlyChartModal, onOpenUserGuideModal, onOpenThemeSettingsModal, onOpenBackupRestoreModal, onOpenTermsModal, onOpenPrivacyModal, onOpenDisclaimerModal }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [currentCategory, setCurrentCategory] = useState<MenuCategory>('main');
 
@@ -120,6 +121,14 @@ export function Header({ onOpenImportModal, onOpenHistoryModal, onOpenTradeFormM
             >
               <span className="menu-icon">📋</span>
               インポート履歴
+            </button>
+            
+            <button 
+              className="menu-item"
+              onClick={() => handleMenuItemClick(onOpenBackupRestoreModal)}
+            >
+              <span className="menu-icon">📦</span>
+              バックアップ・復元
             </button>
             
             <hr className="menu-divider" />

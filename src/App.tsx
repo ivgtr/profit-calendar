@@ -14,6 +14,7 @@ import { TermsOfService } from './components/TermsOfService';
 import { PrivacyPolicy } from './components/PrivacyPolicy';
 import { Disclaimer } from './components/Disclaimer';
 import { UserGuide } from './components/UserGuide';
+import { BackupRestore } from './components/BackupRestore';
 import { useMonthlyTrades } from './hooks/useMonthlyTrades';
 import { db } from './services/database';
 import { Trade } from './types/Trade';
@@ -45,6 +46,7 @@ function App() {
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
   const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
   const [isDisclaimerModalOpen, setIsDisclaimerModalOpen] = useState(false);
+  const [isBackupRestoreModalOpen, setIsBackupRestoreModalOpen] = useState(false);
   const [editingTrade, setEditingTrade] = useState<Trade | undefined>(undefined);
 
   // データベースの初期化
@@ -187,6 +189,17 @@ function App() {
     setIsBulkDeleteModalOpen(false);
   };
 
+  const handleDataRestored = () => {
+    // データが変更されたことを通知
+    setDataVersion(prev => prev + 1);
+    // カレンダーをリフレッシュ
+    if (selectedDate) {
+      loadDailyTrades(selectedDate);
+    }
+    // モーダルを閉じる
+    setIsBackupRestoreModalOpen(false);
+  };
+
   const formatCurrency = (amount: number) => {
     return amount.toLocaleString('ja-JP');
   };
@@ -235,6 +248,7 @@ function App() {
         onOpenYearlyChartModal={() => setIsYearlyChartModalOpen(true)}
         onOpenThemeSettingsModal={() => setIsThemeSettingsModalOpen(true)}
         onOpenUserGuideModal={() => setIsUserGuideModalOpen(true)}
+        onOpenBackupRestoreModal={() => setIsBackupRestoreModalOpen(true)}
         onOpenTermsModal={() => setIsTermsModalOpen(true)}
         onOpenPrivacyModal={() => setIsPrivacyModalOpen(true)}
         onOpenDisclaimerModal={() => setIsDisclaimerModalOpen(true)}
@@ -496,6 +510,16 @@ function App() {
         size="large"
       >
         <Disclaimer />
+      </Modal>
+
+      {/* バックアップ・復元モーダル */}
+      <Modal
+        isOpen={isBackupRestoreModalOpen}
+        onClose={() => setIsBackupRestoreModalOpen(false)}
+        title="📦 データバックアップ・復元"
+        size="large"
+      >
+        <BackupRestore onDataRestored={handleDataRestored} />
       </Modal>
     </div>
   );
