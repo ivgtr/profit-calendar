@@ -2,6 +2,12 @@
 
 取引収益管理カレンダーアプリです。日々の取引記録をカレンダー形式で可視化し、収益状況を効率的に把握できます。
 
+## 🔗 デモ
+
+**Live Demo**: [https://username.github.io/profit-calendar/](https://username.github.io/profit-calendar/)
+
+> **注意**: 実際のGitHubユーザー名に置き換えてください
+
 ## 🚀 特徴
 
 ### 📊 カレンダービューによる収益可視化
@@ -58,6 +64,20 @@ npm run build
 # ビルド結果をプレビュー
 npm run preview
 ```
+
+### デプロイメント
+
+このプロジェクトはGitHub Actionsを使用してGitHub Pagesに自動デプロイされます。
+
+```bash
+# 手動デプロイ（gh-pagesパッケージが必要）
+npm run deploy
+```
+
+**自動デプロイ**:
+- `main`ブランチへのプッシュで自動的にGitHub Pagesにデプロイ
+- GitHub Actionsワークフローが自動実行
+- ビルド後、`dist`フォルダの内容がGitHub Pagesに公開
 
 ## 📖 使い方
 

@@ -4,18 +4,27 @@
   "version": "1.0.0",
   "type": "module",
   "description": "取引収益管理カレンダーアプリ",
-  "keywords": ["trading", "calendar", "profit", "finance", "japanese", "react"],
+  "keywords": [
+    "trading",
+    "calendar",
+    "profit",
+    "finance",
+    "japanese",
+    "react"
+  ],
   "author": "",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/username/profit-calendar.git"
   },
+  "homepage": "https://username.github.io/profit-calendar/",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "npm run build && gh-pages -d dist"
   },
   "dependencies": {
     "@types/uuid": "^10.0.0",
@@ -25,6 +34,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",
+    "@types/node": "^24.1.0",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "@vitejs/plugin-react-swc": "^3.8.0",
