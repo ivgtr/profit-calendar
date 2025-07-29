@@ -3,8 +3,8 @@
 }
 
 .import-info {
-  background-color: #e3f2fd;
-  border: 1px solid #2196f3;
+  background-color: var(--bg-tertiary);
+  border: 1px solid var(--accent-primary);
   border-radius: 8px;
   padding: 16px;
   margin-bottom: 20px;
@@ -12,14 +12,14 @@
 
 .import-info h4 {
   margin: 0 0 12px 0;
-  color: #1976d2;
+  color: var(--accent-primary);
   font-size: 1rem;
   font-weight: 600;
 }
 
 .import-info p {
   margin: 0 0 8px 0;
-  color: #333;
+  color: var(--text-primary);
   font-size: 0.9rem;
   line-height: 1.5;
 }
@@ -29,42 +29,42 @@
 }
 
 .drop-zone {
-  border: 2px dashed #ccc;
+  border: 2px dashed var(--border-primary);
   border-radius: 8px;
   padding: 40px;
   text-align: center;
   transition: all 0.3s ease;
-  background-color: #f9f9f9;
+  background-color: var(--bg-secondary);
 }
 
 .drop-zone.dragging {
-  border-color: #0066cc;
-  background-color: #e6f2ff;
+  border-color: var(--accent-primary);
+  background-color: var(--bg-tertiary);
 }
 
 .drop-zone-content p {
   margin: 10px 0;
-  color: #666;
+  color: var(--text-secondary);
 }
 
 .file-input-label {
   display: inline-block;
   padding: 10px 20px;
-  background-color: #0066cc;
-  color: white;
+  background-color: var(--accent-primary);
+  color: var(--text-inverse);
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
 .file-input-label:hover {
-  background-color: #0052a3;
+  background-color: var(--accent-primary-hover);
 }
 
 .importing-status {
   text-align: center;
   margin: 20px 0;
-  color: #666;
+  color: var(--text-secondary);
 }
 
 .import-result {
@@ -74,15 +74,15 @@
 }
 
 .import-result.success {
-  background-color: #d4edda;
-  border: 1px solid #c3e6cb;
-  color: #155724;
+  background-color: var(--bg-tertiary);
+  border: 1px solid var(--status-profit);
+  color: var(--status-profit);
 }
 
 .import-result.error {
-  background-color: #f8d7da;
-  border: 1px solid #f5c6cb;
-  color: #721c24;
+  background-color: var(--bg-tertiary);
+  border: 1px solid var(--status-loss);
+  color: var(--status-loss);
 }
 
 .import-result h3 {
@@ -104,7 +104,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: var(--bg-modal);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -112,7 +112,8 @@
 }
 
 .preview-content {
-  background: white;
+  background: var(--bg-primary);
+  color: var(--text-primary);
   padding: 30px;
   border-radius: 8px;
   max-width: 800px;
@@ -135,25 +136,26 @@
 .preview-table td {
   padding: 8px 12px;
   text-align: left;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--border-primary);
+  color: var(--text-primary);
 }
 
 .preview-table th {
-  background-color: #f5f5f5;
+  background-color: var(--bg-secondary);
   font-weight: bold;
 }
 
 .preview-table .profit {
-  color: #28a745;
+  color: var(--status-profit);
 }
 
 .preview-table .loss {
-  color: #dc3545;
+  color: var(--status-loss);
 }
 
 .more-rows {
   text-align: center;
-  color: #666;
+  color: var(--text-secondary);
   font-style: italic;
 }
 
@@ -175,21 +177,23 @@
 }
 
 .confirm-button {
-  background-color: #28a745;
-  color: white;
+  background-color: var(--status-profit);
+  color: var(--text-inverse);
 }
 
 .confirm-button:hover:not(:disabled) {
-  background-color: #218838;
+  background-color: var(--status-profit);
+  opacity: 0.9;
 }
 
 .reject-button {
-  background-color: #dc3545;
-  color: white;
+  background-color: var(--status-loss);
+  color: var(--text-inverse);
 }
 
 .reject-button:hover:not(:disabled) {
-  background-color: #c82333;
+  background-color: var(--status-loss);
+  opacity: 0.9;
 }
 
 button:disabled {

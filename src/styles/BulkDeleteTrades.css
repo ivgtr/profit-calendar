@@ -5,9 +5,9 @@
 .delete-mode-selector {
   margin-bottom: 30px;
   padding: 20px;
-  background-color: #f8f9fa;
+  background-color: var(--bg-secondary);
   border-radius: 8px;
-  border: 1px solid #e9ecef;
+  border: 1px solid var(--border-primary);
 }
 
 .mode-option {
@@ -23,7 +23,7 @@
 }
 
 .mode-option:hover {
-  background-color: rgba(0, 123, 255, 0.1);
+  background-color: var(--bg-tertiary);
 }
 
 .mode-option:last-child {
@@ -42,7 +42,7 @@
 
 .date-selector h4 {
   margin-bottom: 15px;
-  color: #333;
+  color: var(--text-primary);
   font-size: 1.1rem;
 }
 
@@ -56,20 +56,22 @@
 .date-input {
   flex: 1;
   padding: 10px 12px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border-primary);
   border-radius: 4px;
   font-size: 0.9rem;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
 }
 
 .date-input:focus {
   outline: none;
-  border-color: #0066cc;
-  box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.1);
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
 }
 
 .remove-date-button {
-  background-color: #dc3545;
-  color: white;
+  background-color: var(--status-loss);
+  color: var(--text-inverse);
   border: none;
   width: 30px;
   height: 30px;
@@ -83,12 +85,13 @@
 }
 
 .remove-date-button:hover {
-  background-color: #c82333;
+  background-color: var(--status-loss);
+  opacity: 0.9;
 }
 
 .add-date-button {
-  background-color: #28a745;
-  color: white;
+  background-color: var(--status-profit);
+  color: var(--text-inverse);
   border: none;
   padding: 8px 16px;
   border-radius: 4px;
@@ -98,12 +101,13 @@
 }
 
 .add-date-button:hover {
-  background-color: #218838;
+  background-color: var(--status-profit);
+  opacity: 0.9;
 }
 
 .warning-message {
-  background-color: #fff3cd;
-  border: 1px solid #ffeaa7;
+  background-color: var(--bg-tertiary);
+  border: 1px solid var(--status-warning);
   border-radius: 8px;
   padding: 20px;
   margin-bottom: 30px;
@@ -112,7 +116,7 @@
 
 .warning-message p {
   margin: 0;
-  color: #856404;
+  color: var(--status-warning);
 }
 
 .warning-message p:first-child {
@@ -125,12 +129,12 @@
   display: flex;
   justify-content: center;
   padding-top: 20px;
-  border-top: 1px solid #e9ecef;
+  border-top: 1px solid var(--border-primary);
 }
 
 .delete-button {
-  background-color: #dc3545;
-  color: white;
+  background-color: var(--status-loss);
+  color: var(--text-inverse);
   border: none;
   padding: 12px 30px;
   border-radius: 6px;
@@ -142,13 +146,14 @@
 }
 
 .delete-button:hover:not(:disabled) {
-  background-color: #c82333;
+  background-color: var(--status-loss);
+  opacity: 0.9;
   transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+  box-shadow: var(--shadow-secondary);
 }
 
 .delete-button:disabled {
-  background-color: #6c757d;
+  background-color: var(--text-secondary);
   cursor: not-allowed;
   transform: none;
   box-shadow: none;

@@ -1,7 +1,7 @@
 .monthly-profit {
-  background: white;
+  background: var(--bg-primary);
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-primary);
   margin-bottom: 20px;
   overflow: hidden;
 }
@@ -9,7 +9,7 @@
 .monthly-profit.loading {
   padding: 20px;
   text-align: center;
-  color: #666;
+  color: var(--text-secondary);
 }
 
 .profit-container {
@@ -33,7 +33,7 @@
 .summary-header h3 {
   margin: 0;
   font-size: 1.1rem;
-  color: #333;
+  color: var(--text-primary);
   font-weight: 600;
 }
 
@@ -44,7 +44,7 @@
 }
 
 .expand-icon {
-  color: #666;
+  color: var(--text-secondary);
   font-size: 0.9rem;
 }
 
@@ -61,15 +61,15 @@
 }
 
 .profit-value.profit {
-  color: #28a745;
+  color: var(--status-profit);
 }
 
 .profit-value.loss {
-  color: #dc3545;
+  color: var(--status-loss);
 }
 
 .trade-count {
-  color: #666;
+  color: var(--text-secondary);
   font-size: 0.9rem;
 }
 
@@ -80,7 +80,7 @@
 .mobile-breakdown {
   display: none;
   padding: 0 20px 16px;
-  border-top: 1px solid #f0f0f0;
+  border-top: 1px solid var(--border-secondary);
 }
 
 .breakdown-list {
@@ -94,7 +94,7 @@
   align-items: center;
   gap: 4px;
   padding: 8px 12px;
-  background-color: #f8f9fa;
+  background-color: var(--bg-secondary);
   border-radius: 6px;
   min-width: 80px;
   text-align: center;
@@ -102,7 +102,7 @@
 
 .breakdown-label {
   font-size: 0.8rem;
-  color: #666;
+  color: var(--text-secondary);
   font-weight: 500;
 }
 
@@ -112,15 +112,15 @@
 }
 
 .breakdown-profit.profit {
-  color: #28a745;
+  color: var(--status-profit);
 }
 
 .breakdown-profit.loss {
-  color: #dc3545;
+  color: var(--status-loss);
 }
 
 .breakdown-count {
-  color: #666;
+  color: var(--text-secondary);
   font-size: 0.85rem;
 }
 
@@ -130,17 +130,17 @@
 }
 
 .breakdown-list::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: var(--bg-secondary);
   border-radius: 3px;
 }
 
 .breakdown-list::-webkit-scrollbar-thumb {
-  background: #c1c1c1;
+  background: var(--text-tertiary);
   border-radius: 3px;
 }
 
 .breakdown-list::-webkit-scrollbar-thumb:hover {
-  background: #a8a8a8;
+  background: var(--text-secondary);
 }
 
 @media (max-width: 768px) {
@@ -154,7 +154,7 @@
   }
   
   .profit-container:hover {
-    background-color: #f8f9fa;
+    background-color: var(--bg-secondary);
   }
   
   .mobile-toggle {

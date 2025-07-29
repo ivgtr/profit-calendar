@@ -1,0 +1,79 @@
+/* CSS変数でテーマカラーを定義 */
+:root {
+  /* デフォルト（ライトテーマ）の色 */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --bg-tertiary: #e9ecef;
+  --bg-modal: rgba(0, 0, 0, 0.5);
+  
+  --text-primary: #333333;
+  --text-secondary: #666666;
+  --text-tertiary: #999999;
+  --text-inverse: #ffffff;
+  
+  --accent-primary: #667eea;
+  --accent-primary-hover: #5a6fd8;
+  --accent-secondary: #764ba2;
+  --accent-secondary-hover: #6a4190;
+  
+  --status-profit: #28a745;
+  --status-loss: #dc3545;
+  --status-warning: #ffc107;
+  --status-info: #17a2b8;
+  
+  --border-primary: #dee2e6;
+  --border-secondary: #e9ecef;
+  
+  --shadow-primary: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-secondary: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* テーマトランジション */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* 背景色 */
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+/* リンクカラー */
+a {
+  color: var(--accent-primary);
+}
+
+a:hover {
+  color: var(--accent-primary-hover);
+}
+
+/* ボタンのデフォルトスタイル */
+button {
+  transition: all 0.3s ease;
+}
+
+/* スクロールバーのスタイリング */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--text-tertiary);
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* Firefox用スクロールバー */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--text-tertiary) var(--bg-secondary);
+}

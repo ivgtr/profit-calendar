@@ -1,8 +1,8 @@
 .app-header {
-  background-color: #0066cc;
-  color: white;
+  background-color: var(--accent-primary);
+  color: var(--text-inverse);
   padding: 0;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-primary);
   position: sticky;
   top: 0;
   z-index: 100;
@@ -30,7 +30,7 @@
 .menu-toggle {
   background: none;
   border: none;
-  color: white;
+  color: var(--text-inverse);
   font-size: 1.5rem;
   cursor: pointer;
   padding: 8px 12px;
@@ -59,9 +59,9 @@
 }
 
 .menu-items {
-  background: white;
+  background: var(--bg-primary);
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-secondary);
   overflow: hidden;
   min-width: 200px;
   position: relative;
@@ -78,17 +78,17 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  color: #333;
+  color: var(--text-primary);
   font-size: 0.95rem;
   transition: background-color 0.2s ease;
 }
 
 .menu-item:hover {
-  background-color: #f8f9fa;
+  background-color: var(--bg-secondary);
 }
 
 .menu-item:not(:last-child) {
-  border-bottom: 1px solid #e9ecef;
+  border-bottom: 1px solid var(--border-primary);
 }
 
 .menu-icon {
@@ -99,32 +99,32 @@
 
 .menu-divider {
   border: none;
-  border-top: 1px solid #e9ecef;
+  border-top: 1px solid var(--border-primary);
   margin: 0;
 }
 
 .menu-item.danger {
-  color: #dc3545;
+  color: var(--status-loss);
 }
 
 .menu-item.danger:hover {
-  background-color: #ffebee;
+  background-color: var(--bg-tertiary);
 }
 
 .menu-item.info {
-  color: #495057;
+  color: var(--text-secondary);
 }
 
 .menu-item.info:hover {
-  background-color: #e3f2fd;
+  background-color: var(--bg-tertiary);
 }
 
 .menu-item.help {
-  color: #28a745;
+  color: var(--status-profit);
 }
 
 .menu-item.help:hover {
-  background-color: #d4edda;
+  background-color: var(--bg-tertiary);
 }
 
 @media (max-width: 768px) {

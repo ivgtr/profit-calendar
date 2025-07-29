@@ -1,6 +1,6 @@
 .yearly-chart-container {
-  background: #1a1a1a;
-  color: #ffffff;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
   border-radius: 16px;
   padding: 24px;
   min-height: 500px;
@@ -21,18 +21,18 @@
   margin: 0;
   font-size: 1.5rem;
   font-weight: 600;
-  color: #ffffff;
+  color: var(--text-primary);
 }
 
 .period-label {
-  color: #999;
+  color: var(--text-secondary);
   font-size: 0.9rem;
 }
 
 .period-selector {
   display: flex;
   gap: 8px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-tertiary);
   padding: 4px;
   border-radius: 12px;
 }
@@ -42,7 +42,7 @@
   padding: 8px 16px;
   border: none;
   background: transparent;
-  color: #999;
+  color: var(--text-secondary);
   border-radius: 8px;
   font-size: 0.9rem;
   cursor: pointer;
@@ -51,13 +51,14 @@
 }
 
 .period-button:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--bg-primary);
 }
 
 .period-button.active {
-  background: rgba(255, 255, 255, 0.2);
-  color: #ffffff;
+  background: var(--bg-primary);
+  color: var(--text-primary);
   font-weight: 500;
+  box-shadow: var(--shadow-primary);
 }
 
 .chart-content {
@@ -71,7 +72,7 @@
 }
 
 .profit-label {
-  color: #999;
+  color: var(--text-secondary);
   font-size: 0.9rem;
   margin-bottom: 4px;
 }
@@ -83,11 +84,11 @@
 }
 
 .profit-amount.positive {
-  color: #3490dc;
+  color: var(--status-profit);
 }
 
 .profit-amount.negative {
-  color: #ef4444;
+  color: var(--status-loss);
 }
 
 .chart-wrapper {
@@ -96,7 +97,7 @@
 }
 
 .investment-summary {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-tertiary);
   border-radius: 12px;
   padding: 20px;
   margin-top: 20px;
@@ -110,7 +111,7 @@
 }
 
 .summary-label {
-  color: #999;
+  color: var(--text-secondary);
   font-size: 0.95rem;
 }
 
@@ -120,11 +121,11 @@
 }
 
 .summary-value.positive {
-  color: #3490dc;
+  color: var(--status-profit);
 }
 
 .summary-value.negative {
-  color: #ef4444;
+  color: var(--status-loss);
 }
 
 .summary-bars {
@@ -137,7 +138,7 @@
 .bar-wrapper {
   width: 100%;
   height: 24px;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--bg-primary);
   border-radius: 12px;
   overflow: hidden;
 }
@@ -149,11 +150,11 @@
 }
 
 .investment-bar {
-  background: #ef4444;
+  background: var(--status-loss);
 }
 
 .return-bar {
-  background: #3490dc;
+  background: var(--status-profit);
 }
 
 .year-navigation {
@@ -161,14 +162,14 @@
   justify-content: space-between;
   margin-top: 24px;
   padding-top: 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid var(--border-primary);
 }
 
 .year-nav-button {
   padding: 8px 16px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--border-primary);
   background: transparent;
-  color: #999;
+  color: var(--text-secondary);
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -176,9 +177,9 @@
 }
 
 .year-nav-button:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
-  border-color: rgba(255, 255, 255, 0.3);
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border-color: var(--border-secondary);
 }
 
 .loading {
@@ -186,7 +187,7 @@
   align-items: center;
   justify-content: center;
   height: 200px;
-  color: #666;
+  color: var(--text-secondary);
 }
 
 .no-data {
@@ -194,7 +195,7 @@
   align-items: center;
   justify-content: center;
   height: 200px;
-  color: #666;
+  color: var(--text-secondary);
   font-size: 0.9rem;
 }
 

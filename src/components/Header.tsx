@@ -9,12 +9,13 @@ interface HeaderProps {
   onOpenMonthlyReportModal: () => void;
   onOpenYearlyChartModal: () => void;
   onOpenUserGuideModal: () => void;
+  onOpenThemeSettingsModal: () => void;
   onOpenTermsModal: () => void;
   onOpenPrivacyModal: () => void;
   onOpenDisclaimerModal: () => void;
 }
 
-export function Header({ onOpenImportModal, onOpenHistoryModal, onOpenTradeFormModal, onOpenBulkDeleteModal, onOpenMonthlyReportModal, onOpenYearlyChartModal, onOpenUserGuideModal, onOpenTermsModal, onOpenPrivacyModal, onOpenDisclaimerModal }: HeaderProps) {
+export function Header({ onOpenImportModal, onOpenHistoryModal, onOpenTradeFormModal, onOpenBulkDeleteModal, onOpenMonthlyReportModal, onOpenYearlyChartModal, onOpenUserGuideModal, onOpenThemeSettingsModal, onOpenTermsModal, onOpenPrivacyModal, onOpenDisclaimerModal }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -103,6 +104,16 @@ export function Header({ onOpenImportModal, onOpenHistoryModal, onOpenTradeFormM
                   <span className="menu-icon">❓</span>
                   使い方ガイド
                 </button>
+                
+                <button 
+                  className="menu-item"
+                  onClick={() => handleMenuItemClick(onOpenThemeSettingsModal)}
+                >
+                  <span className="menu-icon">🎨</span>
+                  テーマ設定
+                </button>
+                
+                <hr className="menu-divider" />
                 
                 <button 
                   className="menu-item info"

@@ -1,6 +1,6 @@
 .app {
   min-height: 100vh;
-  background-color: #f5f5f5;
+  background-color: var(--bg-secondary);
 }
 
 .loading {
@@ -23,7 +23,7 @@ section {
 
 section h2 {
   margin-bottom: 20px;
-  color: #333;
+  color: var(--text-primary);
 }
 
 
@@ -35,8 +35,8 @@ section h2 {
 }
 
 .add-daily-trade-button {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+  color: var(--text-inverse);
   border: 2px solid transparent;
   padding: 10px 16px;
   border-radius: 6px;
@@ -63,9 +63,9 @@ section h2 {
 }
 
 .daily-profit {
-  background: white;
+  background: var(--bg-primary);
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-primary);
   margin-bottom: 20px;
   overflow: hidden;
 }
@@ -91,7 +91,7 @@ section h2 {
 .daily-profit .summary-header h3 {
   margin: 0;
   font-size: 1.1rem;
-  color: #333;
+  color: var(--text-primary);
   font-weight: 600;
 }
 
@@ -102,7 +102,7 @@ section h2 {
 }
 
 .daily-profit .expand-icon {
-  color: #666;
+  color: var(--text-secondary);
   font-size: 0.9rem;
 }
 
@@ -118,15 +118,15 @@ section h2 {
 }
 
 .daily-profit .profit-value.profit {
-  color: #28a745;
+  color: var(--status-profit);
 }
 
 .daily-profit .profit-value.loss {
-  color: #dc3545;
+  color: var(--status-loss);
 }
 
 .daily-profit .trade-count {
-  color: #666;
+  color: var(--text-secondary);
   font-size: 0.9rem;
 }
 
@@ -137,7 +137,7 @@ section h2 {
 .daily-profit .mobile-breakdown {
   display: none;
   padding: 0 20px 16px;
-  border-top: 1px solid #f0f0f0;
+  border-top: 1px solid var(--border-secondary);
 }
 
 .daily-profit .breakdown-list {
@@ -151,7 +151,7 @@ section h2 {
   align-items: center;
   gap: 4px;
   padding: 8px 12px;
-  background-color: #f8f9fa;
+  background-color: var(--bg-secondary);
   border-radius: 6px;
   min-width: 80px;
   text-align: center;
@@ -159,7 +159,7 @@ section h2 {
 
 .daily-profit .breakdown-label {
   font-size: 0.8rem;
-  color: #666;
+  color: var(--text-secondary);
   font-weight: 500;
 }
 
@@ -169,11 +169,11 @@ section h2 {
 }
 
 .daily-profit .breakdown-profit.profit {
-  color: #28a745;
+  color: var(--status-profit);
 }
 
 .daily-profit .breakdown-profit.loss {
-  color: #dc3545;
+  color: var(--status-loss);
 }
 
 .summary-item {
@@ -184,28 +184,28 @@ section h2 {
 
 .summary-item span:first-child {
   font-weight: bold;
-  color: #666;
+  color: var(--text-secondary);
 }
 
 .trades-table {
   width: 100%;
-  background: white;
+  background: var(--bg-primary);
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-primary);
 }
 
 .trades-table th,
 .trades-table td {
   padding: 12px;
   text-align: left;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--border-primary);
 }
 
 .trades-table th {
-  background-color: #f5f5f5;
+  background-color: var(--bg-secondary);
   font-weight: bold;
-  color: #333;
+  color: var(--text-primary);
 }
 
 .trades-table tr:last-child td {
@@ -218,24 +218,24 @@ section h2 {
 }
 
 .trade-row.clickable:hover {
-  background-color: #f8f9fa;
+  background-color: var(--bg-secondary);
 }
 
 .profit {
-  color: #28a745;
+  color: var(--status-profit);
   font-weight: bold;
 }
 
 .loss {
-  color: #dc3545;
+  color: var(--status-loss);
   font-weight: bold;
 }
 
 .no-trades {
   text-align: center;
-  color: #666;
+  color: var(--text-secondary);
   padding: 40px;
-  background: white;
+  background: var(--bg-primary);
   border-radius: 8px;
 }
 
@@ -289,13 +289,13 @@ section h2 {
   }
 
   .trades-table tr {
-    background-color: white;
-    border: 1px solid #ddd;
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-primary);
     border-radius: 8px;
     margin-bottom: 12px;
     padding: 12px;
     position: relative;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-primary);
   }
 
   .trades-table td {
@@ -316,7 +316,7 @@ section h2 {
     padding-right: 10px;
     white-space: nowrap;
     font-weight: bold;
-    color: #666;
+    color: var(--text-secondary);
     font-size: 0.8rem;
   }
 
@@ -330,7 +330,7 @@ section h2 {
   }
   
   .daily-profit .profit-container:hover {
-    background-color: #f8f9fa;
+    background-color: var(--bg-secondary);
   }
   
   .daily-profit .mobile-toggle {

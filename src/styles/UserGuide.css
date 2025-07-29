@@ -1,20 +1,20 @@
 .user-guide {
   padding: 0;
   line-height: 1.6;
-  color: #333;
+  color: var(--text-primary);
 }
 
 .user-guide h2 {
   margin: 0 0 30px 0;
-  color: #2c3e50;
+  color: var(--text-primary);
   font-size: 1.5rem;
-  border-bottom: 2px solid #3498db;
+  border-bottom: 2px solid var(--accent-primary);
   padding-bottom: 10px;
 }
 
 .user-guide h3 {
   margin: 30px 0 20px 0;
-  color: #34495e;
+  color: var(--text-primary);
   font-size: 1.2rem;
   font-weight: 600;
   display: flex;
@@ -24,7 +24,7 @@
 
 .user-guide h4 {
   margin: 15px 0 10px 0;
-  color: #2c3e50;
+  color: var(--text-primary);
   font-size: 1rem;
   font-weight: 600;
 }
@@ -51,8 +51,8 @@
 
 /* 機能ボックス */
 .feature-box {
-  background-color: #f8f9fa;
-  border: 1px solid #e9ecef;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
   border-radius: 8px;
   padding: 20px;
   margin: 20px 0;
@@ -60,30 +60,30 @@
 
 .feature-box h4 {
   margin-top: 0;
-  color: #495057;
+  color: var(--text-secondary);
 }
 
 /* 情報ボックス */
 .info-box {
-  background-color: #e3f2fd;
-  border: 1px solid #2196f3;
+  background-color: var(--bg-tertiary);
+  border: 1px solid var(--accent-primary);
   border-radius: 8px;
   padding: 16px;
   margin: 20px 0;
 }
 
 .info-box.warning {
-  background-color: #fff3cd;
-  border-color: #ffeaa7;
+  background-color: var(--bg-tertiary);
+  border-color: var(--status-warning);
 }
 
 .info-box h4 {
   margin-top: 0;
-  color: #1976d2;
+  color: var(--accent-primary);
 }
 
 .info-box.warning h4 {
-  color: #856404;
+  color: var(--status-warning);
 }
 
 /* ステップガイド */
@@ -97,14 +97,14 @@
   gap: 16px;
   margin: 20px 0;
   padding: 16px;
-  background-color: #f8f9fa;
+  background-color: var(--bg-secondary);
   border-radius: 8px;
-  border-left: 4px solid #3498db;
+  border-left: 4px solid var(--accent-primary);
 }
 
 .step-number {
-  background-color: #3498db;
-  color: white;
+  background-color: var(--accent-primary);
+  color: var(--text-inverse);
   width: 28px;
   height: 28px;
   border-radius: 50%;
@@ -118,12 +118,12 @@
 
 .step-content h4 {
   margin: 0 0 8px 0;
-  color: #2c3e50;
+  color: var(--text-primary);
 }
 
 .step-content p {
   margin: 0;
-  color: #555;
+  color: var(--text-secondary);
 }
 
 /* 機能リスト */
@@ -134,20 +134,20 @@
 }
 
 .feature-item {
-  background-color: #f8f9fa;
+  background-color: var(--bg-secondary);
   padding: 16px;
   border-radius: 8px;
-  border-left: 4px solid #28a745;
+  border-left: 4px solid var(--status-profit);
 }
 
 .feature-item h4 {
   margin: 0 0 8px 0;
-  color: #155724;
+  color: var(--status-profit);
 }
 
 .feature-item p {
   margin: 0;
-  color: #555;
+  color: var(--text-secondary);
 }
 
 /* コツのグリッド */
@@ -159,27 +159,27 @@
 }
 
 .tip-card {
-  background-color: #fff;
-  border: 1px solid #e9ecef;
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-primary);
   border-radius: 8px;
   padding: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-primary);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .tip-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-secondary);
 }
 
 .tip-card h4 {
   margin: 0 0 12px 0;
-  color: #6c63ff;
+  color: var(--accent-primary);
 }
 
 .tip-card p {
   margin: 0;
-  color: #555;
+  color: var(--text-secondary);
   font-size: 0.9rem;
 }
 
@@ -189,8 +189,8 @@
 }
 
 .faq-item {
-  background-color: #fff;
-  border: 1px solid #e9ecef;
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-primary);
   border-radius: 8px;
   padding: 20px;
   margin: 12px 0;
@@ -198,13 +198,13 @@
 
 .faq-item h4 {
   margin: 0 0 10px 0;
-  color: #dc3545;
+  color: var(--status-loss);
   font-size: 0.95rem;
 }
 
 .faq-item p {
   margin: 0;
-  color: #555;
+  color: var(--text-secondary);
   font-size: 0.9rem;
   padding-left: 12px;
 }
@@ -213,18 +213,18 @@
 .guide-footer {
   margin-top: 40px;
   padding-top: 20px;
-  border-top: 1px solid #e9ecef;
+  border-top: 1px solid var(--border-primary);
   text-align: center;
 }
 
 .guide-footer p {
-  color: #666;
+  color: var(--text-secondary);
   font-size: 0.9rem;
 }
 
 .last-updated {
   font-style: italic;
-  color: #999 !important;
+  color: var(--text-tertiary) !important;
 }
 
 /* モバイル対応 */

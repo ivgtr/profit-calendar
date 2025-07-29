@@ -17,8 +17,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   line-height: 1.6;
-  color: #333;
-  background-color: #f5f5f5;
+  color: var(--text-primary);
+  background-color: var(--bg-secondary);
 }
 
 #root {
@@ -42,7 +42,7 @@ p {
 }
 
 a {
-  color: #0066cc;
+  color: var(--accent-primary);
   text-decoration: none;
 }
 

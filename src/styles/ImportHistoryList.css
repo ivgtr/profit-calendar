@@ -4,36 +4,36 @@
 
 .import-history-list h3 {
   margin: 0 0 15px 0;
-  color: #333;
+  color: var(--text-primary);
 }
 
 .loading {
   text-align: center;
   padding: 20px;
-  color: #666;
+  color: var(--text-secondary);
 }
 
 .empty-state {
   text-align: center;
   padding: 40px;
-  color: #666;
-  background: white;
+  color: var(--text-secondary);
+  background: var(--bg-primary);
   border-radius: 8px;
-  border: 2px dashed #ddd;
+  border: 2px dashed var(--border-primary);
 }
 
 .history-item {
-  background: white;
+  background: var(--bg-primary);
   border-radius: 8px;
   margin-bottom: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-primary);
   overflow: hidden;
   transition: all 0.3s ease;
 }
 
 .history-item.rejected {
   opacity: 0.7;
-  background: #f8f9fa;
+  background: var(--bg-secondary);
 }
 
 .history-header {
@@ -46,11 +46,11 @@
 }
 
 .history-header:hover {
-  background-color: #f8f9fa;
+  background-color: var(--bg-secondary);
 }
 
 .history-item.rejected .history-header:hover {
-  background-color: #f1f3f4;
+  background-color: var(--bg-tertiary);
 }
 
 .history-main-info {
@@ -66,7 +66,7 @@
 
 .file-name {
   font-weight: bold;
-  color: #333;
+  color: var(--text-primary);
   font-size: 1.1rem;
 }
 
@@ -78,20 +78,20 @@
 }
 
 .status-badge.active {
-  background-color: #d4edda;
-  color: #155724;
+  background-color: var(--bg-tertiary);
+  color: var(--status-profit);
 }
 
 .status-badge.rejected {
-  background-color: #f8d7da;
-  color: #721c24;
+  background-color: var(--bg-tertiary);
+  color: var(--status-loss);
 }
 
 .import-summary {
   display: flex;
   gap: 20px;
   align-items: center;
-  color: #666;
+  color: var(--text-secondary);
   font-size: 0.9rem;
 }
 
@@ -100,22 +100,22 @@
 }
 
 .net-profit.profit {
-  color: #28a745;
+  color: var(--status-profit);
 }
 
 .net-profit.loss {
-  color: #dc3545;
+  color: var(--status-loss);
 }
 
 .expand-icon {
-  color: #666;
+  color: var(--text-secondary);
   font-size: 0.8rem;
 }
 
 .history-details {
   padding: 0 20px 20px 20px;
-  border-top: 1px solid #eee;
-  background-color: #fafafa;
+  border-top: 1px solid var(--border-secondary);
+  background-color: var(--bg-secondary);
 }
 
 .details-grid {
@@ -127,7 +127,7 @@
 
 .detail-section h4 {
   margin: 15px 0 10px 0;
-  color: #333;
+  color: var(--text-primary);
   font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -141,46 +141,46 @@
 }
 
 .detail-row span:first-child {
-  color: #666;
+  color: var(--text-secondary);
 }
 
 .detail-row span:last-child {
   font-weight: 500;
-  color: #333;
+  color: var(--text-primary);
 }
 
 .detail-row .profit {
-  color: #28a745;
+  color: var(--status-profit);
   font-weight: bold;
 }
 
 .detail-row .loss {
-  color: #dc3545;
+  color: var(--status-loss);
   font-weight: bold;
 }
 
 .csv-summary {
   margin-bottom: 20px;
   padding-top: 15px;
-  border-top: 1px solid #e9ecef;
+  border-top: 1px solid var(--border-primary);
 }
 
 .errors-section {
   margin-bottom: 20px;
   padding-top: 15px;
-  border-top: 1px solid #e9ecef;
+  border-top: 1px solid var(--border-primary);
 }
 
 .errors-list {
-  background: #fff3cd;
-  border: 1px solid #ffeaa7;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--status-warning);
   border-radius: 4px;
   padding: 10px;
 }
 
 .error-item {
   font-size: 0.85rem;
-  color: #856404;
+  color: var(--status-warning);
   margin-bottom: 5px;
 }
 
@@ -192,12 +192,12 @@
   display: flex;
   justify-content: flex-end;
   padding-top: 15px;
-  border-top: 1px solid #e9ecef;
+  border-top: 1px solid var(--border-primary);
 }
 
 .reject-button {
-  background-color: #dc3545;
-  color: white;
+  background-color: var(--status-loss);
+  color: var(--text-inverse);
   border: none;
   padding: 8px 16px;
   border-radius: 4px;
@@ -207,7 +207,8 @@
 }
 
 .reject-button:hover {
-  background-color: #c82333;
+  background-color: var(--status-loss);
+  opacity: 0.9;
 }
 
 @media (max-width: 768px) {

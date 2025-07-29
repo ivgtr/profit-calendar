@@ -9,6 +9,7 @@ import { BulkDeleteTrades } from './components/BulkDeleteTrades';
 import { MonthlyProfit } from './components/MonthlyProfit';
 import { MonthlyReport } from './components/MonthlyReport';
 import { YearlyChart } from './components/YearlyChart';
+import { ThemeSettings } from './components/ThemeSettings';
 import { TermsOfService } from './components/TermsOfService';
 import { PrivacyPolicy } from './components/PrivacyPolicy';
 import { Disclaimer } from './components/Disclaimer';
@@ -39,6 +40,7 @@ function App() {
   const [isBulkDeleteModalOpen, setIsBulkDeleteModalOpen] = useState(false);
   const [isMonthlyReportModalOpen, setIsMonthlyReportModalOpen] = useState(false);
   const [isYearlyChartModalOpen, setIsYearlyChartModalOpen] = useState(false);
+  const [isThemeSettingsModalOpen, setIsThemeSettingsModalOpen] = useState(false);
   const [isUserGuideModalOpen, setIsUserGuideModalOpen] = useState(false);
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
   const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
@@ -231,6 +233,7 @@ function App() {
         onOpenBulkDeleteModal={() => setIsBulkDeleteModalOpen(true)}
         onOpenMonthlyReportModal={() => setIsMonthlyReportModalOpen(true)}
         onOpenYearlyChartModal={() => setIsYearlyChartModalOpen(true)}
+        onOpenThemeSettingsModal={() => setIsThemeSettingsModalOpen(true)}
         onOpenUserGuideModal={() => setIsUserGuideModalOpen(true)}
         onOpenTermsModal={() => setIsTermsModalOpen(true)}
         onOpenPrivacyModal={() => setIsPrivacyModalOpen(true)}
@@ -443,6 +446,16 @@ function App() {
           databaseService={db} 
           isDbReady={isDbReady} 
         />
+      </Modal>
+
+      {/* テーマ設定モーダル */}
+      <Modal
+        isOpen={isThemeSettingsModalOpen}
+        onClose={() => setIsThemeSettingsModalOpen(false)}
+        title=""
+        size="medium"
+      >
+        <ThemeSettings />
       </Modal>
 
       {/* 使い方ガイドモーダル */}
