@@ -1,0 +1,201 @@
+.monthly-profit {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.monthly-profit.loading {
+  padding: 20px;
+  text-align: center;
+  color: #666;
+}
+
+.profit-container {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 16px 20px;
+}
+
+.monthly-summary {
+  flex: 1;
+}
+
+.summary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.summary-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #333;
+  font-weight: 600;
+}
+
+.mobile-toggle {
+  display: none;
+  padding: 4px;
+  border-radius: 4px;
+}
+
+.expand-icon {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+
+.profit-amount {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.profit-value {
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.profit-value.profit {
+  color: #28a745;
+}
+
+.profit-value.loss {
+  color: #dc3545;
+}
+
+.trade-count {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.desktop-breakdown {
+  display: block;
+}
+
+.mobile-breakdown {
+  display: none;
+  padding: 0 20px 16px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.breakdown-list {
+  display: flex;
+  gap: 16px;
+}
+
+.breakdown-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 12px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  min-width: 80px;
+  text-align: center;
+}
+
+.breakdown-label {
+  font-size: 0.8rem;
+  color: #666;
+  font-weight: 500;
+}
+
+.breakdown-profit {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.breakdown-profit.profit {
+  color: #28a745;
+}
+
+.breakdown-profit.loss {
+  color: #dc3545;
+}
+
+.breakdown-count {
+  color: #666;
+  font-size: 0.85rem;
+}
+
+/* スクロールバーのスタイリング */
+.breakdown-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.breakdown-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.breakdown-list::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.breakdown-list::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+@media (max-width: 768px) {
+  .profit-container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .profit-container:hover {
+    background-color: #f8f9fa;
+  }
+  
+  .mobile-toggle {
+    display: block;
+  }
+  
+  .desktop-breakdown {
+    display: none;
+  }
+  
+  .mobile-breakdown {
+    display: block;
+  }
+  
+  .mobile-breakdown .breakdown-list {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .mobile-breakdown .breakdown-item {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    min-width: auto;
+    padding: 12px 16px;
+    text-align: left;
+  }
+  
+  .mobile-breakdown .breakdown-label {
+    font-size: 0.95rem;
+  }
+  
+  .mobile-breakdown .breakdown-profit {
+    font-size: 0.95rem;
+  }
+  
+  .summary-header h3 {
+    font-size: 1rem;
+  }
+  
+  .profit-value {
+    font-size: 1.2rem;
+  }
+}

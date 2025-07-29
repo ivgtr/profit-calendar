@@ -1,0 +1,379 @@
+.app {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+
+.app-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+section {
+  margin-bottom: 40px;
+}
+
+section h2 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+
+.daily-trades-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.add-daily-trade-button {
+  background-color: #28a745;
+  color: white;
+  border: 2px solid #28a745;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(40, 167, 69, 0.2);
+}
+
+.add-daily-trade-button:hover {
+  background-color: #218838;
+  border-color: #218838;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+.button-icon {
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  line-height: 1;
+}
+
+.daily-profit {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.daily-profit .profit-container {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 16px 20px;
+}
+
+.daily-profit .daily-summary {
+  flex: 1;
+}
+
+.daily-profit .summary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.daily-profit .summary-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #333;
+  font-weight: 600;
+}
+
+.daily-profit .mobile-toggle {
+  display: none;
+  padding: 4px;
+  border-radius: 4px;
+}
+
+.daily-profit .expand-icon {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.daily-profit .profit-amount {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.daily-profit .profit-value {
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.daily-profit .profit-value.profit {
+  color: #28a745;
+}
+
+.daily-profit .profit-value.loss {
+  color: #dc3545;
+}
+
+.daily-profit .trade-count {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.daily-profit .desktop-breakdown {
+  display: block;
+}
+
+.daily-profit .mobile-breakdown {
+  display: none;
+  padding: 0 20px 16px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.daily-profit .breakdown-list {
+  display: flex;
+  gap: 16px;
+}
+
+.daily-profit .breakdown-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 12px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  min-width: 80px;
+  text-align: center;
+}
+
+.daily-profit .breakdown-label {
+  font-size: 0.8rem;
+  color: #666;
+  font-weight: 500;
+}
+
+.daily-profit .breakdown-profit {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.daily-profit .breakdown-profit.profit {
+  color: #28a745;
+}
+
+.daily-profit .breakdown-profit.loss {
+  color: #dc3545;
+}
+
+.summary-item {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.summary-item span:first-child {
+  font-weight: bold;
+  color: #666;
+}
+
+.trades-table {
+  width: 100%;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.trades-table th,
+.trades-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.trades-table th {
+  background-color: #f5f5f5;
+  font-weight: bold;
+  color: #333;
+}
+
+.trades-table tr:last-child td {
+  border-bottom: none;
+}
+
+.trade-row.clickable {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.trade-row.clickable:hover {
+  background-color: #f8f9fa;
+}
+
+.profit {
+  color: #28a745;
+  font-weight: bold;
+}
+
+.loss {
+  color: #dc3545;
+  font-weight: bold;
+}
+
+.no-trades {
+  text-align: center;
+  color: #666;
+  padding: 40px;
+  background: white;
+  border-radius: 8px;
+}
+
+
+@media (max-width: 768px) {
+  .app-main {
+    padding: 10px;
+  }
+
+
+  .daily-trades-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;
+  }
+
+  .daily-trades-header h2 {
+    margin-bottom: 0;
+    text-align: center;
+  }
+
+  .add-daily-trade-button {
+    justify-content: center;
+    padding: 12px 16px;
+    font-size: 0.95rem;
+  }
+
+  .button-icon {
+    font-size: 15px;
+  }
+
+  .trades-table {
+    font-size: 0.85rem;
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .trades-table thead,
+  .trades-table tbody,
+  .trades-table th,
+  .trades-table td,
+  .trades-table tr {
+    display: block;
+  }
+
+  .trades-table thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  .trades-table tr {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    padding: 12px;
+    position: relative;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .trades-table td {
+    padding: 6px 0;
+    text-align: left;
+    border: none;
+    position: relative;
+    padding-left: 100px;
+    word-wrap: break-word;
+    white-space: normal;
+  }
+
+  .trades-table td:before {
+    content: attr(data-label);
+    position: absolute;
+    left: 0;
+    width: 90px;
+    padding-right: 10px;
+    white-space: nowrap;
+    font-weight: bold;
+    color: #666;
+    font-size: 0.8rem;
+  }
+
+  .daily-profit .profit-container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .daily-profit .profit-container:hover {
+    background-color: #f8f9fa;
+  }
+  
+  .daily-profit .mobile-toggle {
+    display: block;
+  }
+  
+  .daily-profit .desktop-breakdown {
+    display: none;
+  }
+  
+  .daily-profit .mobile-breakdown {
+    display: block;
+  }
+  
+  .daily-profit .mobile-breakdown .breakdown-list {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .daily-profit .mobile-breakdown .breakdown-item {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    min-width: auto;
+    padding: 12px 16px;
+    text-align: left;
+  }
+  
+  .daily-profit .mobile-breakdown .breakdown-label {
+    font-size: 0.95rem;
+  }
+  
+  .daily-profit .mobile-breakdown .breakdown-profit {
+    font-size: 0.95rem;
+  }
+  
+  .daily-profit .summary-header h3 {
+    font-size: 1rem;
+  }
+  
+  .daily-profit .profit-value {
+    font-size: 1.2rem;
+  }
+}

@@ -1,0 +1,483 @@
+import { Trade } from '../types/Trade';
+import { ImportHistory, ImportTradeRelation } from '../types/ImportHistory';
+
+const DB_NAME = 'ProfitCalendarDB';
+const DB_VERSION = 2;
+
+export const STORES = {
+  TRADES: 'trades',
+  IMPORT_HISTORY: 'import_history',
+  IMPORT_TRADE_RELATIONS: 'import_trade_relations',
+} as const;
+
+class Database {
+  private db: IDBDatabase | null = null;
+
+  async init(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const request = indexedDB.open(DB_NAME, DB_VERSION);
+
+      request.onerror = () => {
+        reject(new Error('データベースを開けませんでした'));
+      };
+
+      request.onsuccess = () => {
+        this.db = request.result;
+        resolve();
+      };
+
+      request.onupgradeneeded = (event) => {
+        const db = (event.target as IDBOpenDBRequest).result;
+        
+        // 取引データストアの作成
+        if (!db.objectStoreNames.contains(STORES.TRADES)) {
+          const tradesStore = db.createObjectStore(STORES.TRADES, { keyPath: 'id' });
+          
+          // インデックスの作成
+          tradesStore.createIndex('date', 'date', { unique: false });
+          tradesStore.createIndex('stockName', 'stockName', { unique: false });
+          tradesStore.createIndex('stockCode', 'stockCode', { unique: false });
+          tradesStore.createIndex('tradeType', 'tradeType', { unique: false });
+          tradesStore.createIndex('csvImported', 'csvImported', { unique: false });
+          
+          // 複合インデックス（日付での検索を高速化）
+          tradesStore.createIndex('year_month', ['date.year', 'date.month'], { unique: false });
+        }
+
+        // インポート履歴ストアの作成
+        if (!db.objectStoreNames.contains(STORES.IMPORT_HISTORY)) {
+          const importHistoryStore = db.createObjectStore(STORES.IMPORT_HISTORY, { keyPath: 'id' });
+          
+          importHistoryStore.createIndex('importDate', 'importDate', { unique: false });
+          importHistoryStore.createIndex('status', 'status', { unique: false });
+          importHistoryStore.createIndex('fileName', 'fileName', { unique: false });
+        }
+
+        // インポート-取引関連ストアの作成
+        if (!db.objectStoreNames.contains(STORES.IMPORT_TRADE_RELATIONS)) {
+          const relationsStore = db.createObjectStore(STORES.IMPORT_TRADE_RELATIONS, { keyPath: ['importId', 'tradeId'] });
+          
+          relationsStore.createIndex('importId', 'importId', { unique: false });
+          relationsStore.createIndex('tradeId', 'tradeId', { unique: false });
+        }
+      };
+    });
+  }
+
+  private getDB(): IDBDatabase {
+    if (!this.db) {
+      throw new Error('データベースが初期化されていません');
+    }
+    return this.db;
+  }
+
+  // 取引を追加
+  async addTrade(trade: Trade): Promise<void> {
+    const db = this.getDB();
+    const transaction = db.transaction([STORES.TRADES], 'readwrite');
+    const store = transaction.objectStore(STORES.TRADES);
+    
+    await new Promise<void>((resolve, reject) => {
+      const request = store.add(trade);
+      request.onsuccess = () => resolve();
+      request.onerror = () => reject(new Error('取引の追加に失敗しました'));
+    });
+  }
+
+  // 複数の取引を一括追加
+  async addTrades(trades: Trade[]): Promise<void> {
+    const db = this.getDB();
+    const transaction = db.transaction([STORES.TRADES], 'readwrite');
+    const store = transaction.objectStore(STORES.TRADES);
+    
+    const promises = trades.map(trade => {
+      return new Promise<void>((resolve, reject) => {
+        const request = store.add(trade);
+        request.onsuccess = () => resolve();
+        request.onerror = () => reject(new Error(`取引の追加に失敗しました: ${trade.stockName}`));
+      });
+    });
+
+    await Promise.all(promises);
+  }
+
+  // 取引を更新
+  async updateTrade(trade: Trade): Promise<void> {
+    const db = this.getDB();
+    const transaction = db.transaction([STORES.TRADES], 'readwrite');
+    const store = transaction.objectStore(STORES.TRADES);
+    
+    await new Promise<void>((resolve, reject) => {
+      const request = store.put(trade);
+      request.onsuccess = () => resolve();
+      request.onerror = () => reject(new Error('取引の更新に失敗しました'));
+    });
+  }
+
+  // 取引を削除
+  async deleteTrade(id: string): Promise<void> {
+    const db = this.getDB();
+    const transaction = db.transaction([STORES.TRADES], 'readwrite');
+    const store = transaction.objectStore(STORES.TRADES);
+    
+    await new Promise<void>((resolve, reject) => {
+      const request = store.delete(id);
+      request.onsuccess = () => resolve();
+      request.onerror = () => reject(new Error('取引の削除に失敗しました'));
+    });
+  }
+
+  // IDで取引を取得
+  async getTradeById(id: string): Promise<Trade | null> {
+    const db = this.getDB();
+    const transaction = db.transaction([STORES.TRADES], 'readonly');
+    const store = transaction.objectStore(STORES.TRADES);
+    
+    return new Promise((resolve, reject) => {
+      const request = store.get(id);
+      request.onsuccess = () => resolve(request.result || null);
+      request.onerror = () => reject(new Error('取引の取得に失敗しました'));
+    });
+  }
+
+  // 日付範囲で取引を取得
+  async getTradesByDateRange(startDate: Date, endDate: Date): Promise<Trade[]> {
+    const db = this.getDB();
+    const transaction = db.transaction([STORES.TRADES], 'readonly');
+    const store = transaction.objectStore(STORES.TRADES);
+    const index = store.index('date');
+    
+    const range = IDBKeyRange.bound(startDate, endDate);
+    
+    return new Promise((resolve, reject) => {
+      const trades: Trade[] = [];
+      const request = index.openCursor(range);
+      
+      request.onsuccess = (event) => {
+        const cursor = (event.target as IDBRequest).result;
+        if (cursor) {
+          trades.push(cursor.value);
+          cursor.continue();
+        } else {
+          resolve(trades);
+        }
+      };
+      
+      request.onerror = () => reject(new Error('取引の取得に失敗しました'));
+    });
+  }
+
+  // 特定の日の取引を取得
+  async getTradesByDate(date: Date): Promise<Trade[]> {
+    const startOfDay = new Date(date);
+    startOfDay.setHours(0, 0, 0, 0);
+    
+    const endOfDay = new Date(date);
+    endOfDay.setHours(23, 59, 59, 999);
+    
+    return this.getTradesByDateRange(startOfDay, endOfDay);
+  }
+
+  // 全ての取引を取得
+  async getAllTrades(): Promise<Trade[]> {
+    const db = this.getDB();
+    const transaction = db.transaction([STORES.TRADES], 'readonly');
+    const store = transaction.objectStore(STORES.TRADES);
+    
+    return new Promise((resolve, reject) => {
+      const request = store.getAll();
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(new Error('取引の取得に失敗しました'));
+    });
+  }
+
+  // 銘柄名で取引を検索
+  async getTradesByStockName(stockName: string): Promise<Trade[]> {
+    const db = this.getDB();
+    const transaction = db.transaction([STORES.TRADES], 'readonly');
+    const store = transaction.objectStore(STORES.TRADES);
+    const index = store.index('stockName');
+    
+    return new Promise((resolve, reject) => {
+      const trades: Trade[] = [];
+      const request = index.openCursor(IDBKeyRange.only(stockName));
+      
+      request.onsuccess = (event) => {
+        const cursor = (event.target as IDBRequest).result;
+        if (cursor) {
+          trades.push(cursor.value);
+          cursor.continue();
+        } else {
+          resolve(trades);
+        }
+      };
+      
+      request.onerror = () => reject(new Error('取引の検索に失敗しました'));
+    });
+  }
+
+  // データベースをクリア（開発用）
+  async clearAllTrades(): Promise<void> {
+    const db = this.getDB();
+    const transaction = db.transaction([STORES.TRADES], 'readwrite');
+    const store = transaction.objectStore(STORES.TRADES);
+    
+    await new Promise<void>((resolve, reject) => {
+      const request = store.clear();
+      request.onsuccess = () => resolve();
+      request.onerror = () => reject(new Error('データのクリアに失敗しました'));
+    });
+  }
+
+  // 指定日付の取引を削除
+  async deleteTradesByDates(dates: Date[]): Promise<number> {
+    const db = this.getDB();
+    const transaction = db.transaction([STORES.TRADES], 'readwrite');
+    const store = transaction.objectStore(STORES.TRADES);
+    const index = store.index('date');
+    
+    let deletedCount = 0;
+    
+    for (const date of dates) {
+      const startOfDay = new Date(date);
+      startOfDay.setHours(0, 0, 0, 0);
+      const endOfDay = new Date(date);
+      endOfDay.setHours(23, 59, 59, 999);
+      
+      const range = IDBKeyRange.bound(startOfDay, endOfDay);
+      
+      await new Promise<void>((resolve, reject) => {
+        const request = index.openCursor(range);
+        
+        request.onsuccess = (event) => {
+          const cursor = (event.target as IDBRequest).result;
+          if (cursor) {
+            cursor.delete();
+            deletedCount++;
+            cursor.continue();
+          } else {
+            resolve();
+          }
+        };
+        
+        request.onerror = () => reject(new Error('取引の削除に失敗しました'));
+      });
+    }
+    
+    return deletedCount;
+  }
+
+  // 全ての取引を削除
+  async deleteAllTrades(): Promise<number> {
+    const db = this.getDB();
+    const transaction = db.transaction([STORES.TRADES], 'readwrite');
+    const store = transaction.objectStore(STORES.TRADES);
+    
+    // 削除前に件数を取得
+    const count = await new Promise<number>((resolve, reject) => {
+      const countRequest = store.count();
+      countRequest.onsuccess = () => resolve(countRequest.result);
+      countRequest.onerror = () => reject(new Error('取引数の取得に失敗しました'));
+    });
+    
+    await new Promise<void>((resolve, reject) => {
+      const request = store.clear();
+      request.onsuccess = () => resolve();
+      request.onerror = () => reject(new Error('全取引の削除に失敗しました'));
+    });
+    
+    return count;
+  }
+
+  // 月間収益を取得
+  async getMonthlyProfit(year: number, month: number): Promise<{
+    totalProfit: number;
+    tradeCount: number;
+    spotProfit: number;
+    marginProfit: number;
+  }> {
+    const db = this.getDB();
+    const transaction = db.transaction([STORES.TRADES], 'readonly');
+    const store = transaction.objectStore(STORES.TRADES);
+    const index = store.index('date');
+    
+    const startDate = new Date(year, month - 1, 1);
+    const endDate = new Date(year, month, 0, 23, 59, 59, 999);
+    const range = IDBKeyRange.bound(startDate, endDate);
+    
+    return new Promise((resolve, reject) => {
+      const trades: Trade[] = [];
+      const request = index.openCursor(range);
+      
+      request.onsuccess = (event) => {
+        const cursor = (event.target as IDBRequest).result;
+        if (cursor) {
+          trades.push(cursor.value);
+          cursor.continue();
+        } else {
+          // 現物・信用別に集計
+          let spotProfit = 0;
+          let marginProfit = 0;
+          
+          trades.forEach(trade => {
+            // 取引タイプの正規化（前後の空白除去、全角半角統一）
+            const normalizedTradeType = trade.tradeType.trim();
+            
+            // 実際のデータに基づく分類
+            if (normalizedTradeType === '売却' || normalizedTradeType === '現物売') {
+              // 現物取引の売却（損益確定）
+              spotProfit += trade.realizedProfitLoss;
+            } 
+            else if (normalizedTradeType === '購入' || normalizedTradeType === '買付' || normalizedTradeType === '現物買') {
+              // 現物取引の購入（取得のみ、損益確定なし）
+              // 何もしない
+            }
+            // 信用取引は返済時に損益確定
+            else if (normalizedTradeType === '返済買' || normalizedTradeType === '返済売') {
+              marginProfit += trade.realizedProfitLoss;
+            }
+          });
+          
+          
+          const totalProfit = trades.reduce((sum, trade) => sum + trade.realizedProfitLoss, 0);
+          
+          resolve({
+            totalProfit,
+            tradeCount: trades.length,
+            spotProfit,
+            marginProfit,
+          });
+        }
+      };
+      
+      request.onerror = () => reject(new Error('月間収益の取得に失敗しました'));
+    });
+  }
+
+  // インポート履歴を追加
+  async addImportHistory(history: ImportHistory): Promise<void> {
+    const db = this.getDB();
+    const transaction = db.transaction([STORES.IMPORT_HISTORY], 'readwrite');
+    const store = transaction.objectStore(STORES.IMPORT_HISTORY);
+    
+    await new Promise<void>((resolve, reject) => {
+      const request = store.add(history);
+      request.onsuccess = () => resolve();
+      request.onerror = () => reject(new Error('インポート履歴の追加に失敗しました'));
+    });
+  }
+
+  // インポート-取引関連を追加
+  async addImportTradeRelations(relations: ImportTradeRelation[]): Promise<void> {
+    const db = this.getDB();
+    const transaction = db.transaction([STORES.IMPORT_TRADE_RELATIONS], 'readwrite');
+    const store = transaction.objectStore(STORES.IMPORT_TRADE_RELATIONS);
+    
+    const promises = relations.map(relation => {
+      return new Promise<void>((resolve, reject) => {
+        const request = store.add(relation);
+        request.onsuccess = () => resolve();
+        request.onerror = () => reject(new Error('関連データの追加に失敗しました'));
+      });
+    });
+
+    await Promise.all(promises);
+  }
+
+  // すべてのインポート履歴を取得
+  async getAllImportHistory(): Promise<ImportHistory[]> {
+    const db = this.getDB();
+    const transaction = db.transaction([STORES.IMPORT_HISTORY], 'readonly');
+    const store = transaction.objectStore(STORES.IMPORT_HISTORY);
+    const index = store.index('importDate');
+    
+    return new Promise((resolve, reject) => {
+      const histories: ImportHistory[] = [];
+      // 新しい順で取得
+      const request = index.openCursor(null, 'prev');
+      
+      request.onsuccess = (event) => {
+        const cursor = (event.target as IDBRequest).result;
+        if (cursor) {
+          histories.push(cursor.value);
+          cursor.continue();
+        } else {
+          resolve(histories);
+        }
+      };
+      
+      request.onerror = () => reject(new Error('インポート履歴の取得に失敗しました'));
+    });
+  }
+
+  // インポート履歴を更新
+  async updateImportHistory(history: ImportHistory): Promise<void> {
+    const db = this.getDB();
+    const transaction = db.transaction([STORES.IMPORT_HISTORY], 'readwrite');
+    const store = transaction.objectStore(STORES.IMPORT_HISTORY);
+    
+    await new Promise<void>((resolve, reject) => {
+      const request = store.put(history);
+      request.onsuccess = () => resolve();
+      request.onerror = () => reject(new Error('インポート履歴の更新に失敗しました'));
+    });
+  }
+
+  // インポートIDに関連する取引IDを取得
+  async getTradeIdsByImportId(importId: string): Promise<string[]> {
+    const db = this.getDB();
+    const transaction = db.transaction([STORES.IMPORT_TRADE_RELATIONS], 'readonly');
+    const store = transaction.objectStore(STORES.IMPORT_TRADE_RELATIONS);
+    const index = store.index('importId');
+    
+    return new Promise((resolve, reject) => {
+      const tradeIds: string[] = [];
+      const request = index.openCursor(IDBKeyRange.only(importId));
+      
+      request.onsuccess = (event) => {
+        const cursor = (event.target as IDBRequest).result;
+        if (cursor) {
+          tradeIds.push(cursor.value.tradeId);
+          cursor.continue();
+        } else {
+          resolve(tradeIds);
+        }
+      };
+      
+      request.onerror = () => reject(new Error('関連取引IDの取得に失敗しました'));
+    });
+  }
+
+  // インポートIDに関連する取引を削除
+  async deleteTradesByImportId(importId: string): Promise<void> {
+    const tradeIds = await this.getTradeIdsByImportId(importId);
+    
+    const db = this.getDB();
+    const transaction = db.transaction([STORES.TRADES, STORES.IMPORT_TRADE_RELATIONS], 'readwrite');
+    const tradesStore = transaction.objectStore(STORES.TRADES);
+    const relationsStore = transaction.objectStore(STORES.IMPORT_TRADE_RELATIONS);
+    
+    // 取引を削除
+    const deleteTradePromises = tradeIds.map(tradeId => {
+      return new Promise<void>((resolve, reject) => {
+        const request = tradesStore.delete(tradeId);
+        request.onsuccess = () => resolve();
+        request.onerror = () => reject(new Error(`取引 ${tradeId} の削除に失敗しました`));
+      });
+    });
+
+    // 関連データを削除
+    const deleteRelationPromises = tradeIds.map(tradeId => {
+      return new Promise<void>((resolve, reject) => {
+        const request = relationsStore.delete([importId, tradeId]);
+        request.onsuccess = () => resolve();
+        request.onerror = () => reject(new Error(`関連データの削除に失敗しました`));
+      });
+    });
+
+    await Promise.all([...deleteTradePromises, ...deleteRelationPromises]);
+  }
+}
+
+// シングルトンインスタンス
+export const db = new Database();
