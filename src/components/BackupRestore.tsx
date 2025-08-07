@@ -61,7 +61,7 @@ export function BackupRestore({ onDataRestored }: BackupRestoreProps) {
         setFilePreview(null);
         showMessage('error', validation.error || 'ファイルの検証に失敗しました');
       }
-    } catch (error) {
+    } catch {
       setFilePreview(null);
       showMessage('error', 'ファイルの検証中にエラーが発生しました');
     } finally {
