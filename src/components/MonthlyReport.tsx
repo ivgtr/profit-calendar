@@ -4,6 +4,7 @@ import { Trade } from '../types/Trade';
 import { Tooltip } from './Tooltip';
 import { TOOLTIPS } from '../constants/tooltips';
 import { formatStockDisplay } from '../utils/stockUtils';
+import { formatCurrency } from '../utils/formatUtils';
 import '../styles/MonthlyReport.css';
 
 interface MonthlyReportProps {
@@ -496,9 +497,6 @@ export function MonthlyReport({ currentMonth, refreshTrigger, isDbReady }: Month
     setReportMonth(currentMonth);
   }, [currentMonth]);
 
-  const formatCurrency = (amount: number) => {
-    return amount.toLocaleString('ja-JP');
-  };
 
   const formatPercentage = (value: number) => {
     return `${value.toFixed(1)}%`;
