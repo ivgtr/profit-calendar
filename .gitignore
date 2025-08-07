@@ -25,3 +25,4 @@ dist-ssr
 
 # Serena cache
 .serena/cache
+# Profit Calendar*.ini
