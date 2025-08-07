@@ -21,6 +21,8 @@ import { Trade } from './types/Trade';
 import { formatCurrency } from './utils/formatUtils';
 import { calculateTradeBreakdown, calculateTotalProfit } from './utils/tradeCalculations';
 import { useModalManager } from './hooks/useModalManager';
+import { useTradeCRUD } from './hooks/useTradeCRUD';
+import { useTradeHandlers } from './hooks/useTradeHandlers';
 import './styles/App.css';
 
 function App() {
@@ -39,7 +41,6 @@ function App() {
   
   // モーダル状態管理（統一化）
   const { openModal, closeModal, isModalOpen } = useModalManager();
-  const [editingTrade, setEditingTrade] = useState<Trade | undefined>(undefined);
 
   // データベースの初期化
   useEffect(() => {
@@ -65,141 +66,51 @@ function App() {
     }
   }, []);
 
-  const handleDateSelect = useCallback((date: Date) => {
-    setSelectedDate(date);
-    loadDailyTrades(date);
-  }, [loadDailyTrades]);
+  // CRUD操作ロジック
+  const {
+    editingTrade,
+    handleOpenTradeForm,
+    handleSaveTrade,
+    handleDeleteTrade,
+    handleCancelTradeForm
+  } = useTradeCRUD({
+    selectedDate,
+    loadDailyTrades,
+    setDataVersion,
+    closeModal,
+    openModal
+  });
 
-  const handleMonthChange = (date: Date) => {
-    setCurrentMonth(date);
-  };
-
-  const handleImportComplete = useCallback(() => {
-    // データが変更されたことを通知
-    setDataVersion(prev => prev + 1);
-    // カレンダーをリフレッシュするため、選択日付を再設定
-    if (selectedDate) {
-      loadDailyTrades(selectedDate);
-    }
-    // インポートモーダルを閉じる
-    closeModal();
-  }, [selectedDate, loadDailyTrades]);
-
-  const handleHistoryUpdate = useCallback(() => {
-    // データが変更されたことを通知
-    setDataVersion(prev => prev + 1);
-    // カレンダーをリフレッシュ
-    if (selectedDate) {
-      loadDailyTrades(selectedDate);
-    }
-  }, [selectedDate, loadDailyTrades]);
-
-  const handleOpenTradeForm = (trade?: Trade, defaultDate?: Date) => {
-    setEditingTrade(trade);
-    // 新規作成時にデフォルト日付を設定
-    if (!trade && defaultDate) {
-      setEditingTrade({
-        id: '',
-        date: defaultDate,
-        accountType: 'NISA',
-        stockName: '',
-        tradeType: '現物買',
-        quantity: 0,
-        amount: 0,
-        unitPrice: 0,
-        averageAcquisitionPrice: 0,
-        realizedProfitLoss: 0,
-        csvImported: false,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      } as Trade);
-    }
-    openModal('tradeForm');
-  };
-
-  const handleSaveTrade = async (trade: Trade) => {
-    try {
-      if (editingTrade) {
-        // 編集
-        await db.updateTrade(trade);
-      } else {
-        // 新規追加
-        await db.addTrade(trade);
-      }
-      
-      // データが変更されたことを通知
-      setDataVersion(prev => prev + 1);
-      // UIを更新
-      if (selectedDate) {
-        loadDailyTrades(selectedDate);
-      }
-            
-      // モーダルを閉じる
-      closeModal();
-      setEditingTrade(undefined);
-    } catch (error) {
-      console.error('取引の保存エラー:', error);
-      alert('取引の保存に失敗しました');
-    }
-  };
-
-  const handleDeleteTrade = async (tradeId: string) => {
-    if (!confirm('この取引を削除しますか？')) return;
-    
-    try {
-      await db.deleteTrade(tradeId);
-      
-      // データが変更されたことを通知
-      setDataVersion(prev => prev + 1);
-      // UIを更新
-      if (selectedDate) {
-        loadDailyTrades(selectedDate);
-      }
-      
-      // モーダルを閉じる
-      closeModal();
-      setEditingTrade(undefined);
-    } catch (error) {
-      console.error('取引の削除エラー:', error);
-      alert('取引の削除に失敗しました');
-    }
-  };
-
-  const handleCancelTradeForm = () => {
-    closeModal();
-    setEditingTrade(undefined);
-  };
-
-  const handleBulkDeleteComplete = () => {
-    // データが変更されたことを通知
-    setDataVersion(prev => prev + 1);
-    // カレンダーをリフレッシュ
-    if (selectedDate) {
-      loadDailyTrades(selectedDate);
-    }
-    // モーダルを閉じる
-    closeModal();
-  };
-
-  const handleDataRestored = () => {
-    // データが変更されたことを通知
-    setDataVersion(prev => prev + 1);
-    // カレンダーをリフレッシュ
-    if (selectedDate) {
-      loadDailyTrades(selectedDate);
-    }
-    // モーダルを閉じる
-    closeModal();
-  };
+  // イベントハンドラー
+  const {
+    isDailyBreakdownExpanded,
+    handleDateSelect,
+    handleMonthChange,
+    handleImportComplete,
+    handleHistoryUpdate,
+    handleBulkDeleteComplete,
+    handleDataRestored,
+    handleHeaderAction,
+    toggleDailyBreakdown
+  } = useTradeHandlers({
+    selectedDate,
+    loadDailyTrades,
+    setDataVersion,
+    setSelectedDate,
+    setCurrentMonth,
+    closeModal,
+    openModal,
+    handleOpenTradeForm
+  });
 
 
 
-  // 日別内訳の表示/非表示状態管理
-  const [isDailyBreakdownExpanded, setIsDailyBreakdownExpanded] = useState(false);
 
-  const toggleDailyBreakdown = () => {
-    setIsDailyBreakdownExpanded(!isDailyBreakdownExpanded);
-  };
+
+
+
+
+
 
   if (!isDbReady) {
     return (
@@ -211,20 +122,7 @@ function App() {
 
   return (
     <div className="app">
-      <Header 
-        onOpenImportModal={() => openModal('import')}
-        onOpenHistoryModal={() => openModal('history')}
-        onOpenTradeFormModal={() => handleOpenTradeForm()}
-        onOpenBulkDeleteModal={() => openModal('bulkDelete')}
-        onOpenMonthlyReportModal={() => openModal('monthlyReport')}
-        onOpenYearlyChartModal={() => openModal('yearlyChart')}
-        onOpenThemeSettingsModal={() => openModal('themeSettings')}
-        onOpenUserGuideModal={() => openModal('userGuide')}
-        onOpenBackupRestoreModal={() => openModal('backupRestore')}
-        onOpenTermsModal={() => openModal('terms')}
-        onOpenPrivacyModal={() => openModal('privacy')}
-        onOpenDisclaimerModal={() => openModal('disclaimer')}
-      />
+      <Header onAction={handleHeaderAction} />
 
       <main className="app-main">
         <MonthlyProfit currentMonth={currentMonth} refreshTrigger={dataVersion} isDbReady={isDbReady} />
