@@ -1,0 +1,155 @@
+.stock-top3-container {
+  margin-top: 24px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0 0 16px 0;
+  text-align: center;
+}
+
+.stock-lists {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .stock-lists {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+.stock-list {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.stock-list-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0 0 12px 0;
+  text-align: center;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stock-list.profit .stock-list-title {
+  color: #10b981;
+}
+
+.stock-list.loss .stock-list-title {
+  color: #ef4444;
+}
+
+.no-stocks {
+  text-align: center;
+  color: #999;
+  font-size: 12px;
+  padding: 20px 0;
+}
+
+.stock-items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.stock-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.stock-item:last-child {
+  border-bottom: none;
+}
+
+.rank-badge {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.stock-item:nth-child(1) .rank-badge {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+}
+
+.stock-item:nth-child(2) .rank-badge {
+  background: linear-gradient(135deg, #6b7280, #4b5563);
+}
+
+.stock-item:nth-child(3) .rank-badge {
+  background: linear-gradient(135deg, #cd7c2f, #92400e);
+}
+
+.stock-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.stock-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: #ffffff;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stock-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.profit {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.profit.positive {
+  color: #10b981;
+}
+
+.profit.negative {
+  color: #ef4444;
+}
+
+.trade-count {
+  font-size: 11px;
+  color: #999;
+  white-space: nowrap;
+}
+
+.stock-top3-loading,
+.stock-top3-no-data {
+  text-align: center;
+  color: #999;
+  padding: 40px 20px;
+  font-size: 14px;
+}
