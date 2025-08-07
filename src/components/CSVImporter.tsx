@@ -3,13 +3,14 @@ import { parseCSV, readFileAsText } from '../utils/csvParser';
 import { db } from '../services/database';
 import { Trade, ImportResult, CSVSummary } from '../types/Trade';
 import { ImportHistory, ImportTradeRelation } from '../types/ImportHistory';
+import { DataUpdateHandler } from '../types/Common';
 import { v4 as uuidv4 } from 'uuid';
 import { Modal } from './Modal';
 import { formatStockDisplay } from '../utils/stockUtils';
 import '../styles/CSVImporter.css';
 
 interface CSVImporterProps {
-  onImportComplete?: (result: ImportResult) => void;
+  onImportComplete?: DataUpdateHandler<ImportResult>;
 }
 
 export function CSVImporter({ onImportComplete }: CSVImporterProps) {

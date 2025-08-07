@@ -1,12 +1,9 @@
 import { useEffect } from 'react';
+import { ModalBaseProps } from '../types/Common';
 import '../styles/Modal.css';
 
-interface ModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  title: string;
+interface ModalProps extends ModalBaseProps {
   children: React.ReactNode;
-  size?: 'small' | 'medium' | 'large';
 }
 
 export function Modal({ isOpen, onClose, title, children, size = 'medium' }: ModalProps) {

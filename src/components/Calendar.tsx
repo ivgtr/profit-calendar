@@ -1,13 +1,13 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { DailySummary } from '../types/Trade';
+import { LoadingProps, DateHandler } from '../types/Common';
 import { formatCurrency } from '../utils/formatUtils';
 import '../styles/Calendar.css';
 
-interface CalendarProps {
-  onDateSelect?: (date: Date) => void;
-  onMonthChange?: (date: Date) => void;
+interface CalendarProps extends LoadingProps {
+  onDateSelect?: DateHandler;
+  onMonthChange?: DateHandler;
   monthlyTrades?: Map<string, DailySummary>;
-  isLoading?: boolean;
 }
 
 export function Calendar({ onDateSelect, onMonthChange, monthlyTrades = new Map(), isLoading = false }: CalendarProps) {
