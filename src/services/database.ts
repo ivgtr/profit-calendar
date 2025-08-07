@@ -114,6 +114,34 @@ class Database {
     });
   }
 
+  // 指定期間での銘柄別損益を取得
+  async getStockProfitsByPeriod(startDate: Date, endDate: Date): Promise<Array<{stockCode?: string, stockName: string, totalProfit: number, tradeCount: number}>> {
+    if (!this.db) {
+      return [];
+    }
+    const trades = await this.getTradesByDateRange(startDate, endDate);
+    
+    const stockProfits = new Map<string, {stockCode?: string, totalProfit: number, tradeCount: number}>();
+    
+    trades.forEach(trade => {
+      const existing = stockProfits.get(trade.stockName) || {stockCode: trade.stockCode, totalProfit: 0, tradeCount: 0};
+      stockProfits.set(trade.stockName, {
+        stockCode: trade.stockCode || existing.stockCode,
+        totalProfit: existing.totalProfit + trade.realizedProfitLoss,
+        tradeCount: existing.tradeCount + 1
+      });
+    });
+    
+    return Array.from(stockProfits.entries())
+      .map(([stockName, data]) => ({
+        stockCode: data.stockCode,
+        stockName,
+        totalProfit: data.totalProfit,
+        tradeCount: data.tradeCount
+      }))
+      .sort((a, b) => b.totalProfit - a.totalProfit);
+  }
+
   // 取引を削除
   async deleteTrade(id: string): Promise<void> {
     const db = this.getDB();
