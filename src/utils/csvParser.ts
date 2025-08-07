@@ -1,5 +1,6 @@
 import { CSVTradeData, Trade, ImportResult, CSVSummary } from '../types/Trade';
 import { v4 as uuidv4 } from 'uuid';
+import * as Encoding from 'encoding-japanese';
 
 // 文字列を数値に変換（カンマと正負記号に対応）
 function parseNumber(value: string): number {
@@ -21,10 +22,32 @@ function parseDate(dateStr: string): Date {
   return new Date(year, month - 1, day);
 }
 
-// 銘柄名から銘柄コードを抽出
-function extractStockCode(stockName: string): string | undefined {
-  const match = stockName.match(/\s(\d{4})$/);
-  return match ? match[1] : undefined;
+// 銘柄名から銘柄コードと純粋な銘柄名を抽出
+function extractStockInfo(stockNameWithCode: string): { name: string; code?: string } {
+  // 日本株のティッカーコードパターン:
+  // - 標準: 4桁数字 (1234, 7203)
+  // - 優先株: 4桁数字+アルファベット1文字 (1234A, 5678B)
+  // - 特殊銘柄: 3桁数字+アルファベット1文字 (123A, 456B)
+  // - 一部のETF/REIT等: その他の英数字組み合わせ
+  
+  // パターン1: 末尾の証券コードを抽出
+  const match = stockNameWithCode.match(/^(.+?)\s+([0-9]{3,4}[A-Z]?|[0-9A-Z]{3,5})$/);
+  if (match) {
+    const code = match[2];
+    // 有効な証券コードパターンかチェック
+    if (/^(\d{4}[A-Z]?|\d{3}[A-Z]|[0-9A-Z]{3,5})$/.test(code)) {
+      return {
+        name: match[1].trim(),
+        code: code
+      };
+    }
+  }
+  
+  // パターン2: コードが含まれていない場合
+  return {
+    name: stockNameWithCode.trim(),
+    code: undefined
+  };
 }
 
 // CSVの行をTradeオブジェクトに変換
@@ -57,14 +80,14 @@ function parseTradeRow(row: string[], headers: string[]): CSVTradeData | null {
 // CSVデータをTradeオブジェクトに変換
 function csvTradeToTrade(csvTrade: CSVTradeData): Trade {
   const now = new Date();
-  const stockCode = extractStockCode(csvTrade.銘柄名);
+  const stockInfo = extractStockInfo(csvTrade.銘柄名);
   
   return {
     id: uuidv4(),
     date: parseDate(csvTrade.約定日),
     accountType: csvTrade.口座,
-    stockName: csvTrade.銘柄名,
-    stockCode,
+    stockName: stockInfo.name,  // 純粋な銘柄名のみを保存
+    stockCode: stockInfo.code,   // 銘柄コードを別フィールドに保存
     tradeType: csvTrade.取引,
     quantity: csvTrade.数量,
     amount: csvTrade.売却決済額,
@@ -254,21 +277,44 @@ export async function parseCSV(content: string): Promise<{
   };
 }
 
-// ファイルを読み込んでテキストを返す
+// ファイルを読み込んでテキストを返す（encoding-japaneseライブラリ使用）
 export function readFileAsText(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     
     reader.onload = (e) => {
-      const text = e.target?.result as string;
-      resolve(text);
+      try {
+        const buffer = e.target?.result as ArrayBuffer;
+        const uint8Array = new Uint8Array(buffer);
+        
+        // encoding-japaneseライブラリを使用してShift-JISをUnicodeに変換
+        const unicodeArray = Encoding.convert(uint8Array, {
+          to: 'UNICODE',
+          from: 'SJIS'
+        });
+        
+        // Unicodeの配列を文字列に変換
+        const text = Encoding.codeToString(unicodeArray);
+        
+        resolve(text);
+      } catch {
+        // Shift-JISで失敗した場合はUTF-8として再試行
+        const reader2 = new FileReader();
+        reader2.onload = (e2) => {
+          resolve(e2.target?.result as string);
+        };
+        reader2.onerror = () => {
+          reject(new Error('ファイルの読み込みに失敗しました'));
+        };
+        reader2.readAsText(file, 'utf-8');
+      }
     };
     
     reader.onerror = () => {
       reject(new Error('ファイルの読み込みに失敗しました'));
     };
     
-    // Shift-JISとして読み込む
-    reader.readAsText(file, 'Shift-JIS');
+    // ArrayBufferとして読み込んでからencoding-japaneseで処理
+    reader.readAsArrayBuffer(file);
   });
 }

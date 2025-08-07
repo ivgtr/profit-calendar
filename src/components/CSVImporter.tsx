@@ -5,6 +5,7 @@ import { Trade, ImportResult, CSVSummary } from '../types/Trade';
 import { ImportHistory, ImportTradeRelation } from '../types/ImportHistory';
 import { v4 as uuidv4 } from 'uuid';
 import { Modal } from './Modal';
+import { formatStockDisplay } from '../utils/stockUtils';
 import '../styles/CSVImporter.css';
 
 interface CSVImporterProps {
@@ -255,7 +256,7 @@ export function CSVImporter({ onImportComplete }: CSVImporterProps) {
               {previewTrades.slice(0, 10).map((trade, index) => (
                 <tr key={index}>
                   <td>{trade.date.toLocaleDateString('ja-JP')}</td>
-                  <td>{trade.stockName}</td>
+                  <td>{formatStockDisplay(trade.stockName, trade.stockCode)}</td>
                   <td>{trade.tradeType}</td>
                   <td>{trade.quantity.toLocaleString()}</td>
                   <td className={trade.realizedProfitLoss >= 0 ? 'profit' : 'loss'}>
