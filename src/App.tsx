@@ -18,6 +18,7 @@ import { BackupRestore } from './components/BackupRestore';
 import { useMonthlyTrades } from './hooks/useMonthlyTrades';
 import { db } from './services/database';
 import { Trade } from './types/Trade';
+import { formatCurrency } from './utils/formatUtils';
 import './styles/App.css';
 
 function App() {
@@ -200,9 +201,6 @@ function App() {
     setIsBackupRestoreModalOpen(false);
   };
 
-  const formatCurrency = (amount: number) => {
-    return amount.toLocaleString('ja-JP');
-  };
 
   // 日別取引の現物・信用別損益を計算
   const calculateDailyBreakdown = (trades: Trade[]) => {
