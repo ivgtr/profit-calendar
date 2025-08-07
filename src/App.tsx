@@ -19,6 +19,8 @@ import { useMonthlyTrades } from './hooks/useMonthlyTrades';
 import { db } from './services/database';
 import { Trade } from './types/Trade';
 import { formatCurrency } from './utils/formatUtils';
+import { calculateTradeBreakdown, calculateTotalProfit } from './utils/tradeCalculations';
+import { useModalManager } from './hooks/useModalManager';
 import './styles/App.css';
 
 function App() {
@@ -35,19 +37,8 @@ function App() {
     isDbReady
   );
   
-  // モーダル状態管理
-  const [isImportModalOpen, setIsImportModalOpen] = useState(false);
-  const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
-  const [isTradeFormModalOpen, setIsTradeFormModalOpen] = useState(false);
-  const [isBulkDeleteModalOpen, setIsBulkDeleteModalOpen] = useState(false);
-  const [isMonthlyReportModalOpen, setIsMonthlyReportModalOpen] = useState(false);
-  const [isYearlyChartModalOpen, setIsYearlyChartModalOpen] = useState(false);
-  const [isThemeSettingsModalOpen, setIsThemeSettingsModalOpen] = useState(false);
-  const [isUserGuideModalOpen, setIsUserGuideModalOpen] = useState(false);
-  const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
-  const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
-  const [isDisclaimerModalOpen, setIsDisclaimerModalOpen] = useState(false);
-  const [isBackupRestoreModalOpen, setIsBackupRestoreModalOpen] = useState(false);
+  // モーダル状態管理（統一化）
+  const { openModal, closeModal, isModalOpen } = useModalManager();
   const [editingTrade, setEditingTrade] = useState<Trade | undefined>(undefined);
 
   // データベースの初期化
@@ -91,7 +82,7 @@ function App() {
       loadDailyTrades(selectedDate);
     }
     // インポートモーダルを閉じる
-    setIsImportModalOpen(false);
+    closeModal();
   }, [selectedDate, loadDailyTrades]);
 
   const handleHistoryUpdate = useCallback(() => {
@@ -123,7 +114,7 @@ function App() {
         updatedAt: new Date(),
       } as Trade);
     }
-    setIsTradeFormModalOpen(true);
+    openModal('tradeForm');
   };
 
   const handleSaveTrade = async (trade: Trade) => {
@@ -144,7 +135,7 @@ function App() {
       }
             
       // モーダルを閉じる
-      setIsTradeFormModalOpen(false);
+      closeModal();
       setEditingTrade(undefined);
     } catch (error) {
       console.error('取引の保存エラー:', error);
@@ -166,7 +157,7 @@ function App() {
       }
       
       // モーダルを閉じる
-      setIsTradeFormModalOpen(false);
+      closeModal();
       setEditingTrade(undefined);
     } catch (error) {
       console.error('取引の削除エラー:', error);
@@ -175,7 +166,7 @@ function App() {
   };
 
   const handleCancelTradeForm = () => {
-    setIsTradeFormModalOpen(false);
+    closeModal();
     setEditingTrade(undefined);
   };
 
@@ -187,7 +178,7 @@ function App() {
       loadDailyTrades(selectedDate);
     }
     // モーダルを閉じる
-    setIsBulkDeleteModalOpen(false);
+    closeModal();
   };
 
   const handleDataRestored = () => {
@@ -198,27 +189,10 @@ function App() {
       loadDailyTrades(selectedDate);
     }
     // モーダルを閉じる
-    setIsBackupRestoreModalOpen(false);
+    closeModal();
   };
 
 
-  // 日別取引の現物・信用別損益を計算
-  const calculateDailyBreakdown = (trades: Trade[]) => {
-    let spotProfit = 0;
-    let marginProfit = 0;
-    
-    trades.forEach(trade => {
-      const normalizedTradeType = trade.tradeType.trim();
-      
-      if (normalizedTradeType === '売却' || normalizedTradeType === '現物売') {
-        spotProfit += trade.realizedProfitLoss;
-      } else if (normalizedTradeType === '返済買' || normalizedTradeType === '返済売') {
-        marginProfit += trade.realizedProfitLoss;
-      }
-    });
-    
-    return { spotProfit, marginProfit };
-  };
 
   // 日別内訳の表示/非表示状態管理
   const [isDailyBreakdownExpanded, setIsDailyBreakdownExpanded] = useState(false);
@@ -238,18 +212,18 @@ function App() {
   return (
     <div className="app">
       <Header 
-        onOpenImportModal={() => setIsImportModalOpen(true)}
-        onOpenHistoryModal={() => setIsHistoryModalOpen(true)}
+        onOpenImportModal={() => openModal('import')}
+        onOpenHistoryModal={() => openModal('history')}
         onOpenTradeFormModal={() => handleOpenTradeForm()}
-        onOpenBulkDeleteModal={() => setIsBulkDeleteModalOpen(true)}
-        onOpenMonthlyReportModal={() => setIsMonthlyReportModalOpen(true)}
-        onOpenYearlyChartModal={() => setIsYearlyChartModalOpen(true)}
-        onOpenThemeSettingsModal={() => setIsThemeSettingsModalOpen(true)}
-        onOpenUserGuideModal={() => setIsUserGuideModalOpen(true)}
-        onOpenBackupRestoreModal={() => setIsBackupRestoreModalOpen(true)}
-        onOpenTermsModal={() => setIsTermsModalOpen(true)}
-        onOpenPrivacyModal={() => setIsPrivacyModalOpen(true)}
-        onOpenDisclaimerModal={() => setIsDisclaimerModalOpen(true)}
+        onOpenBulkDeleteModal={() => openModal('bulkDelete')}
+        onOpenMonthlyReportModal={() => openModal('monthlyReport')}
+        onOpenYearlyChartModal={() => openModal('yearlyChart')}
+        onOpenThemeSettingsModal={() => openModal('themeSettings')}
+        onOpenUserGuideModal={() => openModal('userGuide')}
+        onOpenBackupRestoreModal={() => openModal('backupRestore')}
+        onOpenTermsModal={() => openModal('terms')}
+        onOpenPrivacyModal={() => openModal('privacy')}
+        onOpenDisclaimerModal={() => openModal('disclaimer')}
       />
 
       <main className="app-main">
@@ -282,8 +256,8 @@ function App() {
             {dailyTrades.length > 0 ? (
               <>
                 {(() => {
-                  const totalProfit = dailyTrades.reduce((sum, t) => sum + t.realizedProfitLoss, 0);
-                  const { spotProfit, marginProfit } = calculateDailyBreakdown(dailyTrades);
+                  const totalProfit = calculateTotalProfit(dailyTrades);
+                  const { spotProfit, marginProfit } = calculateTradeBreakdown(dailyTrades);
                   
                   return (
                     <div className="daily-profit">
@@ -392,8 +366,8 @@ function App() {
 
       {/* CSVインポートモーダル */}
       <Modal
-        isOpen={isImportModalOpen}
-        onClose={() => setIsImportModalOpen(false)}
+        isOpen={isModalOpen('import')}
+        onClose={closeModal}
         title="CSVインポート"
         size="medium"
       >
@@ -402,8 +376,8 @@ function App() {
 
       {/* インポート履歴モーダル */}
       <Modal
-        isOpen={isHistoryModalOpen}
-        onClose={() => setIsHistoryModalOpen(false)}
+        isOpen={isModalOpen('history')}
+        onClose={closeModal}
         title="CSVインポート履歴"
         size="large"
       >
@@ -412,7 +386,7 @@ function App() {
 
       {/* 取引入力・編集モーダル */}
       <Modal
-        isOpen={isTradeFormModalOpen}
+        isOpen={isModalOpen('tradeForm')}
         onClose={handleCancelTradeForm}
         title={editingTrade ? '取引を編集' : '新規取引入力'}
         size="large"
@@ -427,8 +401,8 @@ function App() {
 
       {/* 一括削除モーダル */}
       <Modal
-        isOpen={isBulkDeleteModalOpen}
-        onClose={() => setIsBulkDeleteModalOpen(false)}
+        isOpen={isModalOpen('bulkDelete')}
+        onClose={closeModal}
         title="取引の一括削除"
         size="medium"
       >
@@ -437,8 +411,8 @@ function App() {
 
       {/* 月別レポートモーダル */}
       <Modal
-        isOpen={isMonthlyReportModalOpen}
-        onClose={() => setIsMonthlyReportModalOpen(false)}
+        isOpen={isModalOpen('monthlyReport')}
+        onClose={closeModal}
         title=""
         size="large"
       >
@@ -451,8 +425,8 @@ function App() {
 
       {/* 年間推移グラフモーダル */}
       <Modal
-        isOpen={isYearlyChartModalOpen}
-        onClose={() => setIsYearlyChartModalOpen(false)}
+        isOpen={isModalOpen('yearlyChart')}
+        onClose={closeModal}
         title=""
         size="large"
       >
@@ -464,8 +438,8 @@ function App() {
 
       {/* テーマ設定モーダル */}
       <Modal
-        isOpen={isThemeSettingsModalOpen}
-        onClose={() => setIsThemeSettingsModalOpen(false)}
+        isOpen={isModalOpen('themeSettings')}
+        onClose={closeModal}
         title=""
         size="medium"
       >
@@ -474,8 +448,8 @@ function App() {
 
       {/* 使い方ガイドモーダル */}
       <Modal
-        isOpen={isUserGuideModalOpen}
-        onClose={() => setIsUserGuideModalOpen(false)}
+        isOpen={isModalOpen('userGuide')}
+        onClose={closeModal}
         title=""
         size="large"
       >
@@ -484,8 +458,8 @@ function App() {
 
       {/* 利用規約モーダル */}
       <Modal
-        isOpen={isTermsModalOpen}
-        onClose={() => setIsTermsModalOpen(false)}
+        isOpen={isModalOpen('terms')}
+        onClose={closeModal}
         title=""
         size="large"
       >
@@ -494,8 +468,8 @@ function App() {
 
       {/* プライバシーポリシーモーダル */}
       <Modal
-        isOpen={isPrivacyModalOpen}
-        onClose={() => setIsPrivacyModalOpen(false)}
+        isOpen={isModalOpen('privacy')}
+        onClose={closeModal}
         title=""
         size="large"
       >
@@ -504,8 +478,8 @@ function App() {
 
       {/* 免責事項モーダル */}
       <Modal
-        isOpen={isDisclaimerModalOpen}
-        onClose={() => setIsDisclaimerModalOpen(false)}
+        isOpen={isModalOpen('disclaimer')}
+        onClose={closeModal}
         title=""
         size="large"
       >
@@ -514,8 +488,8 @@ function App() {
 
       {/* バックアップ・復元モーダル */}
       <Modal
-        isOpen={isBackupRestoreModalOpen}
-        onClose={() => setIsBackupRestoreModalOpen(false)}
+        isOpen={isModalOpen('backupRestore')}
+        onClose={closeModal}
         title="📦 データバックアップ・復元"
         size="large"
       >

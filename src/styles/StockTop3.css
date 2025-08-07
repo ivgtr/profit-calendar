@@ -127,16 +127,16 @@
   gap: 8px;
 }
 
-.profit {
+.stock-top3-container .profit {
   font-size: 12px;
   font-weight: 600;
 }
 
-.profit.positive {
+.stock-top3-container .profit.positive {
   color: #10b981;
 }
 
-.profit.negative {
+.stock-top3-container .profit.negative {
   color: #ef4444;
 }
 
