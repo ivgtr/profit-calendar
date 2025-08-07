@@ -1,24 +1,14 @@
 import { useState } from 'react';
+import { HeaderAction } from '../types/HeaderActions';
 import '../styles/Header.css';
 
 interface HeaderProps {
-  onOpenImportModal: () => void;
-  onOpenHistoryModal: () => void;
-  onOpenTradeFormModal: () => void;
-  onOpenBulkDeleteModal: () => void;
-  onOpenMonthlyReportModal: () => void;
-  onOpenYearlyChartModal: () => void;
-  onOpenUserGuideModal: () => void;
-  onOpenThemeSettingsModal: () => void;
-  onOpenBackupRestoreModal: () => void;
-  onOpenTermsModal: () => void;
-  onOpenPrivacyModal: () => void;
-  onOpenDisclaimerModal: () => void;
+  onAction: (action: HeaderAction) => void;
 }
 
 type MenuCategory = 'main' | 'data' | 'analytics' | 'settings' | 'legal';
 
-export function Header({ onOpenImportModal, onOpenHistoryModal, onOpenTradeFormModal, onOpenBulkDeleteModal, onOpenMonthlyReportModal, onOpenYearlyChartModal, onOpenUserGuideModal, onOpenThemeSettingsModal, onOpenBackupRestoreModal, onOpenTermsModal, onOpenPrivacyModal, onOpenDisclaimerModal }: HeaderProps) {
+export function Header({ onAction }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [currentCategory, setCurrentCategory] = useState<MenuCategory>('main');
 
@@ -27,8 +17,8 @@ export function Header({ onOpenImportModal, onOpenHistoryModal, onOpenTradeFormM
     setCurrentCategory('main');
   };
 
-  const handleMenuItemClick = (action: () => void) => {
-    action();
+  const handleMenuItemClick = (action: HeaderAction) => {
+    onAction(action);
     setIsMenuOpen(false);
     setCurrentCategory('main');
   };
@@ -48,7 +38,7 @@ export function Header({ onOpenImportModal, onOpenHistoryModal, onOpenTradeFormM
           <>
             <button 
               className="menu-item"
-              onClick={() => handleMenuItemClick(onOpenTradeFormModal)}
+              onClick={() => handleMenuItemClick({ type: 'OPEN_TRADE_FORM_MODAL' })}
             >
               <span className="menu-icon">➕</span>
               新規取引入力
@@ -109,7 +99,7 @@ export function Header({ onOpenImportModal, onOpenHistoryModal, onOpenTradeFormM
             
             <button 
               className="menu-item"
-              onClick={() => handleMenuItemClick(onOpenImportModal)}
+              onClick={() => handleMenuItemClick({ type: 'OPEN_IMPORT_MODAL' })}
             >
               <span className="menu-icon">📁</span>
               CSVインポート
@@ -117,7 +107,7 @@ export function Header({ onOpenImportModal, onOpenHistoryModal, onOpenTradeFormM
             
             <button 
               className="menu-item"
-              onClick={() => handleMenuItemClick(onOpenHistoryModal)}
+              onClick={() => handleMenuItemClick({ type: 'OPEN_HISTORY_MODAL' })}
             >
               <span className="menu-icon">📋</span>
               インポート履歴
@@ -125,7 +115,7 @@ export function Header({ onOpenImportModal, onOpenHistoryModal, onOpenTradeFormM
             
             <button 
               className="menu-item"
-              onClick={() => handleMenuItemClick(onOpenBackupRestoreModal)}
+              onClick={() => handleMenuItemClick({ type: 'OPEN_BACKUP_RESTORE_MODAL' })}
             >
               <span className="menu-icon">📦</span>
               バックアップ・復元
@@ -135,7 +125,7 @@ export function Header({ onOpenImportModal, onOpenHistoryModal, onOpenTradeFormM
             
             <button 
               className="menu-item danger"
-              onClick={() => handleMenuItemClick(onOpenBulkDeleteModal)}
+              onClick={() => handleMenuItemClick({ type: 'OPEN_BULK_DELETE_MODAL' })}
             >
               <span className="menu-icon">🗑️</span>
               取引の一括削除
@@ -158,7 +148,7 @@ export function Header({ onOpenImportModal, onOpenHistoryModal, onOpenTradeFormM
             
             <button 
               className="menu-item"
-              onClick={() => handleMenuItemClick(onOpenMonthlyReportModal)}
+              onClick={() => handleMenuItemClick({ type: 'OPEN_MONTHLY_REPORT_MODAL' })}
             >
               <span className="menu-icon">📊</span>
               月別レポート
@@ -166,7 +156,7 @@ export function Header({ onOpenImportModal, onOpenHistoryModal, onOpenTradeFormM
             
             <button 
               className="menu-item"
-              onClick={() => handleMenuItemClick(onOpenYearlyChartModal)}
+              onClick={() => handleMenuItemClick({ type: 'OPEN_YEARLY_CHART_MODAL' })}
             >
               <span className="menu-icon">📈</span>
               年間推移グラフ
@@ -189,7 +179,7 @@ export function Header({ onOpenImportModal, onOpenHistoryModal, onOpenTradeFormM
             
             <button 
               className="menu-item"
-              onClick={() => handleMenuItemClick(onOpenThemeSettingsModal)}
+              onClick={() => handleMenuItemClick({ type: 'OPEN_THEME_SETTINGS_MODAL' })}
             >
               <span className="menu-icon">🎨</span>
               テーマ設定
@@ -197,7 +187,7 @@ export function Header({ onOpenImportModal, onOpenHistoryModal, onOpenTradeFormM
             
             <button 
               className="menu-item help"
-              onClick={() => handleMenuItemClick(onOpenUserGuideModal)}
+              onClick={() => handleMenuItemClick({ type: 'OPEN_USER_GUIDE_MODAL' })}
             >
               <span className="menu-icon">❓</span>
               使い方ガイド
@@ -220,7 +210,7 @@ export function Header({ onOpenImportModal, onOpenHistoryModal, onOpenTradeFormM
             
             <button 
               className="menu-item info"
-              onClick={() => handleMenuItemClick(onOpenTermsModal)}
+              onClick={() => handleMenuItemClick({ type: 'OPEN_TERMS_MODAL' })}
             >
               <span className="menu-icon">📄</span>
               利用規約
@@ -228,7 +218,7 @@ export function Header({ onOpenImportModal, onOpenHistoryModal, onOpenTradeFormM
             
             <button 
               className="menu-item info"
-              onClick={() => handleMenuItemClick(onOpenPrivacyModal)}
+              onClick={() => handleMenuItemClick({ type: 'OPEN_PRIVACY_MODAL' })}
             >
               <span className="menu-icon">🔒</span>
               プライバシーポリシー
@@ -236,7 +226,7 @@ export function Header({ onOpenImportModal, onOpenHistoryModal, onOpenTradeFormM
             
             <button 
               className="menu-item info"
-              onClick={() => handleMenuItemClick(onOpenDisclaimerModal)}
+              onClick={() => handleMenuItemClick({ type: 'OPEN_DISCLAIMER_MODAL' })}
             >
               <span className="menu-icon">⚠️</span>
               免責事項
