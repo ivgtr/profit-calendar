@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { db } from '../services/database';
+import { formatCurrency, formatMonthYear } from '../utils/formatUtils';
 import '../styles/MonthlyProfit.css';
 
 interface MonthlyProfitProps {
@@ -41,13 +42,6 @@ export function MonthlyProfit({ currentMonth, refreshTrigger, isDbReady }: Month
     loadMonthlyData();
   }, [currentMonth, refreshTrigger, loadMonthlyData]);
 
-  const formatCurrency = (amount: number) => {
-    return amount.toLocaleString('ja-JP');
-  };
-
-  const formatMonthYear = (date: Date) => {
-    return `${date.getFullYear()}年${date.getMonth() + 1}月`;
-  };
 
   const toggleMobileExpanded = () => {
     setIsMobileExpanded(!isMobileExpanded);
