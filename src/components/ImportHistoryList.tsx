@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { db } from '../services/database';
 import { ImportHistory } from '../types/ImportHistory';
+import { formatCurrency } from '../utils/formatUtils';
 import '../styles/ImportHistoryList.css';
 
 interface ImportHistoryListProps {
@@ -63,9 +64,6 @@ export function ImportHistoryList({ onHistoryUpdate }: ImportHistoryListProps) {
     setExpandedId(expandedId === id ? null : id);
   };
 
-  const formatCurrency = (amount: number) => {
-    return amount.toLocaleString('ja-JP');
-  };
 
   const formatDate = (date: Date) => {
     return new Date(date).toLocaleString('ja-JP', {
