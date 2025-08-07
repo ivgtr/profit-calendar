@@ -2,6 +2,9 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## 前提
+- 勝手に開発サーバーを起動しないでください
+
 ## プロジェクト概要
 - 利益カレンダー (profit-calendar) - React + TypeScript + Viteで構築されたWebアプリケーション
 - SWCを使用した高速開発環境
