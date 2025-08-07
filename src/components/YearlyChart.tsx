@@ -11,6 +11,7 @@ import {
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import { Database } from '../services/database';
+import { StockTop3 } from './StockTop3';
 import '../styles/YearlyChart.css';
 
 // Chart.jsのコンポーネントを登録
@@ -265,6 +266,13 @@ export function YearlyChart({ databaseService, isDbReady }: YearlyChartProps) {
           </div>
         </div>
       </div>
+
+      <StockTop3 
+        databaseService={databaseService}
+        isDbReady={isDbReady}
+        periodType={periodType}
+        currentYear={currentYear}
+      />
 
       {periodType === '12months' && (
         <div className="year-navigation">

@@ -353,11 +353,12 @@ function App() {
                 <table className="trades-table">
                   <thead>
                     <tr>
+                      <th>銘柄コード</th>
                       <th>銘柄名</th>
                       <th>取引</th>
                       <th>数量</th>
+                      <th>平均取得価額</th>
                       <th>単価</th>
-                      <th>金額</th>
                       <th>損益</th>
                     </tr>
                   </thead>
@@ -369,11 +370,12 @@ function App() {
                         onClick={() => handleOpenTradeForm(trade)}
                         title="クリックして編集"
                       >
+                        <td data-label="銘柄コード">{trade.stockCode || '-'}</td>
                         <td data-label="銘柄名">{trade.stockName}</td>
                         <td data-label="取引">{trade.tradeType}</td>
                         <td data-label="数量">{trade.quantity.toLocaleString()}</td>
+                        <td data-label="平均取得価額">{formatCurrency(trade.averageAcquisitionPrice)}円</td>
                         <td data-label="単価">{formatCurrency(trade.unitPrice)}円</td>
-                        <td data-label="金額">{formatCurrency(trade.amount)}円</td>
                         <td data-label="損益" className={trade.realizedProfitLoss >= 0 ? 'profit' : 'loss'}>
                           {trade.realizedProfitLoss >= 0 ? '+' : ''}
                           {formatCurrency(trade.realizedProfitLoss)}円

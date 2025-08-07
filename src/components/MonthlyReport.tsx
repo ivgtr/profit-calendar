@@ -3,6 +3,7 @@ import { db } from '../services/database';
 import { Trade } from '../types/Trade';
 import { Tooltip } from './Tooltip';
 import { TOOLTIPS } from '../constants/tooltips';
+import { formatStockDisplay } from '../utils/stockUtils';
 import '../styles/MonthlyReport.css';
 
 interface MonthlyReportProps {
@@ -820,7 +821,7 @@ export function MonthlyReport({ currentMonth, refreshTrigger, isDbReady }: Month
             <h4>トップパフォーマー</h4>
             {stats.stockAnalysis.topPerformers.slice(0, 3).map((stock, index) => (
               <div key={index} className="stat-item">
-                <span className="label">{stock.symbol}</span>
+                <span className="label">{formatStockDisplay(stock.symbol)}</span>
                 <span className="value profit">+{formatCurrency(stock.profit)}円 ({stock.trades}回)</span>
               </div>
             ))}
@@ -829,7 +830,7 @@ export function MonthlyReport({ currentMonth, refreshTrigger, isDbReady }: Month
             <h4>ワーストパフォーマー</h4>
             {stats.stockAnalysis.worstPerformers.slice(0, 3).map((stock, index) => (
               <div key={index} className="stat-item">
-                <span className="label">{stock.symbol}</span>
+                <span className="label">{formatStockDisplay(stock.symbol)}</span>
                 <span className="value loss">{formatCurrency(stock.profit)}円 ({stock.trades}回)</span>
               </div>
             ))}
@@ -838,7 +839,7 @@ export function MonthlyReport({ currentMonth, refreshTrigger, isDbReady }: Month
             <h4>最多取引銘柄</h4>
             {stats.stockAnalysis.mostTraded.slice(0, 3).map((stock, index) => (
               <div key={index} className="stat-item">
-                <span className="label">{stock.symbol}</span>
+                <span className="label">{formatStockDisplay(stock.symbol)}</span>
                 <span className="value">{stock.trades}回 (勝率{formatPercentage(stock.winRate)})</span>
               </div>
             ))}
