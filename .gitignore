@@ -24,4 +24,4 @@ dist-ssr
 *.sw?
 
 # Serena cache
-.serena/cache/
+.serena/cache
