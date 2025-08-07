@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { DailySummary } from '../types/Trade';
+import { formatCurrency } from '../utils/formatUtils';
 import '../styles/Calendar.css';
 
 interface CalendarProps {
@@ -69,9 +70,6 @@ export function Calendar({ onDateSelect, onMonthChange, monthlyTrades = new Map(
     onDateSelect?.(today);
   };
 
-  const formatCurrency = (amount: number) => {
-    return amount.toLocaleString('ja-JP');
-  };
 
   const days = calendarDays;
   const weekDays = ['日', '月', '火', '水', '木', '金', '土'];
