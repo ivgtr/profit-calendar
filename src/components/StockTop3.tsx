@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo, memo } from 'react';
 import { Database } from '../services/database';
 import { formatStockDisplay } from '../utils/stockUtils';
 import '../styles/StockTop3.css';
@@ -17,38 +17,55 @@ interface StockProfitData {
   tradeCount: number;
 }
 
-export function StockTop3({ databaseService, isDbReady, periodType, currentYear }: StockTop3Props) {
+const StockTop3 = memo(function StockTop3({ databaseService, isDbReady, periodType, currentYear }: StockTop3Props) {
   const [profitableStocks, setProfitableStocks] = useState<StockProfitData[]>([]);
   const [lossStocks, setLossStocks] = useState<StockProfitData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  // 日付範囲をメモ化（毎回のnew Date()生成を減らす）
+  const dateRange = useMemo(() => {
+    const now = new Date();
+    let startDate: Date;
+    let endDate = new Date(now);
+    
+    if (periodType === '7days') {
+      startDate = new Date(now);
+      startDate.setDate(startDate.getDate() - 7);
+    } else if (periodType === '30days') {
+      startDate = new Date(now);
+      startDate.setDate(startDate.getDate() - 30);
+    } else {
+      // 12months - 指定年の全体
+      startDate = new Date(currentYear, 0, 1);
+      endDate = new Date(currentYear, 11, 31);
+    }
+    
+    return { startDate, endDate };
+  }, [periodType, currentYear]);
 
   const loadStockData = useCallback(async () => {
     if (!isDbReady) return;
     
     setIsLoading(true);
     try {
-      let startDate: Date;
-      let endDate = new Date();
       
-      if (periodType === '7days') {
-        startDate = new Date();
-        startDate.setDate(startDate.getDate() - 7);
-      } else if (periodType === '30days') {
-        startDate = new Date();
-        startDate.setDate(startDate.getDate() - 30);
-      } else {
-        // 12months - 指定年の全体
-        startDate = new Date(currentYear, 0, 1);
-        endDate = new Date(currentYear, 11, 31);
-      }
+      const stockProfits = await databaseService.getStockProfitsByPeriod(dateRange.startDate, dateRange.endDate);
       
-      const stockProfits = await databaseService.getStockProfitsByPeriod(startDate, endDate);
+      // 利益TOP3と損失TOP3に分ける（最適化：複数filterを単一ループに統合）
+      const profitable: StockProfitData[] = [];
+      const allLosses: StockProfitData[] = [];
       
-      // 利益TOP3と損失TOP3に分ける
-      const profitable = stockProfits.filter(stock => stock.totalProfit > 0).slice(0, 3);
-      const losses = stockProfits
-        .filter(stock => stock.totalProfit < 0)
-        .sort((a, b) => a.totalProfit - b.totalProfit) // 損失が大きい順（マイナスが大きい順）
+      stockProfits.forEach(stock => {
+        if (stock.totalProfit > 0 && profitable.length < 3) {
+          profitable.push(stock);
+        } else if (stock.totalProfit < 0) {
+          allLosses.push(stock);
+        }
+      });
+      
+      // 損失は別途ソートしてTOP3を取得
+      const losses = allLosses
+        .sort((a, b) => a.totalProfit - b.totalProfit)
         .slice(0, 3);
       
       setProfitableStocks(profitable);
@@ -58,7 +75,7 @@ export function StockTop3({ databaseService, isDbReady, periodType, currentYear 
     } finally {
       setIsLoading(false);
     }
-  }, [databaseService, isDbReady, periodType, currentYear]);
+  }, [databaseService, isDbReady, dateRange]);
 
   useEffect(() => {
     loadStockData();
@@ -111,4 +128,6 @@ export function StockTop3({ databaseService, isDbReady, periodType, currentYear 
       </div>
     </div>
   );
-}
+});
+
+export { StockTop3 };
