@@ -1,0 +1,53 @@
+.confirm-dialog {
+  min-width: 300px;
+}
+
+.confirm-message {
+  margin: 0 0 1.5rem;
+  color: var(--color-text, #333);
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.confirm-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
+.confirm-cancel,
+.confirm-ok {
+  padding: 0.5rem 1.25rem;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.confirm-cancel {
+  background-color: var(--color-cancel, #f0f0f0);
+  color: var(--color-text, #333);
+}
+
+.confirm-cancel:hover {
+  background-color: var(--color-cancel-hover, #e0e0e0);
+}
+
+.confirm-ok {
+  background-color: var(--color-primary, #007bff);
+  color: white;
+}
+
+.confirm-ok:hover {
+  background-color: var(--color-primary-hover, #0056b3);
+}
+
+.confirm-ok.confirm-danger {
+  background-color: var(--color-danger, #dc3545);
+}
+
+.confirm-ok.confirm-danger:hover {
+  background-color: var(--color-danger-hover, #c82333);
+}
