@@ -51,26 +51,35 @@
 
 .profit-amount {
   display: flex;
-  align-items: center;
-  gap: 8px;
+  align-items: baseline;
+  gap: 10px;
+  margin-top: 4px;
 }
 
 .profit-value {
-  font-size: var(--font-size-xl);
+  font-size: var(--font-size-2xl);
   font-weight: bold;
+  letter-spacing: -0.01em;
 }
 
-.profit-value.profit {
+.monthly-profit .profit-value.profit {
   color: var(--status-profit);
+  font-size: var(--font-size-2xl);
+  font-weight: bold;
+  letter-spacing: -0.01em;
 }
 
-.profit-value.loss {
+.monthly-profit .profit-value.loss {
   color: var(--status-loss);
+  font-size: var(--font-size-2xl);
+  font-weight: bold;
+  letter-spacing: -0.01em;
 }
 
 .trade-count {
   color: var(--text-secondary);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-base);
+  font-weight: 500;
 }
 
 .desktop-breakdown {
@@ -184,18 +193,30 @@
   }
   
   .mobile-breakdown .breakdown-label {
-    font-size: var(--font-size-sm);
-  }
-  
-  .mobile-breakdown .breakdown-profit {
-    font-size: var(--font-size-sm);
-  }
-  
-  .summary-header h3 {
     font-size: var(--font-size-base);
   }
   
-  .profit-value {
-    font-size: var(--font-size-xl);
+  .mobile-breakdown .breakdown-profit {
+    font-size: var(--font-size-base);
+    font-weight: 600;
+  }
+  
+  .summary-header h3 {
+    font-size: var(--font-size-lg);
+  }
+  
+  .trade-count {
+    font-size: var(--font-size-sm);
+  }
+  
+  .monthly-profit .profit-value {
+    font-size: var(--font-size-2xl);
+  }
+  
+  .monthly-profit .profit-value.profit,
+  .monthly-profit .profit-value.loss {
+    font-size: var(--font-size-2xl);
+    font-weight: bold;
+    letter-spacing: -0.01em;
   }
 }
