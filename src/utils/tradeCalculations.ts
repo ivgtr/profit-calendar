@@ -6,6 +6,7 @@ import { Trade } from '../types/Trade';
 export interface TradeBreakdown {
   spotProfit: number;
   marginProfit: number;
+  unknownProfit: number;
 }
 
 export interface TradeSummary {
@@ -26,18 +27,28 @@ export interface TradeSummary {
 export const calculateTradeBreakdown = (trades: Trade[]): TradeBreakdown => {
   let spotProfit = 0;
   let marginProfit = 0;
+  let unknownProfit = 0;
   
   trades.forEach(trade => {
+    // tradeTypeがnullの場合は「不明」として処理
+    if (!trade.tradeType) {
+      unknownProfit += trade.realizedProfitLoss;
+      return;
+    }
+    
     const normalizedTradeType = trade.tradeType.trim();
     
     if (normalizedTradeType === '売却' || normalizedTradeType === '現物売') {
       spotProfit += trade.realizedProfitLoss;
     } else if (normalizedTradeType === '返済買' || normalizedTradeType === '返済売') {
       marginProfit += trade.realizedProfitLoss;
+    } else {
+      // その他の取引種別も「不明」として処理
+      unknownProfit += trade.realizedProfitLoss;
     }
   });
   
-  return { spotProfit, marginProfit };
+  return { spotProfit, marginProfit, unknownProfit };
 };
 
 /**
@@ -108,7 +119,7 @@ export const calculateProfitByStock = (trades: Trade[]): Map<string, number> => 
   const profitByStock = new Map<string, number>();
   
   trades.forEach(trade => {
-    const stockKey = `${trade.stockCode || trade.stockName}`;
+    const stockKey = `${trade.stockCode || trade.stockName || '不明'}`;
     const currentProfit = profitByStock.get(stockKey) || 0;
     profitByStock.set(stockKey, currentProfit + trade.realizedProfitLoss);
   });

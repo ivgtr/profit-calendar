@@ -124,8 +124,9 @@ class Database {
     const stockProfits = new Map<string, {stockCode?: string, totalProfit: number, tradeCount: number}>();
     
     trades.forEach(trade => {
-      const existing = stockProfits.get(trade.stockName) || {stockCode: trade.stockCode, totalProfit: 0, tradeCount: 0};
-      stockProfits.set(trade.stockName, {
+      const stockKey = trade.stockName || '不明';
+      const existing = stockProfits.get(stockKey) || {stockCode: trade.stockCode, totalProfit: 0, tradeCount: 0};
+      stockProfits.set(stockKey, {
         stockCode: trade.stockCode || existing.stockCode,
         totalProfit: existing.totalProfit + trade.realizedProfitLoss,
         tradeCount: existing.tradeCount + 1
@@ -259,10 +260,10 @@ class Database {
       let tradeCount = 0;
 
       trades.forEach(trade => {
-        if (['売却', '現物売'].includes(trade.tradeType)) {
+        if (trade.tradeType && ['売却', '現物売'].includes(trade.tradeType)) {
           spotProfit += trade.realizedProfitLoss;
           tradeCount++;
-        } else if (['返済売', '返済買'].includes(trade.tradeType)) {
+        } else if (trade.tradeType && ['返済売', '返済買'].includes(trade.tradeType)) {
           marginProfit += trade.realizedProfitLoss;
           tradeCount++;
         }
@@ -328,11 +329,11 @@ class Database {
       const dayData = dailyMap.get(dateKey);
       
       if (dayData) {
-        if (['売却', '現物売'].includes(trade.tradeType)) {
+        if (trade.tradeType && ['売却', '現物売'].includes(trade.tradeType)) {
           dayData.spotProfit += trade.realizedProfitLoss;
           dayData.totalProfit += trade.realizedProfitLoss;
           dayData.tradeCount++;
-        } else if (['返済売', '返済買'].includes(trade.tradeType)) {
+        } else if (trade.tradeType && ['返済売', '返済買'].includes(trade.tradeType)) {
           dayData.marginProfit += trade.realizedProfitLoss;
           dayData.totalProfit += trade.realizedProfitLoss;
           dayData.tradeCount++;
@@ -525,6 +526,7 @@ class Database {
     tradeCount: number;
     spotProfit: number;
     marginProfit: number;
+    unknownProfit: number;
   }> {
     const db = this.getDB();
     const transaction = db.transaction([STORES.TRADES], 'readonly');
@@ -545,12 +547,18 @@ class Database {
           trades.push(cursor.value);
           cursor.continue();
         } else {
-          // 現物・信用別に集計
+          // 現物・信用・不明別に集計
           let spotProfit = 0;
           let marginProfit = 0;
+          let unknownProfit = 0;
           
           trades.forEach(trade => {
             // 取引タイプの正規化（前後の空白除去、全角半角統一）
+            if (!trade.tradeType) {
+              unknownProfit += trade.realizedProfitLoss;
+              return;
+            }
+            
             const normalizedTradeType = trade.tradeType.trim();
             
             // 実際のデータに基づく分類
@@ -565,6 +573,9 @@ class Database {
             // 信用取引は返済時に損益確定
             else if (normalizedTradeType === '返済買' || normalizedTradeType === '返済売') {
               marginProfit += trade.realizedProfitLoss;
+            } else {
+              // その他の取引種別は「不明」として処理
+              unknownProfit += trade.realizedProfitLoss;
             }
           });
           
@@ -576,6 +587,7 @@ class Database {
             tradeCount: trades.length,
             spotProfit,
             marginProfit,
+            unknownProfit,
           });
         }
       };

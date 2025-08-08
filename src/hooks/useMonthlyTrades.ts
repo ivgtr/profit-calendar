@@ -26,13 +26,8 @@ export function useMonthlyTrades(currentMonth: Date, dataVersion: number, isDbRe
       const dailySummaryMap = new Map<string, DailySummary>();
       
       trades.forEach(trade => {
-        // 損益確定する取引のみを処理（現物売却、信用返済）
-        const isProfitRealized = trade.tradeType === '売却' || 
-                                 trade.tradeType === '現物売' ||
-                                 trade.tradeType === '返済買' || 
-                                 trade.tradeType === '返済売';
-        
-        if (!isProfitRealized) return;
+        // 実現損益が記録されている取引のみを処理（tradeTypeがnullでも損益があれば表示）
+        if (trade.realizedProfitLoss == null || trade.realizedProfitLoss === 0) return;
         
         const dateKey = trade.date.toISOString().split('T')[0];
         

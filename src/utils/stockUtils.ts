@@ -3,7 +3,10 @@
  * @param stockName 「銘柄名 銘柄コード」または「銘柄名」形式の文字列
  * @returns 銘柄名と銘柄コード
  */
-export function parseStockInfo(stockName: string): { name: string; code?: string } {
+export function parseStockInfo(stockName: string | null): { name: string; code?: string } {
+  if (!stockName) {
+    return { name: '不明' };
+  }
   // 日本株のティッカーコードパターン:
   // - 標準: 4桁数字 (1234, 7203)
   // - 優先株: 4桁数字+アルファベット1文字 (1234A, 5678B)
@@ -33,15 +36,18 @@ export function parseStockInfo(stockName: string): { name: string; code?: string
  * @param stockCode データベースに保存されている銘柄コード（undefinedの可能性がある）
  * @returns 表示用の文字列
  */
-export function formatStockDisplay(stockName: string, stockCode?: string): string {
+export function formatStockDisplay(stockName: string | null, stockCode?: string): string {
   const parsed = parseStockInfo(stockName);
   
   // stockCodeが明示的に渡されている場合はそれを使用
   const code = stockCode || parsed.code;
   
+  // 名前が空の場合は「不明」を使用
+  const displayName = parsed.name || '不明';
+  
   if (code) {
-    return `${code} ${parsed.name}`;
+    return `${code} ${displayName}`;
   }
   
-  return parsed.name;
+  return displayName;
 }

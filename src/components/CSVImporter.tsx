@@ -105,10 +105,10 @@ export function CSVImporter({ onImportComplete }: CSVImporterProps) {
                     <td>{trade.date.toLocaleDateString('ja-JP')}</td>
                     <td>{formatStockDisplay(trade.stockName, trade.stockCode)}</td>
                     <td>{trade.tradeType}</td>
-                    <td>{trade.quantity.toLocaleString()}</td>
+                    <td>{trade.quantity?.toLocaleString() || '未入力'}</td>
                     <td className={trade.realizedProfitLoss >= 0 ? 'profit' : 'loss'}>
                       {trade.realizedProfitLoss >= 0 ? '+' : ''}
-                      {trade.realizedProfitLoss.toLocaleString()}円
+                      {trade.realizedProfitLoss?.toLocaleString() || 0}円
                     </td>
                   </tr>
                 ))}

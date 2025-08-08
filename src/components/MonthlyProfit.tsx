@@ -14,6 +14,7 @@ interface MonthlyData {
   tradeCount: number;
   spotProfit: number;
   marginProfit: number;
+  unknownProfit: number;
 }
 
 export function MonthlyProfit({ currentMonth, refreshTrigger, isDbReady }: MonthlyProfitProps) {
@@ -59,60 +60,41 @@ export function MonthlyProfit({ currentMonth, refreshTrigger, isDbReady }: Month
   if (!monthlyData) {
     return (
       <div className="monthly-profit">
-        <div className="profit-container" onClick={toggleMobileExpanded}>
+        <div className="profit-container">
           <div className="monthly-summary">
             <div className="summary-header">
               <h3>{formatMonthYear(currentMonth)}の収益</h3>
-              <div className="mobile-toggle">
-                <span className="expand-icon">{isMobileExpanded ? '▼' : '▶'}</span>
-              </div>
             </div>
             <div className="profit-amount">
               <span className="profit-value">データなし</span>
             </div>
           </div>
-          
-          <div className="trade-breakdown desktop-breakdown">
-            <div className="breakdown-list">
-              <div className="breakdown-item">
-                <div className="breakdown-label">現物</div>
-                <div className="breakdown-profit">0円</div>
-              </div>
-              <div className="breakdown-item">
-                <div className="breakdown-label">信用</div>
-                <div className="breakdown-profit">0円</div>
-              </div>
-            </div>
-          </div>
         </div>
-        
-        {isMobileExpanded && (
-          <div className="trade-breakdown mobile-breakdown">
-            <div className="breakdown-list">
-              <div className="breakdown-item">
-                <div className="breakdown-label">現物取引</div>
-                <div className="breakdown-profit">0円</div>
-              </div>
-              <div className="breakdown-item">
-                <div className="breakdown-label">信用取引</div>
-                <div className="breakdown-profit">0円</div>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     );
   }
 
+  // 表示する項目をフィルタリング
+  const breakdownItems = [
+    { label: '現物', mobileLabel: '現物取引', profit: monthlyData.spotProfit },
+    { label: '信用', mobileLabel: '信用取引', profit: monthlyData.marginProfit },
+    { label: '不明', mobileLabel: '不明取引', profit: monthlyData.unknownProfit }
+  ].filter(item => item.profit !== 0);
+  
+  // 内訳が一つもない場合は内訳表示を非表示
+  const hasBreakdown = breakdownItems.length > 0;
+
   return (
     <div className="monthly-profit">
-      <div className="profit-container" onClick={toggleMobileExpanded}>
+      <div className="profit-container" onClick={hasBreakdown ? toggleMobileExpanded : undefined}>
         <div className="monthly-summary">
           <div className="summary-header">
             <h3>{formatMonthYear(currentMonth)}の収益</h3>
-            <div className="mobile-toggle">
-              <span className="expand-icon">{isMobileExpanded ? '▼' : '▶'}</span>
-            </div>
+            {hasBreakdown && (
+              <div className="mobile-toggle">
+                <span className="expand-icon">{isMobileExpanded ? '▼' : '▶'}</span>
+              </div>
+            )}
           </div>
           <div className="profit-amount">
             <span className={`profit-value ${monthlyData.totalProfit >= 0 ? 'profit' : 'loss'}`}>
@@ -123,43 +105,35 @@ export function MonthlyProfit({ currentMonth, refreshTrigger, isDbReady }: Month
           </div>
         </div>
         
-        <div className="trade-breakdown desktop-breakdown">
-          <div className="breakdown-list">
-            <div className="breakdown-item">
-              <div className="breakdown-label">現物</div>
-              <div className={`breakdown-profit ${monthlyData.spotProfit >= 0 ? 'profit' : 'loss'}`}>
-                {monthlyData.spotProfit >= 0 ? '+' : ''}
-                {formatCurrency(monthlyData.spotProfit)}円
-              </div>
-            </div>
-            <div className="breakdown-item">
-              <div className="breakdown-label">信用</div>
-              <div className={`breakdown-profit ${monthlyData.marginProfit >= 0 ? 'profit' : 'loss'}`}>
-                {monthlyData.marginProfit >= 0 ? '+' : ''}
-                {formatCurrency(monthlyData.marginProfit)}円
-              </div>
+        {hasBreakdown && (
+          <div className="trade-breakdown desktop-breakdown">
+            <div className="breakdown-list">
+              {breakdownItems.map(item => (
+                <div key={item.label} className="breakdown-item">
+                  <div className="breakdown-label">{item.label}</div>
+                  <div className={`breakdown-profit ${item.profit >= 0 ? 'profit' : 'loss'}`}>
+                    {item.profit >= 0 ? '+' : ''}
+                    {formatCurrency(item.profit)}円
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
-        </div>
+        )}
       </div>
       
-      {isMobileExpanded && (
+      {hasBreakdown && isMobileExpanded && (
         <div className="trade-breakdown mobile-breakdown">
           <div className="breakdown-list">
-            <div className="breakdown-item">
-              <div className="breakdown-label">現物取引</div>
-              <div className={`breakdown-profit ${monthlyData.spotProfit >= 0 ? 'profit' : 'loss'}`}>
-                {monthlyData.spotProfit >= 0 ? '+' : ''}
-                {formatCurrency(monthlyData.spotProfit)}円
+            {breakdownItems.map(item => (
+              <div key={item.mobileLabel} className="breakdown-item">
+                <div className="breakdown-label">{item.mobileLabel}</div>
+                <div className={`breakdown-profit ${item.profit >= 0 ? 'profit' : 'loss'}`}>
+                  {item.profit >= 0 ? '+' : ''}
+                  {formatCurrency(item.profit)}円
+                </div>
               </div>
-            </div>
-            <div className="breakdown-item">
-              <div className="breakdown-label">信用取引</div>
-              <div className={`breakdown-profit ${monthlyData.marginProfit >= 0 ? 'profit' : 'loss'}`}>
-                {monthlyData.marginProfit >= 0 ? '+' : ''}
-                {formatCurrency(monthlyData.marginProfit)}円
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       )}

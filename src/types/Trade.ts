@@ -24,14 +24,14 @@ export interface CSVTradeData {
 export interface Trade {
   id: string;
   date: Date;
-  accountType: AccountType;
-  stockName: string;
+  accountType: AccountType | null;
+  stockName: string | null;
   stockCode?: string;
-  tradeType: TradeType;
-  quantity: number;
-  amount: number;
-  unitPrice: number;
-  averageAcquisitionPrice: number;
+  tradeType: TradeType | null;
+  quantity: number | null;
+  amount: number | null;
+  unitPrice: number | null;
+  averageAcquisitionPrice: number | null;
   realizedProfitLoss: number;
   memo?: string;
   csvImported: boolean;
