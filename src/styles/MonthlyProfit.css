@@ -110,6 +110,20 @@
   text-align: center;
 }
 
+.breakdown-item.clickable {
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.breakdown-item.clickable:hover {
+  background-color: var(--bg-hover);
+  transform: translateY(-1px);
+}
+
+.breakdown-item.clickable:active {
+  transform: translateY(0);
+}
+
 .breakdown-label {
   font-size: var(--font-size-xs);
   color: var(--text-secondary);
