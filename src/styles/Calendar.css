@@ -69,7 +69,7 @@
 
 .calendar-grid {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(7, minmax(0, 1fr));
   gap: 1px;
   background: var(--border-primary);
   border: 1px solid var(--border-primary);
@@ -82,16 +82,26 @@
   font-weight: bold;
   font-size: var(--font-size-sm);
   color: var(--text-primary);
+  min-width: 0;
+  overflow: hidden;
 }
 
 .calendar-day {
   background: var(--bg-primary);
-  min-height: 80px;
-  padding: 8px;
+  min-height: 120px;
+  width: 100%;
+  min-width: 0;
+  padding: 6px;
   cursor: pointer;
   transition: all 0.2s;
   position: relative;
   color: var(--text-primary);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  overflow: hidden;
 }
 
 .calendar-day:hover {
@@ -101,11 +111,13 @@
 .calendar-day.other-month {
   color: var(--text-tertiary);
   background: var(--bg-tertiary);
+  opacity: 0.5;
 }
 
 .calendar-day.today {
   background: var(--bg-primary);
   color: var(--text-primary);
+  border: 1px solid var(--accent-primary);
 }
 
 .calendar-day.today .day-number {
@@ -121,29 +133,59 @@
 
 .day-number {
   font-weight: bold;
-  margin-bottom: 4px;
+  font-size: var(--font-size-base);
+  margin: 0;
+  align-self: flex-start;
+  width: 100%;
+  min-width: 0;
 }
 
 .day-summary {
-  font-size: var(--font-size-xs);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  flex: 1;
+  justify-content: center;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
 }
 
-.profit-loss {
+.calendar-day .profit-loss {
   font-weight: bold;
-  margin-bottom: 2px;
+  font-size: var(--font-size-sm);
+  margin: 0;
+  text-align: center;
+  line-height: var(--line-height-tight);
+  width: 100%;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.profit-loss.profit {
+.calendar-day .profit-loss.profit {
   color: var(--status-profit);
+  font-size: var(--font-size-sm);
 }
 
-.profit-loss.loss {
+.calendar-day .profit-loss.loss {
   color: var(--status-loss);
+  font-size: var(--font-size-sm);
 }
 
-.trade-count {
+.calendar-day .trade-count {
   color: var(--text-secondary);
   font-size: var(--font-size-xs);
+  text-align: center;
+  margin: 0;
+  opacity: 0.8;
+  width: 100%;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* 今日の日付の取引件数の色調整 */
@@ -185,16 +227,34 @@
   }
 
   .calendar-day {
-    min-height: 60px;
-    padding: 4px;
+    min-height: auto;
+    aspect-ratio: 1 / 1;
+    padding: 2px;
+  }
+
+  .day-number {
     font-size: var(--font-size-sm);
   }
 
-  .day-summary {
-    font-size: var(--font-size-xs);
+  .calendar-day .profit-loss {
+    font-size: var(--font-size-2xs);
+    line-height: var(--line-height-tight);
   }
 
-  .trade-count {
+  .calendar-day .profit-loss.profit,
+  .calendar-day .profit-loss.loss {
+    font-size: var(--font-size-2xs);
+  }
+
+  .calendar-day .trade-count {
     display: none;
+  }
+
+  .calendar-day.today {
+    border: 1px solid var(--accent-primary);
+  }
+
+  .calendar-day.selected {
+    outline: 1px solid var(--accent-primary);
   }
 }
