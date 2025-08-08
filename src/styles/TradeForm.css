@@ -1,8 +1,94 @@
-/* TradeForm - 3列グリッドレイアウト */
+/* TradeForm - 必須項目を上位に配置したレイアウト */
 .trade-form {
+  max-height: 60vh; /* フォールバック */
+  max-height: 60svh; /* Safari対応 */
+  max-height: 60dvh; /* モダンブラウザ */
+  display: flex;
+  flex-direction: column;
   width: 100%;
   max-width: 100%;
 }
+
+/* スクロール可能なコンテンツ部分 */
+.trade-form-content {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: var(--spacing-xs);
+}
+
+.trade-form-inner {
+  padding-bottom: var(--spacing-md);
+}
+
+/* 必須項目セクション */
+.required-section {
+  margin-bottom: var(--spacing-lg);
+  padding: var(--spacing-lg);
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--border-radius-lg);
+}
+
+.required-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-lg);
+}
+
+/* 詳細項目セクション */
+.details-section {
+  margin-bottom: var(--spacing-lg);
+}
+
+.details-header {
+  margin-bottom: var(--spacing-md);
+}
+
+.details-toggle {
+  display: none; /* デスクトップでは非表示 */
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: var(--bg-primary);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--border-radius-md);
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.details-toggle:hover {
+  background: var(--bg-secondary);
+  border-color: var(--accent-primary);
+}
+
+.chevron {
+  transition: transform 0.3s ease;
+  color: var(--text-secondary);
+}
+
+.chevron.open {
+  transform: rotate(180deg);
+}
+
+.details-content {
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+/* デスクトップでは常に表示 */
+@media (min-width: 769px) {
+  .details-content {
+    max-height: none;
+    opacity: 1;
+    padding-top: var(--spacing-md);
+  }
+}
+
+
 
 .form-grid {
   display: grid;
@@ -77,9 +163,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: var(--spacing-lg);
+  padding: var(--spacing-md) 0 0 0;
   border-top: 1px solid var(--border-primary);
-  margin-top: var(--spacing-lg);
+  background-color: var(--bg-primary);
+  flex-shrink: 0;
 }
 
 .form-actions-left {
@@ -148,6 +235,28 @@
 
 /* レスポンシブ: モバイル (768px以下) */
 @media (max-width: 768px) {
+  /* 必須項目セクション */
+  .required-fields {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+  
+  /* 詳細項目のトグル表示 */
+  .details-toggle {
+    display: flex !important; /* モバイルでは表示 */
+  }
+  
+  .details-content {
+    max-height: 0;
+    opacity: 0;
+  }
+  
+  .details-content.open {
+    max-height: 1000px;
+    opacity: 1;
+    padding-top: var(--spacing-md);
+  }
+  
   .form-grid {
     grid-template-columns: 1fr;
     gap: var(--spacing-md);
@@ -157,6 +266,12 @@
     grid-column: span 1;
   }
   
+  .trade-form {
+    max-height: 70vh; /* フォールバック */
+    max-height: 70svh; /* Safari対応 */
+    max-height: 70dvh; /* モダンブラウザ */
+  }
+
   .form-actions {
     flex-direction: column;
     gap: var(--spacing-md);
