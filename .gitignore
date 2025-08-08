@@ -26,6 +26,5 @@ dist-ssr
 # Serena cache
 .serena/cache
 
-# リファクタリング分析レポート
-*リファクタリング分析レポート.ini
-# Profit Calendar*.ini
+# 計画ディレクトリ
+計画/*
