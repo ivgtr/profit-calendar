@@ -1,6 +1,8 @@
 .backup-restore-container {
   width: 100%;
-  max-height: 70vh;
+  max-height: 70vh; /* フォールバック */
+  max-height: 70svh; /* Safari対応 */
+  max-height: 70dvh; /* モダンブラウザ */
   overflow-y: auto;
 }
 
@@ -280,7 +282,9 @@
 /* モバイル対応 */
 @media (max-width: 768px) {
   .backup-restore-container {
-    max-height: 60vh;
+    max-height: 60vh; /* フォールバック */
+    max-height: 60svh; /* Safari対応 */
+    max-height: 60dvh; /* モダンブラウザ */
   }
   
   .tab-button {

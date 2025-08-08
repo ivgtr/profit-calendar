@@ -3,7 +3,9 @@
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
+  height: 100vh; /* フォールバック */
+  height: 100svh; /* Safari対応 */
+  height: 100dvh; /* モダンブラウザ */
   background-color: var(--bg-modal);
   display: flex;
   align-items: center;
@@ -19,7 +21,9 @@
   background: var(--bg-primary);
   border-radius: var(--border-radius-xl);
   box-shadow: var(--shadow-secondary);
-  max-height: 90vh;
+  max-height: 90vh; /* フォールバック */
+  max-height: 90svh; /* Safari対応 */
+  max-height: 90dvh; /* モダンブラウザ */
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -130,13 +134,17 @@
     padding: 16px;
     align-items: center;
     width: 100vw;
-    height: 100vh;
+    height: 100vh; /* フォールバック */
+    height: 100svh; /* Safari対応 */
+    height: 100dvh; /* モダンブラウザ */
     left: 0;
     top: 0;
   }
   
   .modal-content {
-    max-height: 80vh;
+    max-height: 80vh; /* フォールバック */
+    max-height: 80svh; /* Safari対応 */
+    max-height: 80dvh; /* モダンブラウザ */
     min-height: 0;
     width: calc(100vw - 32px);
     max-width: calc(100vw - 32px);
@@ -182,13 +190,17 @@
     padding: 12px;
     align-items: center;
     width: 100vw;
-    height: 100vh;
+    height: 100vh; /* フォールバック */
+    height: 100svh; /* Safari対応 */
+    height: 100dvh; /* モダンブラウザ */
   }
   
   .modal-content {
     width: calc(100vw - 24px);
     max-width: calc(100vw - 24px);
-    max-height: 85vh;
+    max-height: 85vh; /* フォールバック */
+    max-height: 85svh; /* Safari対応 */
+    max-height: 85dvh; /* モダンブラウザ */
     margin: 0 auto;
   }
   
@@ -226,11 +238,15 @@
     padding: 8px;
     align-items: flex-start;
     width: 100vw;
-    height: 100vh;
+    height: 100vh; /* フォールバック */
+    height: 100svh; /* Safari対応 */
+    height: 100dvh; /* モダンブラウザ */
   }
   
   .modal-content {
-    max-height: calc(100vh - 20px);
+    max-height: calc(100vh - 20px); /* フォールバック */
+    max-height: calc(100svh - 20px); /* Safari対応 */
+    max-height: calc(100dvh - 20px); /* モダンブラウザ */
     width: calc(100vw - 16px);
     max-width: calc(100vw - 16px);
   }
