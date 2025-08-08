@@ -7,7 +7,7 @@
 
 .tooltip {
   position: absolute;
-  z-index: 10000;
+  z-index: var(--z-tooltip);
   opacity: 1;
   transition: opacity 0.2s ease;
   pointer-events: none;
