@@ -18,12 +18,145 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
+  width: 100%;
+  min-width: 0;
 }
 
 @media (max-width: 768px) {
+  .stock-top3-container {
+    margin-top: 16px;
+    padding: 16px;
+    border-radius: 8px;
+  }
+  
+  .section-title {
+    font-size: 16px;
+    margin: 0 0 12px 0;
+  }
+  
   .stock-lists {
     grid-template-columns: 1fr;
     gap: 16px;
+  }
+  
+  .stock-list {
+    padding: 12px;
+    border-radius: 6px;
+  }
+  
+  .stock-list-title {
+    font-size: 13px;
+    margin: 0 0 10px 0;
+    padding-bottom: 6px;
+  }
+  
+  .stock-item {
+    gap: 8px;
+    padding: 8px 0;
+    align-items: flex-start;
+  }
+  
+  .rank-badge {
+    width: 22px;
+    height: 22px;
+    font-size: 11px;
+    margin-top: 2px;
+  }
+  
+  .stock-info {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+  }
+  
+  .stock-name {
+    font-size: 12px;
+    margin-bottom: 4px;
+    line-height: 1.3;
+    word-break: break-all;
+    word-wrap: break-word;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+    max-width: 100%;
+    width: 100%;
+    hyphens: auto;
+  }
+  
+  .stock-details {
+    flex-wrap: wrap;
+    gap: 4px;
+    align-items: flex-start;
+  }
+  
+  .stock-top3-container .profit {
+    font-size: 11px;
+    min-width: fit-content;
+    white-space: nowrap;
+  }
+  
+  .trade-count {
+    font-size: 10px;
+    white-space: nowrap;
+  }
+  
+  .stock-top3-loading,
+  .stock-top3-no-data {
+    padding: 30px 15px;
+    font-size: 13px;
+  }
+}
+
+/* より小さな画面向けの追加対応 */
+@media (max-width: 480px) {
+  .stock-top3-container {
+    padding: 12px;
+    margin-top: 12px;
+  }
+  
+  .section-title {
+    font-size: 15px;
+    margin: 0 0 10px 0;
+  }
+  
+  .stock-list {
+    padding: 10px;
+  }
+  
+  .stock-list-title {
+    font-size: 12px;
+    margin: 0 0 8px 0;
+    padding-bottom: 4px;
+  }
+  
+  .stock-item {
+    gap: 6px;
+    padding: 6px 0;
+  }
+  
+  .rank-badge {
+    width: 20px;
+    height: 20px;
+    font-size: 10px;
+  }
+  
+  .stock-name {
+    font-size: 11px;
+    line-height: 1.2;
+    word-break: break-all;
+    word-wrap: break-word;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+    max-width: 100%;
+    width: 100%;
+    hyphens: auto;
+  }
+  
+  .stock-top3-container .profit {
+    font-size: 10px;
+  }
+  
+  .trade-count {
+    font-size: 9px;
   }
 }
 
@@ -31,6 +164,9 @@
   background: rgba(0, 0, 0, 0.2);
   border-radius: 8px;
   padding: 16px;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .stock-list-title {
@@ -69,10 +205,12 @@
 
 .stock-item {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 12px;
   padding: 8px 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  width: 100%;
+  min-width: 0;
 }
 
 .stock-item:last-child {
@@ -108,6 +246,8 @@
 .stock-info {
   flex: 1;
   min-width: 0;
+  overflow: hidden;
+  width: 100%;
 }
 
 .stock-name {
@@ -115,9 +255,14 @@
   font-weight: 500;
   color: #ffffff;
   margin-bottom: 4px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  word-break: break-all;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+  line-height: 1.3;
+  max-width: 100%;
+  width: 100%;
+  hyphens: auto;
 }
 
 .stock-details {
@@ -125,11 +270,15 @@
   justify-content: space-between;
   align-items: center;
   gap: 8px;
+  width: 100%;
+  flex-wrap: wrap;
 }
 
 .stock-top3-container .profit {
   font-size: 12px;
   font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .stock-top3-container .profit.positive {
@@ -144,6 +293,7 @@
   font-size: 11px;
   color: #999;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .stock-top3-loading,
