@@ -1,82 +1,141 @@
-# 推奨コマンド
+# Profit Calendar - 開発コマンド集
 
-## 開発コマンド
+## 基本開発コマンド
 
-### 開発サーバー起動
+### 開発環境
 ```bash
+# 開発サーバー起動（http://localhost:5173）
 npm run dev
-```
-- Vite開発サーバーを起動
-- ホットリロード対応
-- 通常は http://localhost:5173 で起動
 
-### ビルド
+# 開発サーバー停止
+Ctrl+C
+```
+
+### ビルド・デプロイ
 ```bash
+# プロダクションビルド（TypeScript型チェック込み）
 npm run build
-```
-- TypeScriptコンパイル（`tsc -b`）
-- Viteビルド実行
-- `dist/`ディレクトリに出力
 
-### プレビュー
-```bash
+# ビルド成果物プレビュー
 npm run preview
-```
-- ビルド済みアプリケーションのプレビュー
-- プロダクション環境の動作確認用
 
-### リンティング
-```bash
-npm run lint
-```
-- ESLintによるコード品質チェック
-- TypeScript + React の推奨ルール適用
-
-## デプロイメント
-
-### 手動デプロイ
-```bash
+# GitHub Pagesへ手動デプロイ
 npm run deploy
 ```
-- ビルド実行後、GitHub Pagesにデプロイ
-- `gh-pages`パッケージ使用
 
-## 開発用システムコマンド（macOS）
-
-### ファイル操作
+### コード品質管理
 ```bash
-ls -la          # ディレクトリ内容表示（詳細）
-find . -name    # ファイル検索
-grep -r         # 文字列検索
+# ESLintによる静的解析
+npm run lint
+
+# ESLint自動修正（可能な範囲で）
+npm run lint -- --fix
 ```
-
-### Git操作
-```bash
-git status      # ステータス確認
-git add .       # ステージング
-git commit -m   # コミット
-git push        # プッシュ
-```
-
-## タスク完了時の確認コマンド
-
-### 必須チェック
-1. **リンティング**: `npm run lint`
-2. **ビルド**: `npm run build`
-3. **プレビュー**: `npm run preview`（必要に応じて）
-
-### オプション
-- **開発サーバー**: `npm run dev`（動作確認）
-
-## データベース・ファイル
-- **データベース**: ブラウザのIndexedDBに保存
-- **設定ファイル**: ローカルストレージ
-- **バックアップ**: JSONファイルエクスポート/インポート
 
 ## パッケージ管理
 ```bash
-npm install             # 依存関係インストール
-npm install --save      # 本番依存関係追加
-npm install --save-dev  # 開発依存関係追加
-npm outdated           # 依存関係の更新確認
+# 依存関係インストール
+npm install
+
+# 新しいパッケージ追加
+npm install <package-name>
+
+# 開発用依存関係追加
+npm install --save-dev <package-name>
+
+# パッケージ更新確認
+npm outdated
+
+# パッケージ更新実行
+npm update
 ```
+
+## Gitコマンド（Darwinシステム）
+```bash
+# 変更状況確認
+git status
+
+# 変更差分表示
+git diff
+
+# ファイルをステージング
+git add <file>
+
+# コミット実行
+git commit -m "feat: 新機能追加"
+
+# リモートプッシュ（自動デプロイ実行）
+git push origin main
+
+# コミット履歴確認
+git log --oneline -10
+```
+
+## ファイル・ディレクトリ操作（Darwin）
+```bash
+# ディレクトリ一覧
+ls -la
+
+# ディレクトリ移動
+cd <directory>
+
+# ファイル内容表示
+cat <file>
+
+# ファイル検索
+find . -name "*.tsx" -type f
+
+# 文字列検索（ripgrep推奨）
+rg "useEffect" --type tsx
+
+# ディスク容量確認
+du -sh node_modules/
+```
+
+## プロジェクト特有のコマンド
+
+### データベース操作
+```bash
+# IndexedDBクリア（ブラウザ開発者ツール）
+# Application > Storage > IndexedDB > profit-calendar-db > Delete
+```
+
+### CSS変数確認
+```bash
+# CSS変数定義検索
+rg "--[a-z-]+:" src/styles/
+
+# CSS設計システム確認
+cat CSS_DESIGN_SYSTEM.md
+```
+
+### TypeScript型チェック
+```bash
+# 型チェックのみ実行
+npx tsc --noEmit
+
+# 特定ファイルの型チェック
+npx tsc --noEmit src/components/TradeForm.tsx
+```
+
+## トラブルシューティング
+```bash
+# node_modules再構築
+rm -rf node_modules package-lock.json
+npm install
+
+# Viteキャッシュクリア
+rm -rf dist .vite
+
+# Git履歴確認
+git reflog
+
+# ファイルサイズ確認
+ls -lh dist/
+```
+
+## 注意事項
+- **開発サーバー**: 勝手に起動しない（CLAUDE.md記載）
+- **プッシュ**: 自動デプロイが実行されるため慎重に
+- **型エラー**: ビルド時に厳格チェックされるため事前確認必須
+- **CSS**: !important使用禁止（設計システム準拠）

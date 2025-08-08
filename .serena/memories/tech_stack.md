@@ -1,40 +1,41 @@
-# 技術スタック
+# Profit Calendar - 技術スタック
 
-## フロントエンド
-- **React**: 19.0.0 - UIフレームワーク
-- **TypeScript**: 5.7.2 - 型システム
-- **Vite**: 6.3.1 - ビルドツール・開発サーバー
-- **SWC**: @vitejs/plugin-react-swc 3.8.0 - 高速コンパイル
+## フロントエンド技術
+- **React 19**: UIフレームワーク
+- **TypeScript 5.7**: 型システム
+- **Vite 6.3**: ビルドツール（SWC使用の高速開発環境）
+- **@vitejs/plugin-react-swc**: React高速コンパイル
 
-## UI・可視化
-- **Chart.js**: 4.5.0 - チャート描画
-- **react-chartjs-2**: 5.3.0 - React Chart.js インテグレーション
-- **CSS**: モジュール化されたスタイリング（テーマシステム付き）
+## スタイリング・UI
+- **CSS + CSS変数**: デザインシステム
+- **レスポンシブデザイン**: モバイルファースト（768px基準）
+- **モダンUIシステム**: Modal, Toast, ConfirmDialog
+- **テーマシステム**: ライト・ダーク・カスタム対応
 
-## データ・状態管理
+## データ・チャート
 - **IndexedDB**: ローカルデータベース
-- **React Context**: テーマ管理
-- **React Hooks**: 状態管理（useState, useEffect等）
+- **Chart.js + react-chartjs-2**: チャート表示
+- **encoding-japanese**: Shift-JISエンコーディング対応
+
+## 開発・品質管理
+- **ESLint 9.22**: コード品質管理
+- **typescript-eslint**: TypeScript用ESLint設定
+- **eslint-plugin-react-hooks**: Reactフック最適化
+- **eslint-plugin-react-refresh**: React開発体験向上
 
 ## ユーティリティ
-- **uuid**: 11.1.0 - 一意識別子生成
-- **@types/uuid**: 10.0.0 - UUID型定義
+- **uuid**: 一意ID生成
+- **@types系**: TypeScript型定義パッケージ群
 
-## 開発ツール
-- **ESLint**: 9.22.0 - リンティング
-- **typescript-eslint**: 8.26.1 - TypeScript ESLint統合
-- **eslint-plugin-react-hooks**: 5.2.0 - React Hooks リンティング
-- **eslint-plugin-react-refresh**: 0.4.19 - React Refresh リンティング
-- **Vite Plugin React SWC**: 高速開発環境
+## デプロイ・CI/CD
+- **GitHub Actions**: 自動デプロイ
+- **GitHub Pages**: 静的サイトホスティング
+- **gh-pages**: 手動デプロイ対応
 
-## ビルド設定
-- **ターゲット**: ES2020
-- **モジュール**: ESNext
-- **JSX**: react-jsx
-- **バンドラーモード**: Vite
-- **型チェック**: strict mode有効
+## Node.js要件
+- **Node.js 18以上**
+- **npm または yarn**
 
-## デプロイメント
-- **GitHub Pages**: 自動デプロイ対応
-- **GitHub Actions**: CI/CDパイプライン
-- **ベースパス**: プロダクション時は /profit-calendar/
+## ブラウザ対応
+- モダンブラウザ（ES2020対応）
+- IndexedDB対応必須

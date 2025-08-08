@@ -1,83 +1,80 @@
-# コードスタイル・規約
+# Profit Calendar - コードスタイル・規約
 
-## TypeScript設定
-- **strict mode**: 有効（厳格な型チェック）
-- **noUnusedLocals**: 未使用ローカル変数の検出
-- **noUnusedParameters**: 未使用パラメータの検出
-- **noFallthroughCasesInSwitch**: switch文のfallthrough防止
-- **target**: ES2020
-- **module**: ESNext
-- **jsx**: react-jsx
+## TypeScript規約
+- **型システム**: TypeScript 5.7の厳格モード
+- **型定義**: 明示的な型注釈を推奨
+- **インターフェース**: 複雑なオブジェクト型はinterfaceで定義
+- **列挙型**: string enumを活用（例: TradeType, AccountType）
+- **型ガード**: ユーザー定義型ガードの活用
 
-## ESLint設定
-- **ベース**: @eslint/js推奨設定 + typescript-eslint推奨設定
-- **React Hooks**: eslint-plugin-react-hooks（推奨ルール適用）
-- **React Refresh**: eslint-plugin-react-refresh
-- **対象ファイル**: **/*.{ts,tsx}
-- **除外**: dist/
+## React規約
+- **関数コンポーネント**: アロー関数形式を基本とする
+- **Hooks**: カスタムHooksは`use`プレフィックス必須
+- **Props型**: コンポーネント固有の型定義
+- **状態管理**: Context API + useReducerパターン
+- **副作用**: useEffectの依存配列を厳密に管理
 
-## 命名規約
-### コンポーネント
-- **ファイル名**: PascalCase（例: `TradeForm.tsx`, `MonthlyReport.tsx`）
-- **コンポーネント名**: PascalCase
-- **Props型**: `ComponentNameProps`（例: `TradeFormProps`）
-
-### フック
-- **ファイル名**: camelCase（例: `useMonthlyTrades.ts`）
-- **フック名**: `use`プレフィックス付きcamelCase
-
-### 型定義
-- **インターフェース**: PascalCase（例: `Trade`, `ImportHistory`）
-- **型エイリアス**: PascalCase
-- **enum**: PascalCase
+## 命名規則
+### ファイル・ディレクトリ
+- **コンポーネント**: PascalCase（例: `TradeForm.tsx`）
+- **Hooks**: camelCase with `use` prefix（例: `useTradeHandlers.ts`）
+- **ユーティリティ**: camelCase（例: `formatUtils.ts`）
+- **型定義**: PascalCase（例: `Trade.ts`）
+- **CSS**: kebab-case（例: `monthly-profit.css`）
 
 ### 変数・関数
 - **変数**: camelCase
-- **関数**: camelCase
-- **定数**: SCREAMING_SNAKE_CASE（例: `DB_NAME`, `DB_VERSION`）
+- **関数**: camelCase（動詞から開始）
+- **定数**: UPPER_SNAKE_CASE
+- **コンポーネント関数**: PascalCase
+- **イベントハンドラ**: `handle` + 動作（例: `handleSaveTrade`）
 
-## ファイル構成規約
-### インポート順序
-1. React関連
-2. 外部ライブラリ
-3. 内部コンポーネント
-4. 型定義
-5. スタイル
+## CSS設計システム
+### 設計原則
+- **`!important`使用禁止**: 詳細度による制御
+- **CSS変数必須**: デザイントークン活用
+- **BEM記法推奨**: `.block__element--modifier`
+- **レスポンシブ**: モバイルファースト（768px基準）
 
-### コンポーネント構造
-```tsx
-// インポート
-import React from 'react';
+### CSS変数システム
+```css
+/* カラー */
+--bg-primary, --text-primary, --status-profit, --status-loss
 
-// 型定義
-interface ComponentProps {
-  // props定義
-}
+/* スペーシング */
+--spacing-xs: 0.25rem (4px)
+--spacing-sm: 0.5rem (8px)  
+--spacing-md: 1rem (16px)
+--spacing-lg: 1.5rem (24px)
 
-// コンポーネント本体
-export default function Component({ props }: ComponentProps) {
-  // ステート
-  // エフェクト
-  // ハンドラー関数
-  // レンダリング
-}
+/* タイポグラフィ */
+--font-size-xs: 0.75rem (12px)
+--font-size-base: 1rem (16px)
+--font-size-xl: 1.25rem (20px)
+
+/* Z-Index管理 */
+--z-modal: 50, --z-tooltip: 70, --z-toast: 80
 ```
 
-## スタイリング規約
-- **CSS Modules**: 使用しない（通常のCSSファイル使用）
-- **ファイル命名**: コンポーネント名.css
-- **グローバルスタイル**: `src/styles/index.css`に統一
-- **テーマシステム**: CSS変数ベース（`theme.css`）
+## ESLint設定
+- **ベース**: @eslint/js + typescript-eslint
+- **React**: react-hooks, react-refresh プラグイン
+- **厳格レベル**: recommended設定を採用
+- **自動修正**: 可能な限りauto-fix対応
 
-## React パターン
-- **関数コンポーネント**: クラスコンポーネントは使用しない
-- **Hooks**: 状態管理・副作用処理
-- **Props**: 分割代入で受け取り
-- **イベントハンドラー**: `handle`プレフィックス
-- **ステートセッター**: `set`プレフィックス
+## ディレクトリ規約
+- **機能別分割**: components, hooks, services, utils
+- **共通要素**: types, constants 配下に集約
+- **スタイル**: コンポーネントごとに分離
+- **テスト**: 未実装（今後の拡張予定）
 
-## データ型規約
-- **日付**: `Date`オブジェクト使用
-- **ID**: uuid v4文字列
-- **金額**: number型（整数）
-- **フラグ**: boolean型明示
+## コメント・ドキュメント
+- **JSDoc**: 複雑な関数・型には必須
+- **コンポーネント**: Props型にコメント記述
+- **ビジネスロジック**: 計算式・アルゴリズムに説明追加
+- **TODOコメント**: 改善点を明確に記述
+
+## Git規約
+- **コミットメッセージ**: Conventional Commits形式
+- **ブランチ**: main単一ブランチ運用
+- **自動デプロイ**: mainプッシュ時にGitHub Pages展開
