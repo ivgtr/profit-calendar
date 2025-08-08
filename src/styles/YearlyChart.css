@@ -96,65 +96,107 @@
   margin: 20px 0;
 }
 
-.investment-summary {
+.trading-summary {
   background: var(--bg-tertiary);
   border-radius: 12px;
   padding: 20px;
   margin-top: 20px;
 }
 
-.summary-row {
+/* シンプルな統計表示 */
+.simple-stats {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
+  gap: 24px;
 }
 
-.summary-label {
-  color: var(--text-secondary);
+.net-result {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.result-label {
   font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  font-weight: 500;
 }
 
-.summary-value {
-  font-size: var(--font-size-lg);
-  font-weight: 600;
+.result-amount {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  letter-spacing: -0.01em;
 }
 
-.summary-value.positive {
+.result-amount.positive {
   color: var(--status-profit);
 }
 
-.summary-value.negative {
+.result-amount.negative {
   color: var(--status-loss);
 }
 
-.summary-bars {
-  margin-top: 20px;
+.result-breakdown {
+  display: flex;
+  gap: 12px;
+  margin-top: 4px;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+}
+
+.profit-part {
+  color: var(--status-profit);
+}
+
+.loss-part {
+  color: var(--status-loss);
+}
+
+.win-rate-section {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  flex: 1;
+  max-width: 200px;
 }
 
-.bar-wrapper {
+.win-rate-info {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: var(--font-size-sm);
+}
+
+.rate-label {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.rate-value {
+  color: var(--text-primary);
+  font-weight: 700;
+  font-size: var(--font-size-base);
+}
+
+.record {
+  color: var(--text-tertiary);
+  font-size: var(--font-size-xs);
+}
+
+.win-rate-bar {
   width: 100%;
-  height: 24px;
-  background: var(--bg-primary);
-  border-radius: 12px;
+  height: 8px;
+  background: var(--status-loss);
+  border-radius: 4px;
   overflow: hidden;
 }
 
-.bar {
+.win-portion {
   height: 100%;
-  border-radius: 12px;
-  transition: width 0.5s ease;
-}
-
-.investment-bar {
-  background: var(--status-loss);
-}
-
-.return-bar {
   background: var(--status-profit);
+  border-radius: 4px;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .year-navigation {
@@ -226,8 +268,23 @@
     height: 160px;
   }
 
-  .investment-summary {
+  .trading-summary {
     padding: 16px;
+  }
+
+  .simple-stats {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .result-amount {
+    font-size: var(--font-size-xl);
+  }
+
+  .win-rate-section {
+    width: 100%;
+    max-width: none;
   }
 
   .summary-value {
