@@ -16,7 +16,7 @@ import { Disclaimer } from './components/Disclaimer';
 import { UserGuide } from './components/UserGuide';
 import { BackupRestore } from './components/BackupRestore';
 import { useMonthlyTrades } from './hooks/useMonthlyTrades';
-import { db } from './services/database';
+import { db, Database } from './services/database';
 import { Trade } from './types/Trade';
 import { formatCurrency } from './utils/formatUtils';
 import { calculateTradeBreakdown, calculateTotalProfit } from './utils/tradeCalculations';
@@ -31,6 +31,9 @@ function App() {
   const [isDbReady, setIsDbReady] = useState(false);
   const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
   const [dataVersion, setDataVersion] = useState(0);
+  
+  // Database クラスのインスタンスを作成
+  const [databaseService] = useState(() => new Database());
   
   // 月間取引データをフックで管理（データベース初期化後のみ）
   const { monthlyTrades, isLoading: isCalendarLoading } = useMonthlyTrades(
@@ -47,6 +50,7 @@ function App() {
     const initDb = async () => {
       try {
         await db.init();
+        await databaseService.init();
         setIsDbReady(true);
       } catch (error) {
         console.error('データベース初期化エラー:', error);
@@ -54,7 +58,7 @@ function App() {
       }
     };
     initDb();
-  }, []);
+  }, [databaseService]);
 
   // 選択された日付の取引を読み込み（メモ化）
   const loadDailyTrades = useCallback(async (date: Date) => {
@@ -329,6 +333,7 @@ function App() {
         size="large"
       >
         <YearlyChart 
+          databaseService={databaseService}
           isDbReady={isDbReady} 
         />
       </Modal>
