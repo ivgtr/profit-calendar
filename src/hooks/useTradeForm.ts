@@ -1,13 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { Trade, TradeType, AccountType } from '../types/Trade';
 import { v4 as uuidv4 } from 'uuid';
 
 export interface TradeFormData {
   date: string;
-  accountType: AccountType;
+  accountType: string;
   stockName: string;
   stockCode: string;
-  tradeType: TradeType;
+  tradeType: string;
   quantity: string;
   unitPrice: string;
   amount: string;
@@ -25,17 +25,83 @@ export interface UseTradeFormProps {
   onSave: (trade: Trade) => void;
 }
 
+// 型定数の定義（const assertionで型安全性を確保）
+const ACCOUNT_TYPES = ['特定', '一般', 'NISA'] as const;
+const TRADE_TYPES = ['返済売', '返済買', '現物売', '現物買', '売却', '購入', '買付'] as const;
+
+// 型ガード関数（asを完全に除去）
+function isAccountType(value: string): value is AccountType {
+  return ACCOUNT_TYPES.some(type => type === value);
+}
+
+function isTradeType(value: string): value is TradeType {
+  return TRADE_TYPES.some(type => type === value);
+}
+
+// 型変換ユーティリティ関数
+function convertTradeToFormData(trade: Trade): TradeFormData {
+  // ローカルタイムゾーンで日付を取得
+  const localDate = new Date(trade.date.getTime() - trade.date.getTimezoneOffset() * 60000);
+  
+  return {
+    date: localDate.toISOString().split('T')[0],
+    accountType: trade.accountType || '',
+    stockName: trade.stockName || '',
+    stockCode: trade.stockCode || '',
+    tradeType: trade.tradeType || '',
+    quantity: (trade.quantity != null && trade.quantity !== 0) ? trade.quantity.toString() : '',
+    unitPrice: (trade.unitPrice != null && trade.unitPrice !== 0) ? trade.unitPrice.toString() : '',
+    amount: (trade.amount != null && trade.amount !== 0) ? trade.amount.toString() : '',
+    averageAcquisitionPrice: (trade.averageAcquisitionPrice != null && trade.averageAcquisitionPrice !== 0) ? trade.averageAcquisitionPrice.toString() : '',
+    realizedProfitLoss: (trade.realizedProfitLoss != null && trade.realizedProfitLoss !== 0) ? trade.realizedProfitLoss.toString() : '',
+    memo: trade.memo || '',
+  };
+}
+
+function convertFormDataToTrade(formData: TradeFormData, existingTrade?: Trade): Trade {
+  const now = new Date();
+  // ローカルタイムゾーンで日付を作成（YYYY-MM-DD形式の文字列から）
+  const [year, month, day] = formData.date.split('-').map(Number);
+  
+  // 型安全な変換（型ガード関数を使用）
+  const accountType = formData.accountType && isAccountType(formData.accountType) 
+    ? formData.accountType 
+    : null;
+  
+  const tradeType = formData.tradeType && isTradeType(formData.tradeType) 
+    ? formData.tradeType 
+    : null;
+  
+  return {
+    id: existingTrade?.id || uuidv4(),
+    date: new Date(year, month - 1, day),
+    accountType,
+    stockName: formData.stockName?.trim() || null,
+    stockCode: formData.stockCode?.trim() || undefined,
+    tradeType,
+    quantity: formData.quantity ? Number(formData.quantity) : null,
+    unitPrice: formData.unitPrice ? Number(formData.unitPrice) : null,
+    amount: formData.amount ? Number(formData.amount) : null,
+    averageAcquisitionPrice: formData.averageAcquisitionPrice ? Number(formData.averageAcquisitionPrice) : null,
+    realizedProfitLoss: Number(formData.realizedProfitLoss),
+    memo: formData.memo?.trim() || undefined,
+    csvImported: existingTrade?.csvImported || false,
+    createdAt: existingTrade?.createdAt || now,
+    updatedAt: now,
+  };
+}
+
 export function useTradeForm({ trade, onSave }: UseTradeFormProps) {
   const [formData, setFormData] = useState<TradeFormData>({
     date: '',
-    accountType: 'NISA' as AccountType,
-    stockName: '手動入力',
+    accountType: '',
+    stockName: '',
     stockCode: '',
-    tradeType: '現物買' as TradeType,
-    quantity: '1',
-    unitPrice: '1',
-    amount: '1',
-    averageAcquisitionPrice: '1',
+    tradeType: '',
+    quantity: '',
+    unitPrice: '',
+    amount: '',
+    averageAcquisitionPrice: '',
     realizedProfitLoss: '',
     memo: '',
   });
@@ -45,41 +111,30 @@ export function useTradeForm({ trade, onSave }: UseTradeFormProps) {
   // 編集時の初期データ設定
   useEffect(() => {
     if (trade) {
-      // ローカルタイムゾーンで日付を取得
-      const localDate = new Date(trade.date.getTime() - trade.date.getTimezoneOffset() * 60000);
-      setFormData({
-        date: localDate.toISOString().split('T')[0],
-        accountType: trade.accountType,
-        stockName: trade.stockName,
-        stockCode: trade.stockCode || '',
-        tradeType: trade.tradeType,
-        quantity: trade.quantity.toString(),
-        unitPrice: trade.unitPrice.toString(),
-        amount: trade.amount.toString(),
-        averageAcquisitionPrice: trade.averageAcquisitionPrice.toString(),
-        realizedProfitLoss: trade.realizedProfitLoss.toString(),
-        memo: trade.memo || '',
-      });
+      setFormData(convertTradeToFormData(trade));
     }
   }, [trade]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
+    
     setFormData(prev => ({ ...prev, [name]: value }));
     
     // エラーをクリア
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
     }
-  };
+  }, [errors]);
 
   const validateForm = (): boolean => {
     const newErrors: ValidationErrors = {};
 
-    // 必須項目：約定日、実現損益のみ
+    // 必須項目：約定日、実現損益
     if (!formData.date) newErrors.date = '約定日は必須です';
-    if (!formData.realizedProfitLoss || isNaN(Number(formData.realizedProfitLoss))) {
+    if (!formData.realizedProfitLoss || formData.realizedProfitLoss.trim() === '') {
       newErrors.realizedProfitLoss = '実現損益は必須です';
+    } else if (isNaN(Number(formData.realizedProfitLoss))) {
+      newErrors.realizedProfitLoss = '数値を入力してください';
     }
 
     // 任意項目のバリデーション（入力がある場合のみ）
@@ -100,34 +155,27 @@ export function useTradeForm({ trade, onSave }: UseTradeFormProps) {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!validateForm()) return;
+    // HTMLネイティブバリデーションを使用するため、フォームの有効性をチェック
+    const form = e.target as HTMLFormElement;
+    if (!form.checkValidity()) {
+      form.reportValidity(); // ブラウザのデフォルトエラー表示とスクロール
+      return;
+    }
 
-    const now = new Date();
-    // ローカルタイムゾーンで日付を作成（YYYY-MM-DD形式の文字列から）
-    const [year, month, day] = formData.date.split('-').map(Number);
-    const tradeData: Trade = {
-      id: trade?.id || uuidv4(),
-      date: new Date(year, month - 1, day),
-      accountType: formData.accountType,
-      stockName: formData.stockName.trim(),
-      stockCode: formData.stockCode.trim() || undefined,
-      tradeType: formData.tradeType,
-      quantity: Number(formData.quantity),
-      unitPrice: Number(formData.unitPrice),
-      amount: Number(formData.amount),
-      averageAcquisitionPrice: Number(formData.averageAcquisitionPrice),
-      realizedProfitLoss: Number(formData.realizedProfitLoss),
-      memo: formData.memo.trim() || undefined,
-      csvImported: trade?.csvImported || false,
-      createdAt: trade?.createdAt || now,
-      updatedAt: now,
-    };
-
+    const tradeData = convertFormDataToTrade(formData, trade);
     onSave(tradeData);
-  };
+  }, [formData, trade, onSave]);
+
+  // リアルタイムバリデーション（ボタンの無効化判定用）
+  const isFormValid = useMemo(() => Boolean(
+    formData.date && 
+    formData.realizedProfitLoss && 
+    formData.realizedProfitLoss.trim() !== '' &&
+    !isNaN(Number(formData.realizedProfitLoss))
+  ), [formData.date, formData.realizedProfitLoss]);
 
   return {
     formData,
@@ -135,5 +183,6 @@ export function useTradeForm({ trade, onSave }: UseTradeFormProps) {
     handleInputChange,
     handleSubmit,
     validateForm,
+    isFormValid,
   };
 }
