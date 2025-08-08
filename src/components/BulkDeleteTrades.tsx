@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { db } from '../services/database';
+import { useUI } from '../contexts/UIContext';
 import '../styles/BulkDeleteTrades.css';
 
 interface BulkDeleteTradesProps {
@@ -9,6 +10,7 @@ interface BulkDeleteTradesProps {
 type DeleteMode = 'all' | 'dates' | 'reset';
 
 export function BulkDeleteTrades({ onComplete }: BulkDeleteTradesProps) {
+  const { showConfirm, showAlert, showToast } = useUI();
   const [mode, setMode] = useState<DeleteMode>('dates');
   const [selectedDates, setSelectedDates] = useState<string[]>(['']);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -28,18 +30,21 @@ export function BulkDeleteTrades({ onComplete }: BulkDeleteTradesProps) {
   };
 
   const handleDeleteAll = async () => {
-    if (!confirm('全ての取引データを削除します。この操作は元に戻せません。本当に実行しますか？')) {
-      return;
-    }
+    const confirmed = await showConfirm({
+      message: '全ての取引データを削除します。この操作は元に戻せません。本当に実行しますか？',
+      confirmText: '削除',
+      variant: 'danger'
+    });
+    if (!confirmed) return;
 
     setIsDeleting(true);
     try {
       const deletedCount = await db.deleteAllTrades();
-      alert(`${deletedCount}件の取引を削除しました`);
+      showToast(`${deletedCount}件の取引を削除しました`, 'success');
       onComplete();
     } catch (error) {
       console.error('全削除エラー:', error);
-      alert('取引の削除に失敗しました');
+      showToast('取引の削除に失敗しました', 'error');
     } finally {
       setIsDeleting(false);
     }
@@ -49,46 +54,58 @@ export function BulkDeleteTrades({ onComplete }: BulkDeleteTradesProps) {
     const validDates = selectedDates.filter(date => date.trim() !== '');
     
     if (validDates.length === 0) {
-      alert('削除する日付を指定してください');
+      await showAlert('削除する日付を指定してください');
       return;
     }
 
-    if (!confirm(`${validDates.length}個の日付の取引を削除します。この操作は元に戻せません。本当に実行しますか？`)) {
-      return;
-    }
+    const confirmed = await showConfirm({
+      message: `${validDates.length}個の日付の取引を削除します。この操作は元に戻せません。本当に実行しますか？`,
+      confirmText: '削除',
+      variant: 'danger'
+    });
+    if (!confirmed) return;
 
     setIsDeleting(true);
     try {
       const dates = validDates.map(dateStr => new Date(dateStr));
       const deletedCount = await db.deleteTradesByDates(dates);
-      alert(`${deletedCount}件の取引を削除しました`);
+      showToast(`${deletedCount}件の取引を削除しました`, 'success');
       onComplete();
     } catch (error) {
       console.error('日付指定削除エラー:', error);
-      alert('取引の削除に失敗しました');
+      showToast('取引の削除に失敗しました', 'error');
     } finally {
       setIsDeleting(false);
     }
   };
 
   const handleResetAll = async () => {
-    if (!confirm('全ての取引データ、インポート履歴、設定を削除してアプリを初期状態に戻します。この操作は元に戻せません。本当に実行しますか？')) {
-      return;
-    }
+    const firstConfirm = await showConfirm({
+      message: '全ての取引データ、インポート履歴、設定を削除してアプリを初期状態に戻します。この操作は元に戻せません。本当に実行しますか？',
+      confirmText: '続行',
+      variant: 'danger'
+    });
+    if (!firstConfirm) return;
 
-    if (!confirm('最終確認：この操作により全てのデータと設定が失われます。本当に続行しますか？')) {
-      return;
-    }
+    const secondConfirm = await showConfirm({
+      message: '最終確認：この操作により全てのデータと設定が失われます。本当に続行しますか？',
+      confirmText: '完全リセット',
+      variant: 'danger'
+    });
+    if (!secondConfirm) return;
 
     setIsDeleting(true);
     try {
       await db.resetAll();
-      alert('アプリを初期状態にリセットしました。ページをリロードします。');
+      await showAlert({
+        title: 'リセット完了',
+        message: 'アプリを初期状態にリセットしました。ページをリロードします。'
+      });
       // ページをリロードしてアプリを完全に初期化
       window.location.reload();
     } catch (error) {
       console.error('完全初期化エラー:', error);
-      alert('初期化に失敗しました');
+      showToast('初期化に失敗しました', 'error');
       setIsDeleting(false);
     }
   };

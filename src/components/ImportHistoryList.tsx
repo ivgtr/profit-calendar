@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { db } from '../services/database';
 import { ImportHistory } from '../types/ImportHistory';
 import { formatCurrency } from '../utils/formatUtils';
+import { useUI } from '../contexts/UIContext';
 import '../styles/ImportHistoryList.css';
 
 interface ImportHistoryListProps {
@@ -9,6 +10,7 @@ interface ImportHistoryListProps {
 }
 
 export function ImportHistoryList({ onHistoryUpdate }: ImportHistoryListProps) {
+  const { showConfirm, showToast } = useUI();
   const [histories, setHistories] = useState<ImportHistory[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -30,9 +32,12 @@ export function ImportHistoryList({ onHistoryUpdate }: ImportHistoryListProps) {
   }, []);
 
   const handleReject = async (history: ImportHistory) => {
-    if (!confirm(`「${history.fileName}」のインポートを取り消しますか？\n関連する${history.importedRecords}件の取引データが削除されます。`)) {
-      return;
-    }
+    const confirmed = await showConfirm({
+      message: `「${history.fileName}」のインポートを取り消しますか？\n関連する${history.importedRecords}件の取引データが削除されます。`,
+      confirmText: '取り消す',
+      variant: 'danger'
+    });
+    if (!confirmed) return;
 
     try {
       // 関連する取引データを削除
@@ -53,10 +58,10 @@ export function ImportHistoryList({ onHistoryUpdate }: ImportHistoryListProps) {
       // 親コンポーネントに更新を通知
       onHistoryUpdate?.();
       
-      alert('インポートを取り消しました');
+      showToast('インポートを取り消しました', 'success');
     } catch (error) {
       console.error('インポート取り消しエラー:', error);
-      alert('インポートの取り消しに失敗しました');
+      showToast('インポートの取り消しに失敗しました', 'error');
     }
   };
 

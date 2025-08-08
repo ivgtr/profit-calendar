@@ -1,6 +1,7 @@
 import { Trade, TradeType, AccountType } from '../types/Trade';
 import { DataUpdateHandler, DataDeleteHandler } from '../types/Common';
 import { useTradeForm } from '../hooks/useTradeForm';
+import { useUI } from '../contexts/UIContext';
 import '../styles/TradeForm.css';
 
 interface TradeFormProps {
@@ -11,6 +12,7 @@ interface TradeFormProps {
 }
 
 export default function TradeForm({ trade, onSave, onCancel, onDelete }: TradeFormProps) {
+  const { showConfirm } = useUI();
   const {
     formData,
     errors,
@@ -18,9 +20,14 @@ export default function TradeForm({ trade, onSave, onCancel, onDelete }: TradeFo
     handleSubmit,
   } = useTradeForm({ trade, onSave });
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (trade && onDelete) {
-      if (confirm('この取引を削除しますか？この操作は取り消せません。')) {
+      const confirmed = await showConfirm({
+        message: 'この取引を削除しますか？この操作は取り消せません。',
+        confirmText: '削除',
+        variant: 'danger'
+      });
+      if (confirmed) {
         onDelete(trade.id);
       }
     }
