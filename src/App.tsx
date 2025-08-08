@@ -4,7 +4,7 @@ import { Modal } from './components/Modal';
 import { CSVImporter } from './components/CSVImporter';
 import { Calendar } from './components/Calendar';
 import { ImportHistoryList } from './components/ImportHistoryList';
-import { TradeForm } from './components/TradeForm';
+import TradeForm from './components/TradeForm';
 import { BulkDeleteTrades } from './components/BulkDeleteTrades';
 import { MonthlyProfit } from './components/MonthlyProfit';
 import { MonthlyReport } from './components/MonthlyReport';
@@ -89,7 +89,7 @@ function App() {
     handleImportComplete,
     handleHistoryUpdate,
     handleBulkDeleteComplete,
-    handleDataRestored,
+
     handleHeaderAction,
     toggleDailyBreakdown
   } = useTradeHandlers({
@@ -329,7 +329,6 @@ function App() {
         size="large"
       >
         <YearlyChart 
-          databaseService={db} 
           isDbReady={isDbReady} 
         />
       </Modal>
@@ -391,7 +390,7 @@ function App() {
         title="📦 データバックアップ・復元"
         size="large"
       >
-        <BackupRestore onDataRestored={handleDataRestored} />
+        <BackupRestore />
       </Modal>
     </div>
   );

@@ -1,30 +1,21 @@
-import { useState } from 'react';
-import { useTheme } from '../contexts/ThemeContext';
-import { ThemeMode } from '../types/Theme';
+import { useThemeSettings } from '../hooks/useThemeSettings';
 import '../styles/ThemeSettings.css';
 
 export function ThemeSettings() {
-  const { theme, themeMode, setThemeMode, updateCustomTheme, resetCustomTheme } = useTheme();
-  const [activeTab, setActiveTab] = useState<'mode' | 'custom'>('mode');
-
-  const handleThemeModeChange = (mode: ThemeMode) => {
-    setThemeMode(mode);
-  };
-
-  const handleColorChange = (category: string, key: string, value: string) => {
-    updateCustomTheme({
-      [category]: {
-        [key]: value,
-      },
-    } as any);
-  };
+  const {
+    theme,
+    themeMode,
+    activeTab,
+    setActiveTab,
+    handleThemeModeChange,
+    handleColorChange,
+    handleResetCustomTheme,
+  } = useThemeSettings();
 
   return (
     <div className="theme-settings">
-      <div className="theme-header">
-        <h2>テーマ設定</h2>
-      </div>
-
+      <h3>🎨 テーマ設定</h3>
+      
       <div className="theme-tabs">
         <button
           className={`tab-button ${activeTab === 'mode' ? 'active' : ''}`}
@@ -36,70 +27,61 @@ export function ThemeSettings() {
           className={`tab-button ${activeTab === 'custom' ? 'active' : ''}`}
           onClick={() => setActiveTab('custom')}
         >
-          カスタマイズ
+          カスタムテーマ
         </button>
       </div>
 
       {activeTab === 'mode' && (
         <div className="theme-mode-section">
           <div className="theme-options">
-            <label className={`theme-option ${themeMode === 'light' ? 'active' : ''}`}>
+            <label className="theme-option">
               <input
                 type="radio"
-                name="theme"
+                name="theme-mode"
                 value="light"
                 checked={themeMode === 'light'}
                 onChange={() => handleThemeModeChange('light')}
               />
               <div className="option-content">
-                <div className="option-preview light-preview">
-                  <div className="preview-header"></div>
-                  <div className="preview-content">
-                    <div className="preview-card"></div>
-                    <div className="preview-card"></div>
-                  </div>
+                <span className="option-icon">☀️</span>
+                <div className="option-text">
+                  <span className="option-title">ライトモード</span>
+                  <span className="option-description">明るい背景のテーマ</span>
                 </div>
-                <span className="option-label">ライトモード</span>
               </div>
             </label>
 
-            <label className={`theme-option ${themeMode === 'dark' ? 'active' : ''}`}>
+            <label className="theme-option">
               <input
                 type="radio"
-                name="theme"
+                name="theme-mode"
                 value="dark"
                 checked={themeMode === 'dark'}
                 onChange={() => handleThemeModeChange('dark')}
               />
               <div className="option-content">
-                <div className="option-preview dark-preview">
-                  <div className="preview-header"></div>
-                  <div className="preview-content">
-                    <div className="preview-card"></div>
-                    <div className="preview-card"></div>
-                  </div>
+                <span className="option-icon">🌙</span>
+                <div className="option-text">
+                  <span className="option-title">ダークモード</span>
+                  <span className="option-description">暗い背景のテーマ</span>
                 </div>
-                <span className="option-label">ダークモード</span>
               </div>
             </label>
 
-            <label className={`theme-option ${themeMode === 'custom' ? 'active' : ''}`}>
+            <label className="theme-option">
               <input
                 type="radio"
-                name="theme"
+                name="theme-mode"
                 value="custom"
                 checked={themeMode === 'custom'}
                 onChange={() => handleThemeModeChange('custom')}
               />
               <div className="option-content">
-                <div className="option-preview custom-preview">
-                  <div className="preview-header"></div>
-                  <div className="preview-content">
-                    <div className="preview-card"></div>
-                    <div className="preview-card"></div>
-                  </div>
+                <span className="option-icon">🎨</span>
+                <div className="option-text">
+                  <span className="option-title">カスタムモード</span>
+                  <span className="option-description">自分好みの色にカスタマイズ</span>
                 </div>
-                <span className="option-label">カスタム</span>
               </div>
             </label>
           </div>
@@ -110,19 +92,20 @@ export function ThemeSettings() {
         <div className="custom-theme-section">
           {themeMode !== 'custom' && (
             <div className="custom-notice">
-              カスタムテーマを編集するには、先にカスタムモードを選択してください。
+              💡 カスタムテーマを使用するには、テーマモードで「カスタムモード」を選択してください
             </div>
           )}
 
-          <div className={`color-settings ${themeMode !== 'custom' ? 'disabled' : ''}`}>
+          <div className="color-groups">
             <div className="color-group">
-              <h3>アクセントカラー</h3>
-              <div className="color-inputs">
-                <div className="color-input">
-                  <label>プライマリ</label>
-                  <div className="color-picker-wrapper">
+              <h4>アクセントカラー</h4>
+              <div className="color-items">
+                <div className="color-item">
+                  <label htmlFor="accent-primary">プライマリ</label>
+                  <div className="color-input-wrapper">
                     <input
                       type="color"
+                      id="accent-primary"
                       value={theme.colors.accent.primary}
                       onChange={(e) => handleColorChange('accent', 'primary', e.target.value)}
                       disabled={themeMode !== 'custom'}
@@ -132,14 +115,16 @@ export function ThemeSettings() {
                       value={theme.colors.accent.primary}
                       onChange={(e) => handleColorChange('accent', 'primary', e.target.value)}
                       disabled={themeMode !== 'custom'}
+                      className="color-text"
                     />
                   </div>
                 </div>
-                <div className="color-input">
-                  <label>セカンダリ</label>
-                  <div className="color-picker-wrapper">
+                <div className="color-item">
+                  <label htmlFor="accent-secondary">セカンダリ</label>
+                  <div className="color-input-wrapper">
                     <input
                       type="color"
+                      id="accent-secondary"
                       value={theme.colors.accent.secondary}
                       onChange={(e) => handleColorChange('accent', 'secondary', e.target.value)}
                       disabled={themeMode !== 'custom'}
@@ -149,6 +134,7 @@ export function ThemeSettings() {
                       value={theme.colors.accent.secondary}
                       onChange={(e) => handleColorChange('accent', 'secondary', e.target.value)}
                       disabled={themeMode !== 'custom'}
+                      className="color-text"
                     />
                   </div>
                 </div>
@@ -156,13 +142,14 @@ export function ThemeSettings() {
             </div>
 
             <div className="color-group">
-              <h3>ステータスカラー</h3>
-              <div className="color-inputs">
-                <div className="color-input">
-                  <label>利益</label>
-                  <div className="color-picker-wrapper">
+              <h4>ステータスカラー</h4>
+              <div className="color-items">
+                <div className="color-item">
+                  <label htmlFor="status-profit">利益</label>
+                  <div className="color-input-wrapper">
                     <input
                       type="color"
+                      id="status-profit"
                       value={theme.colors.status.profit}
                       onChange={(e) => handleColorChange('status', 'profit', e.target.value)}
                       disabled={themeMode !== 'custom'}
@@ -172,14 +159,16 @@ export function ThemeSettings() {
                       value={theme.colors.status.profit}
                       onChange={(e) => handleColorChange('status', 'profit', e.target.value)}
                       disabled={themeMode !== 'custom'}
+                      className="color-text"
                     />
                   </div>
                 </div>
-                <div className="color-input">
-                  <label>損失</label>
-                  <div className="color-picker-wrapper">
+                <div className="color-item">
+                  <label htmlFor="status-loss">損失</label>
+                  <div className="color-input-wrapper">
                     <input
                       type="color"
+                      id="status-loss"
                       value={theme.colors.status.loss}
                       onChange={(e) => handleColorChange('status', 'loss', e.target.value)}
                       disabled={themeMode !== 'custom'}
@@ -189,6 +178,7 @@ export function ThemeSettings() {
                       value={theme.colors.status.loss}
                       onChange={(e) => handleColorChange('status', 'loss', e.target.value)}
                       disabled={themeMode !== 'custom'}
+                      className="color-text"
                     />
                   </div>
                 </div>
@@ -196,13 +186,14 @@ export function ThemeSettings() {
             </div>
 
             <div className="color-group">
-              <h3>背景色</h3>
-              <div className="color-inputs">
-                <div className="color-input">
-                  <label>プライマリ</label>
-                  <div className="color-picker-wrapper">
+              <h4>背景カラー</h4>
+              <div className="color-items">
+                <div className="color-item">
+                  <label htmlFor="background-primary">プライマリ</label>
+                  <div className="color-input-wrapper">
                     <input
                       type="color"
+                      id="background-primary"
                       value={theme.colors.background.primary}
                       onChange={(e) => handleColorChange('background', 'primary', e.target.value)}
                       disabled={themeMode !== 'custom'}
@@ -212,14 +203,16 @@ export function ThemeSettings() {
                       value={theme.colors.background.primary}
                       onChange={(e) => handleColorChange('background', 'primary', e.target.value)}
                       disabled={themeMode !== 'custom'}
+                      className="color-text"
                     />
                   </div>
                 </div>
-                <div className="color-input">
-                  <label>セカンダリ</label>
-                  <div className="color-picker-wrapper">
+                <div className="color-item">
+                  <label htmlFor="background-secondary">セカンダリ</label>
+                  <div className="color-input-wrapper">
                     <input
                       type="color"
+                      id="background-secondary"
                       value={theme.colors.background.secondary}
                       onChange={(e) => handleColorChange('background', 'secondary', e.target.value)}
                       disabled={themeMode !== 'custom'}
@@ -229,18 +222,21 @@ export function ThemeSettings() {
                       value={theme.colors.background.secondary}
                       onChange={(e) => handleColorChange('background', 'secondary', e.target.value)}
                       disabled={themeMode !== 'custom'}
+                      className="color-text"
                     />
                   </div>
                 </div>
               </div>
             </div>
+          </div>
 
+          <div className="theme-actions">
             <button
               className="reset-button"
-              onClick={resetCustomTheme}
+              onClick={handleResetCustomTheme}
               disabled={themeMode !== 'custom'}
             >
-              デフォルトに戻す
+              初期値にリセット
             </button>
           </div>
         </div>

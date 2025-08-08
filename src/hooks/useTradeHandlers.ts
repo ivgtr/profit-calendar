@@ -69,10 +69,6 @@ export function useTradeHandlers({
     handleDataUpdate();
   }, [handleDataUpdate]);
 
-  // データ復元完了ハンドラー
-  const handleDataRestored = useCallback(() => {
-    handleDataUpdate();
-  }, [handleDataUpdate]);
 
   // Header アクションハンドラー
   const handleHeaderAction = useCallback((action: HeaderAction) => {
@@ -130,7 +126,6 @@ export function useTradeHandlers({
     handleImportComplete,
     handleHistoryUpdate,
     handleBulkDeleteComplete,
-    handleDataRestored,
     handleHeaderAction,
     toggleDailyBreakdown
   };
