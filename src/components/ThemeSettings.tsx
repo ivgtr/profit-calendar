@@ -16,7 +16,7 @@ export function ThemeSettings() {
       [category]: {
         [key]: value,
       },
-    } as any);
+    });
   };
 
   return (
