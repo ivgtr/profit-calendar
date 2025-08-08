@@ -22,7 +22,9 @@ body {
 }
 
 #root {
-  min-height: 100vh;
+  min-height: 100vh; /* フォールバック */
+  min-height: 100svh; /* Safari対応 */
+  min-height: 100dvh; /* モダンブラウザ */
   display: flex;
   flex-direction: column;
 }
