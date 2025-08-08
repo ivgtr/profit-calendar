@@ -1,6 +1,7 @@
 import { Trade, TradeType, AccountType } from '../types/Trade';
 import { DataUpdateHandler, DataDeleteHandler } from '../types/Common';
 import { useTradeForm } from '../hooks/useTradeForm';
+import '../styles/TradeForm.css';
 
 interface TradeFormProps {
   trade?: Trade; // 編集時は既存データ、新規時はundefined

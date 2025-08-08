@@ -1,16 +1,14 @@
+/* TradeForm - 3列グリッドレイアウト */
 .trade-form {
+  width: 100%;
   max-width: 100%;
 }
 
 .form-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--spacing-lg);
-  margin-bottom: var(--spacing-lg);
-}
-
-.form-grid-row {
-  display: contents;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
 }
 
 .form-group {
@@ -19,7 +17,7 @@
 }
 
 .form-group.full-width {
-  grid-column: 1 / -1;
+  grid-column: span 3;
 }
 
 .form-group label {
@@ -33,12 +31,25 @@
 .form-group select,
 .form-group textarea {
   padding: var(--spacing-sm) var(--spacing-md);
-  border: var(--border-thin) solid var(--border-primary);
+  border: 1px solid var(--border-primary);
   border-radius: var(--border-radius-md);
   font-size: var(--font-size-sm);
   background-color: var(--bg-primary);
   color: var(--text-primary);
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  height: 40px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.form-group select {
+  cursor: pointer;
+}
+
+.form-group textarea {
+  height: 80px;
+  min-height: 80px;
+  resize: vertical;
 }
 
 .form-group input:focus,
@@ -62,17 +73,13 @@
   margin-top: var(--spacing-xs);
 }
 
-.form-group textarea {
-  resize: vertical;
-  min-height: calc(var(--spacing-3xl) + var(--spacing-md));
-}
-
 .form-actions {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding-top: var(--spacing-lg);
-  border-top: var(--border-thin) solid var(--border-primary);
+  border-top: 1px solid var(--border-primary);
+  margin-top: var(--spacing-lg);
 }
 
 .form-actions-left {
@@ -94,7 +101,8 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
-  min-width: calc(var(--spacing-3xl) * 1.5);
+  min-width: 80px;
+  height: 40px;
 }
 
 .cancel-button {
@@ -106,7 +114,7 @@
   background-color: var(--text-primary);
 }
 
-.save-button {  
+.save-button {
   background: var(--accent-primary);
   color: var(--text-inverse);
 }
@@ -119,6 +127,7 @@
 .save-button:disabled {
   background-color: var(--text-secondary);
   cursor: not-allowed;
+  transform: none;
 }
 
 .delete-button {
@@ -132,21 +141,20 @@
 }
 
 /* Required field indicator */
-.form-group label::after {
-  content: "";
-}
-
-.form-group:has(input[required]) label::after,
-.form-group label:has-text(" *")::after {
+.form-group label[data-required="true"]::after {
   content: " *";
   color: var(--status-loss);
 }
 
-/* レスポンシブ: モバイル (--breakpoint-md以下) */
+/* レスポンシブ: モバイル (768px以下) */
 @media (max-width: 768px) {
   .form-grid {
     grid-template-columns: 1fr;
     gap: var(--spacing-md);
+  }
+  
+  .form-group.full-width {
+    grid-column: span 1;
   }
   
   .form-actions {
@@ -168,7 +176,6 @@
   .save-button,
   .delete-button {
     width: 100%;
-    padding: var(--spacing-md);
   }
   
   .form-group input,
@@ -176,5 +183,11 @@
   .form-group textarea {
     padding: var(--spacing-md);
     font-size: var(--font-size-base); /* iOS zoom prevention */
+    height: 48px;
+  }
+  
+  .form-group textarea {
+    height: 100px;
+    min-height: 100px;
   }
 }
