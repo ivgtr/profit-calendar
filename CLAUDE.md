@@ -41,21 +41,25 @@ npm run preview
 - **ビルドツール**: Vite + @vitejs/plugin-react-swc
 - **型システム**: TypeScript 5.7
 - **エントリーポイント**: src/main.tsx → src/App.tsx
-- **スタイリング**: CSS（App.css, index.css）
+- **スタイリング**: CSS + CSS変数によるデザインシステム
+- **チャート**: Chart.js + react-chartjs-2
+- **エンコーディング**: encoding-japanese（Shift-JIS対応）
 
 ## プロジェクト構造
 - `/src` - ソースコード
   - `main.tsx` - アプリケーションのエントリーポイント
   - `App.tsx` - メインコンポーネント
   - `/components` - 再利用可能なUIコンポーネント
-  - `/pages` - ルーティングに対応するページコンポーネント
+    - `/ui` - 汎用UIコンポーネント（Modal, Toast, ConfirmDialog）
+    - `/MonthlyReport` - 月次レポート関連コンポーネント
+  - `/contexts` - React Context（UIContext, ThemeContext）
   - `/hooks` - カスタムReact Hooks
   - `/utils` - 汎用的なユーティリティ関数
   - `/types` - TypeScriptの型定義
-  - `/styles` - グローバルスタイルとテーマ
-  - `/services` - API通信とデータ処理
+  - `/styles` - CSSファイル（デザインシステム準拠）
+  - `/services` - データベース・バックアップサービス
   - `/constants` - アプリケーション定数
-  - `/assets` - 静的リソース（画像、CSVファイル等）
+  - `/assets` - 静的リソース
 - `/public` - 公開ディレクトリ
 
 ## アプリケーション仕様
@@ -65,15 +69,42 @@ npm run preview
   - 月間カレンダー表示（日別損益・取引件数表示）
   - 日付選択による詳細取引履歴表示
   - IndexedDBによるローカルデータ保存
+  - 年間収益チャート表示
+  - 月次レポート機能（基本指標・トレンド・リスク・銘柄分析）
+  - データバックアップ・復元機能
+  - テーマ設定（ライト・ダーク・カスタム）
+  - 取引履歴の一括削除機能
 
 ## 技術仕様
 - **データベース**: IndexedDB
 - **CSVフォーマット**: Shift-JIS エンコーディング対応
 - **対応取引種別**: 現物売買・信用取引（返済売・返済買）
-- **必須パッケージ**: uuid, @types/uuid
+- **主要パッケージ**:
+  - uuid, @types/uuid（ID生成）
+  - chart.js, react-chartjs-2（チャート表示）
+  - encoding-japanese（文字エンコーディング）
 
 ## 注意事項
 - Reactベストプラクティスに従ったディレクトリ構造を採用
 - テストフレームワークは未設定
 - CSVインポート機能はShift-JISエンコーディングを前提
-- グローバルスタイルは`src/styles/index.css`に統一
+- CSS設計システムに従った統一的なスタイル管理
+- `!important`の使用禁止（CSS_DESIGN_SYSTEM.mdを参照）
+
+## CSS設計システム
+詳細は`CSS_DESIGN_SYSTEM.md`を参照。主要な原則：
+- CSS変数によるデザイントークン管理
+- `!important`使用禁止
+- BEM記法の採用推奨
+- レスポンシブデザイン（768px以下をモバイル基準）
+- 統一されたz-index管理
+
+## UI/UX システム
+- モダンUIシステム導入済み（ConfirmDialog, Toast, Modal）
+- テーマ切り替え機能（ライト・ダーク・カスタムテーマ）
+- レスポンシブデザイン対応
+
+## デプロイ設定
+- GitHub Pages対応（`npm run deploy`）
+- リポジトリ: https://github.com/ivgtr/profit-calendar.git
+- 公開URL: https://ivgtr.github.io/profit-calendar/
