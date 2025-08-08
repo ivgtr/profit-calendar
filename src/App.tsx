@@ -7,6 +7,7 @@ import { ImportHistoryList } from './components/ImportHistoryList';
 import TradeForm from './components/TradeForm';
 import { BulkDeleteTrades } from './components/BulkDeleteTrades';
 import { MonthlyProfit } from './components/MonthlyProfit';
+import { DailyTradesSection } from './components/DailyTradesSection';
 import { MonthlyReport } from './components/MonthlyReport';
 import { YearlyChart } from './components/YearlyChart';
 import { ThemeSettings } from './components/ThemeSettings';
@@ -20,8 +21,6 @@ import { useTradeListModal } from './hooks/useTradeListModal';
 import { TradeListModal } from './components/TradeListModal';
 import { db, Database } from './services/database';
 import { Trade } from './types/Trade';
-import { formatCurrency } from './utils/formatUtils';
-import { calculateTradeBreakdown, calculateTotalProfit } from './utils/tradeCalculations';
 import { useModalManager } from './hooks/useModalManager';
 import { useTradeCRUD } from './hooks/useTradeCRUD';
 import { useTradeHandlers } from './hooks/useTradeHandlers';
@@ -130,15 +129,6 @@ function AppInner() {
     handleOpenTradeForm
   });
 
-
-
-
-
-
-
-
-
-
   if (!isDbReady) {
     return (
       <div className="loading">
@@ -164,146 +154,15 @@ function AppInner() {
           />
         </section>
 
-        {selectedDate && (
-          <section className="daily-trades-section">
-            <div className="daily-trades-header">
-              <h2>{selectedDate.toLocaleDateString('ja-JP')}の取引</h2>
-              <button 
-                className="add-daily-trade-button"
-                onClick={() => handleOpenTradeForm(undefined, selectedDate)}
-                title={`${selectedDate.toLocaleDateString('ja-JP')}の取引を追加`}
-              >
-                <span className="button-icon">+</span>
-                取引を追加
-              </button>
-            </div>
-            
-            {dailyTrades.length > 0 ? (
-              <>
-                {(() => {
-                  const totalProfit = calculateTotalProfit(dailyTrades);
-                  const { spotProfit, marginProfit, unknownProfit } = calculateTradeBreakdown(dailyTrades);
-                  
-                  // 表示する項目をフィルタリング
-                  const breakdownItems = [
-                    { label: '現物', mobileLabel: '現物取引', profit: spotProfit, type: 'spot' as const },
-                    { label: '信用', mobileLabel: '信用取引', profit: marginProfit, type: 'margin' as const },
-                    { label: '不明', mobileLabel: '不明取引', profit: unknownProfit, type: 'unknown' as const }
-                  ].filter(item => item.profit !== 0);
-                  
-                  // 内訳が一つもない場合は内訳表示を非表示
-                  const hasBreakdown = breakdownItems.length > 0;
-                  
-                  return (
-                    <div className="daily-profit">
-                      <div className="profit-container" onClick={hasBreakdown ? toggleDailyBreakdown : undefined}>
-                        <div className="daily-summary">
-                          <div className="summary-header">
-                            <h3>この日の収益</h3>
-                            {hasBreakdown && (
-                              <div className="mobile-toggle">
-                                <span className="expand-icon">{isDailyBreakdownExpanded ? '▼' : '▶'}</span>
-                              </div>
-                            )}
-                          </div>
-                          <div className="profit-amount">
-                            <span className={`profit-value ${totalProfit >= 0 ? 'profit' : 'loss'}`}>
-                              {totalProfit >= 0 ? '+' : ''}
-                              {formatCurrency(totalProfit)}円
-                            </span>
-                            <span className="trade-count">({dailyTrades.length}件)</span>
-                          </div>
-                        </div>
-                        
-                        {hasBreakdown && (
-                          <div className="trade-breakdown desktop-breakdown">
-                            <div className="breakdown-list">
-                              {breakdownItems.map(item => (
-                                <div 
-                                  key={item.label} 
-                                  className="breakdown-item clickable"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleDailyTradeTypeClick(item.type, item.label);
-                                  }}
-                                  title={`${item.label}取引の詳細を表示`}
-                                >
-                                  <div className="breakdown-label">{item.label}</div>
-                                  <div className={`breakdown-profit ${item.profit >= 0 ? 'profit' : 'loss'}`}>
-                                    {item.profit >= 0 ? '+' : ''}
-                                    {formatCurrency(item.profit)}円
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                      
-                      {hasBreakdown && isDailyBreakdownExpanded && (
-                        <div className="trade-breakdown mobile-breakdown">
-                          <div className="breakdown-list">
-                            {breakdownItems.map(item => (
-                              <div 
-                                key={item.mobileLabel} 
-                                className="breakdown-item clickable"
-                                onClick={() => handleDailyTradeTypeClick(item.type, item.label)}
-                                title={`${item.label}取引の詳細を表示`}
-                              >
-                                <div className="breakdown-label">{item.mobileLabel}</div>
-                                <div className={`breakdown-profit ${item.profit >= 0 ? 'profit' : 'loss'}`}>
-                                  {item.profit >= 0 ? '+' : ''}
-                                  {formatCurrency(item.profit)}円
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })()}
-
-                <table className="trades-table">
-                  <thead>
-                    <tr>
-                      <th>銘柄コード</th>
-                      <th>銘柄名</th>
-                      <th>取引</th>
-                      <th>数量</th>
-                      <th>平均取得価額</th>
-                      <th>単価</th>
-                      <th>損益</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {dailyTrades.map(trade => (
-                      <tr 
-                        key={trade.id} 
-                        className="trade-row clickable"
-                        onClick={() => handleOpenTradeForm(trade)}
-                        title="クリックして編集"
-                      >
-                        <td data-label="銘柄コード">{trade.stockCode || '不明'}</td>
-                        <td data-label="銘柄名">{trade.stockName || '不明'}</td>
-                        <td data-label="取引">{trade.tradeType || '未入力'}</td>
-                        <td data-label="数量">{trade.quantity?.toLocaleString() || '未入力'}</td>
-                        <td data-label="平均取得価額">{trade.averageAcquisitionPrice ? formatCurrency(trade.averageAcquisitionPrice) + '円' : '未入力'}</td>
-                        <td data-label="単価">{trade.unitPrice ? formatCurrency(trade.unitPrice) + '円' : '未入力'}</td>
-                        <td data-label="損益" className={trade.realizedProfitLoss >= 0 ? 'profit' : 'loss'}>
-                          {trade.realizedProfitLoss >= 0 ? '+' : ''}
-                          {formatCurrency(trade.realizedProfitLoss)}円
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </>
-            ) : (
-              <p className="no-trades">この日の取引はありません</p>
-            )}
-          </section>
-        )}
+        <DailyTradesSection
+          selectedDate={selectedDate}
+          dailyTrades={dailyTrades}
+          isDailyBreakdownExpanded={isDailyBreakdownExpanded}
+          onToggleDailyBreakdown={toggleDailyBreakdown}
+          onAddTrade={(date) => handleOpenTradeForm(undefined, date)}
+          onEditTrade={(trade) => handleOpenTradeForm(trade)}
+          onTradeTypeClick={handleDailyTradeTypeClick}
+        />
       </main>
 
       {/* CSVインポートモーダル */}
