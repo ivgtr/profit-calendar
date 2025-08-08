@@ -140,7 +140,7 @@ section h2 {
 
 .daily-profit .mobile-breakdown {
   display: none;
-  padding: 0 20px 16px;
+  padding: 16px 20px;
   border-top: 1px solid var(--border-secondary);
 }
 
