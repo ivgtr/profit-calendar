@@ -1,10 +1,12 @@
 import { useState, useCallback } from 'react';
 import { BackupService } from '../services/backup';
+import { useUI } from '../contexts/UIContext';
 
 export type TabType = 'backup' | 'restore';
 export type MessageType = { type: 'success' | 'error'; text: string };
 
 export function useBackupRestore() {
+  const { showConfirm } = useUI();
   const [activeTab, setActiveTab] = useState<TabType>('backup');
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState<MessageType | null>(null);
@@ -87,7 +89,11 @@ export function useBackupRestore() {
       return;
     }
 
-    const confirmed = confirm('現在のデータはすべて削除され、バックアップファイルのデータで置き換えられます。この操作は取り消せません。続行しますか？');
+    const confirmed = await showConfirm({
+      message: '現在のデータはすべて削除され、バックアップファイルのデータで置き換えられます。この操作は取り消せません。続行しますか？',
+      confirmText: '復元',
+      variant: 'danger'
+    });
     if (!confirmed) return;
 
     setIsLoading(true);
@@ -110,7 +116,7 @@ export function useBackupRestore() {
     } finally {
       setIsLoading(false);
     }
-  }, [selectedFile, clearMessage, showMessage]);
+  }, [selectedFile, clearMessage, showMessage, showConfirm]);
 
   const handleRestoreFromUrl = useCallback(async () => {
     if (!restoreUrl.trim()) {
@@ -118,7 +124,11 @@ export function useBackupRestore() {
       return;
     }
 
-    const confirmed = confirm('現在のデータはすべて削除され、指定されたURLのデータで置き換えられます。この操作は取り消せません。続行しますか？');
+    const confirmed = await showConfirm({
+      message: '現在のデータはすべて削除され、指定されたURLのデータで置き換えられます。この操作は取り消せません。続行しますか？',
+      confirmText: '復元',
+      variant: 'danger'
+    });
     if (!confirmed) return;
 
     setIsLoading(true);
@@ -136,7 +146,7 @@ export function useBackupRestore() {
     } finally {
       setIsLoading(false);
     }
-  }, [restoreUrl, clearMessage, showMessage]);
+  }, [restoreUrl, clearMessage, showMessage, showConfirm]);
 
   return {
     // State

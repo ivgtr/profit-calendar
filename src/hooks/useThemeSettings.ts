@@ -1,10 +1,12 @@
 import { useState, useCallback } from 'react';
 import { useTheme } from './useTheme';
 import { ThemeMode } from '../types/Theme';
+import { useUI } from '../contexts/UIContext';
 
 export type TabType = 'mode' | 'custom';
 
 export function useThemeSettings() {
+  const { showConfirm } = useUI();
   const { theme, themeMode, setThemeMode, updateCustomTheme, resetCustomTheme } = useTheme();
   const [activeTab, setActiveTab] = useState<TabType>('mode');
 
@@ -26,11 +28,15 @@ export function useThemeSettings() {
     });
   }, [theme.colors, updateCustomTheme]);
 
-  const handleResetCustomTheme = useCallback(() => {
-    if (confirm('カスタムテーマを初期値にリセットしますか？')) {
+  const handleResetCustomTheme = useCallback(async () => {
+    const confirmed = await showConfirm({
+      message: 'カスタムテーマを初期値にリセットしますか？',
+      confirmText: 'リセット'
+    });
+    if (confirmed) {
       resetCustomTheme();
     }
-  }, [resetCustomTheme]);
+  }, [resetCustomTheme, showConfirm]);
 
   return {
     // State
