@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, memo } from 'react';
 import { DailySummary } from '../types/Trade';
 import { LoadingProps, DateHandler } from '../types/Common';
 import { formatCurrency } from '../utils/formatUtils';
@@ -10,16 +10,19 @@ interface CalendarProps extends LoadingProps {
   monthlyTrades?: Map<string, DailySummary>;
 }
 
-export function Calendar({ onDateSelect, onMonthChange, monthlyTrades = new Map(), isLoading = false }: CalendarProps) {
+const Calendar = memo(function Calendar({ onDateSelect, onMonthChange, monthlyTrades = new Map(), isLoading = false }: CalendarProps) {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
 
 
+  // 今日の日付をメモ化（毎回のnew Date()生成を防止）
+  const today = useMemo(() => new Date(), []);
+  const todayString = useMemo(() => today.toDateString(), [today]);
+
   // 初期化時に今日の日付を選択
   useEffect(() => {
-    const today = new Date();
     onDateSelect?.(today);
-  }, [onDateSelect]);
+  }, [onDateSelect, today]);
 
   // 月が変更された時の通知
   useEffect(() => {
@@ -94,7 +97,7 @@ export function Calendar({ onDateSelect, onMonthChange, monthlyTrades = new Map(
           const dateKey = date.toISOString().split('T')[0];
           const summary = monthlyTrades.get(dateKey);
           const isCurrentMonth = date.getMonth() === currentDate.getMonth();
-          const isToday = date.toDateString() === new Date().toDateString();
+          const isToday = date.toDateString() === todayString;
           const isSelected = selectedDate?.toDateString() === date.toDateString();
 
           return (
@@ -126,4 +129,6 @@ export function Calendar({ onDateSelect, onMonthChange, monthlyTrades = new Map(
       )}
     </div>
   );
-}
+});
+
+export { Calendar };
