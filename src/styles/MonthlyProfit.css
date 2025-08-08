@@ -88,8 +88,9 @@
 
 .mobile-breakdown {
   display: none;
-  padding: 0 20px 16px;
+  padding: 16px 20px;
   border-top: 1px solid var(--border-secondary);
+  margin-top: 12px;
 }
 
 .breakdown-list {
