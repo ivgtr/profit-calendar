@@ -23,14 +23,18 @@ import { calculateTradeBreakdown, calculateTotalProfit } from './utils/tradeCalc
 import { useModalManager } from './hooks/useModalManager';
 import { useTradeCRUD } from './hooks/useTradeCRUD';
 import { useTradeHandlers } from './hooks/useTradeHandlers';
+import { UIProvider, useUI } from './contexts/UIContext';
 import './styles/App.css';
 
-function App() {
+function AppInner() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [dailyTrades, setDailyTrades] = useState<Trade[]>([]);
   const [isDbReady, setIsDbReady] = useState(false);
   const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
   const [dataVersion, setDataVersion] = useState(0);
+  
+  // UIContext hooks
+  const { showAlert } = useUI();
   
   // Database クラスのインスタンスを作成
   const [databaseService] = useState(() => new Database());
@@ -54,11 +58,11 @@ function App() {
         setIsDbReady(true);
       } catch (error) {
         console.error('データベース初期化エラー:', error);
-        alert('データベースの初期化に失敗しました');
+        showAlert('データベースの初期化に失敗しました');
       }
     };
     initDb();
-  }, [databaseService]);
+  }, [databaseService, showAlert]);
 
   // 選択された日付の取引を読み込み（メモ化）
   const loadDailyTrades = useCallback(async (date: Date) => {
@@ -398,6 +402,14 @@ function App() {
         <BackupRestore />
       </Modal>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <UIProvider>
+      <AppInner />
+    </UIProvider>
   );
 }
 
