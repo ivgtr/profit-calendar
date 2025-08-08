@@ -16,6 +16,8 @@ import { Disclaimer } from './components/Disclaimer';
 import { UserGuide } from './components/UserGuide';
 import { BackupRestore } from './components/BackupRestore';
 import { useMonthlyTrades } from './hooks/useMonthlyTrades';
+import { useTradeListModal } from './hooks/useTradeListModal';
+import { TradeListModal } from './components/TradeListModal';
 import { db, Database } from './services/database';
 import { Trade } from './types/Trade';
 import { formatCurrency } from './utils/formatUtils';
@@ -88,6 +90,23 @@ function AppInner() {
     closeModal,
     openModal
   });
+
+  // 日次取引一覧モーダル管理
+  const {
+    modalTrades: dailyModalTrades,
+    modalTitle: dailyModalTitle,
+    isModalOpen: isDailyModalOpen,
+    modalFilterType: dailyModalFilterType,
+    showTradesForDate,
+    closeModal: closeDailyModal
+  } = useTradeListModal();
+
+  // 日次breakdown-itemクリック処理
+  const handleDailyTradeTypeClick = useCallback(async (type: 'spot' | 'margin' | 'unknown', label: string) => {
+    if (selectedDate) {
+      await showTradesForDate(selectedDate, type, label);
+    }
+  }, [selectedDate, showTradesForDate]);
 
   // イベントハンドラー
   const {
@@ -167,9 +186,9 @@ function AppInner() {
                   
                   // 表示する項目をフィルタリング
                   const breakdownItems = [
-                    { label: '現物', mobileLabel: '現物取引', profit: spotProfit },
-                    { label: '信用', mobileLabel: '信用取引', profit: marginProfit },
-                    { label: '不明', mobileLabel: '不明取引', profit: unknownProfit }
+                    { label: '現物', mobileLabel: '現物取引', profit: spotProfit, type: 'spot' as const },
+                    { label: '信用', mobileLabel: '信用取引', profit: marginProfit, type: 'margin' as const },
+                    { label: '不明', mobileLabel: '不明取引', profit: unknownProfit, type: 'unknown' as const }
                   ].filter(item => item.profit !== 0);
                   
                   // 内訳が一つもない場合は内訳表示を非表示
@@ -200,7 +219,15 @@ function AppInner() {
                           <div className="trade-breakdown desktop-breakdown">
                             <div className="breakdown-list">
                               {breakdownItems.map(item => (
-                                <div key={item.label} className="breakdown-item">
+                                <div 
+                                  key={item.label} 
+                                  className="breakdown-item clickable"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleDailyTradeTypeClick(item.type, item.label);
+                                  }}
+                                  title={`${item.label}取引の詳細を表示`}
+                                >
                                   <div className="breakdown-label">{item.label}</div>
                                   <div className={`breakdown-profit ${item.profit >= 0 ? 'profit' : 'loss'}`}>
                                     {item.profit >= 0 ? '+' : ''}
@@ -217,7 +244,12 @@ function AppInner() {
                         <div className="trade-breakdown mobile-breakdown">
                           <div className="breakdown-list">
                             {breakdownItems.map(item => (
-                              <div key={item.mobileLabel} className="breakdown-item">
+                              <div 
+                                key={item.mobileLabel} 
+                                className="breakdown-item clickable"
+                                onClick={() => handleDailyTradeTypeClick(item.type, item.label)}
+                                title={`${item.label}取引の詳細を表示`}
+                              >
                                 <div className="breakdown-label">{item.mobileLabel}</div>
                                 <div className={`breakdown-profit ${item.profit >= 0 ? 'profit' : 'loss'}`}>
                                   {item.profit >= 0 ? '+' : ''}
@@ -405,6 +437,15 @@ function AppInner() {
       >
         <BackupRestore />
       </Modal>
+
+      {/* 日次取引一覧モーダル */}
+      <TradeListModal
+        trades={dailyModalTrades}
+        isOpen={isDailyModalOpen}
+        onClose={closeDailyModal}
+        title={dailyModalTitle}
+        filterType={dailyModalFilterType}
+      />
     </div>
   );
 }
