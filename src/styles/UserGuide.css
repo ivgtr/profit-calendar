@@ -7,7 +7,7 @@
 .user-guide h2 {
   margin: 0 0 30px 0;
   color: var(--text-primary);
-  font-size: 1.5rem;
+  font-size: var(--font-size-xl);
   border-bottom: 2px solid var(--accent-primary);
   padding-bottom: 10px;
 }
@@ -15,7 +15,7 @@
 .user-guide h3 {
   margin: 30px 0 20px 0;
   color: var(--text-primary);
-  font-size: 1.2rem;
+  font-size: var(--font-size-lg);
   font-weight: 600;
   display: flex;
   align-items: center;
@@ -25,13 +25,13 @@
 .user-guide h4 {
   margin: 15px 0 10px 0;
   color: var(--text-primary);
-  font-size: 1rem;
+  font-size: var(--font-size-base);
   font-weight: 600;
 }
 
 .user-guide p {
   margin: 0 0 15px 0;
-  font-size: 0.95rem;
+  font-size: var(--font-size-sm);
 }
 
 .user-guide ul, .user-guide ol {
@@ -41,7 +41,7 @@
 
 .user-guide li {
   margin: 6px 0;
-  font-size: 0.95rem;
+  font-size: var(--font-size-sm);
 }
 
 /* セクション */
@@ -112,7 +112,7 @@
   align-items: center;
   justify-content: center;
   font-weight: bold;
-  font-size: 0.9rem;
+  font-size: var(--font-size-sm);
   flex-shrink: 0;
 }
 
@@ -180,7 +180,7 @@
 .tip-card p {
   margin: 0;
   color: var(--text-secondary);
-  font-size: 0.9rem;
+  font-size: var(--font-size-sm);
 }
 
 /* FAQ */
@@ -199,13 +199,13 @@
 .faq-item h4 {
   margin: 0 0 10px 0;
   color: var(--status-loss);
-  font-size: 0.95rem;
+  font-size: var(--font-size-sm);
 }
 
 .faq-item p {
   margin: 0;
   color: var(--text-secondary);
-  font-size: 0.9rem;
+  font-size: var(--font-size-sm);
   padding-left: 12px;
 }
 
@@ -219,7 +219,7 @@
 
 .guide-footer p {
   color: var(--text-secondary);
-  font-size: 0.9rem;
+  font-size: var(--font-size-sm);
 }
 
 .user-guide .last-updated {
@@ -230,30 +230,30 @@
 /* モバイル対応 */
 @media (max-width: 768px) {
   .user-guide {
-    font-size: 0.95rem;
+    font-size: var(--font-size-sm);
     line-height: 1.7;
   }
   
   .user-guide h2 {
-    font-size: 1.35rem;
+    font-size: var(--font-size-xl);
     margin-bottom: 24px;
     line-height: 1.3;
   }
   
   .user-guide h3 {
-    font-size: 1.15rem;
+    font-size: var(--font-size-lg);
     margin: 30px 0 18px 0;
     line-height: 1.4;
   }
   
   .user-guide h4 {
-    font-size: 1rem;
+    font-size: var(--font-size-base);
     margin: 18px 0 12px 0;
     line-height: 1.4;
   }
   
   .user-guide p {
-    font-size: 0.95rem;
+    font-size: var(--font-size-sm);
     line-height: 1.7;
     margin-bottom: 16px;
   }
@@ -274,7 +274,7 @@
     align-self: flex-start;
     width: 26px;
     height: 26px;
-    font-size: 0.85rem;
+    font-size: var(--font-size-xs);
   }
   
   .step-content h4 {
@@ -313,13 +313,13 @@
   }
   
   .faq-item h4 {
-    font-size: 0.95rem;
+    font-size: var(--font-size-sm);
     line-height: 1.4;
     margin-bottom: 12px;
   }
   
   .faq-item p {
-    font-size: 0.9rem;
+    font-size: var(--font-size-sm);
     line-height: 1.6;
     padding-left: 10px;
     margin: 0;

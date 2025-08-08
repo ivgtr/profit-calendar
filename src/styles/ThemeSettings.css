@@ -130,7 +130,7 @@
 }
 
 .option-label {
-  font-size: 0.9rem;
+  font-size: var(--font-size-sm);
   font-weight: 500;
   color: var(--text-primary);
 }
@@ -168,7 +168,7 @@
 
 .color-group h3 {
   margin: 0 0 16px;
-  font-size: 1.1rem;
+  font-size: var(--font-size-lg);
   color: var(--text-primary);
 }
 
@@ -185,7 +185,7 @@
 }
 
 .color-input label {
-  font-size: 0.9rem;
+  font-size: var(--font-size-sm);
   color: var(--text-secondary);
 }
 
@@ -221,7 +221,7 @@
   background: var(--bg-primary);
   color: var(--text-primary);
   font-family: monospace;
-  font-size: 0.9rem;
+  font-size: var(--font-size-sm);
 }
 
 .reset-button {

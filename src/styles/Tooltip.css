@@ -19,7 +19,7 @@
   padding: 8px 12px;
   border-radius: 6px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  font-size: 0.85rem;
+  font-size: var(--font-size-xs);
   line-height: 1.4;
   max-width: 280px;
   min-width: 200px;
@@ -107,7 +107,7 @@
   .tooltip-content {
     max-width: 240px;
     min-width: 180px;
-    font-size: 0.8rem;
+    font-size: var(--font-size-xs);
     padding: 6px 10px;
   }
   
