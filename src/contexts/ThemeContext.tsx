@@ -1,5 +1,6 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useState, useEffect, useCallback, ReactNode } from 'react';
 import { Theme, ThemeMode, lightTheme, darkTheme, defaultCustomTheme, ColorPalette } from '../types/Theme';
+import { THEME_MODE_KEY, CUSTOM_THEME_KEY } from '../constants/theme';
 
 interface ThemeContextType {
   theme: Theme;
@@ -9,11 +10,7 @@ interface ThemeContextType {
   resetCustomTheme: () => void;
 }
 
-const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
-
-// ローカルストレージのキー
-const THEME_MODE_KEY = 'profit-calendar-theme-mode';
-const CUSTOM_THEME_KEY = 'profit-calendar-custom-theme';
+export const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   // 保存されたテーマモードを取得
@@ -26,7 +23,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   );
 
   // 現在のテーマを取得
-  const getCurrentTheme = (): Theme => {
+  const getCurrentTheme = useCallback((): Theme => {
     switch (themeMode) {
       case 'light':
         return lightTheme;
@@ -37,7 +34,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       default:
         return lightTheme;
     }
-  };
+  }, [themeMode, customTheme]);
 
   const [theme, setTheme] = useState<Theme>(getCurrentTheme());
 
@@ -52,7 +49,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     
     // body要素にテーマクラスを追加
     document.body.className = `theme-${themeMode}`;
-  }, [themeMode, customTheme]);
+  }, [themeMode, customTheme, getCurrentTheme]);
 
   // CSS変数を更新する関数
   const updateCSSVariables = (colors: ColorPalette) => {
@@ -134,13 +131,4 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       {children}
     </ThemeContext.Provider>
   );
-}
-
-// テーマフック
-export function useTheme() {
-  const context = useContext(ThemeContext);
-  if (!context) {
-    throw new Error('useTheme must be used within a ThemeProvider');
-  }
-  return context;
 }

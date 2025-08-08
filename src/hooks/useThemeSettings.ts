@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { useTheme } from '../contexts/ThemeContext';
+import { useTheme } from './useTheme';
 import { ThemeMode } from '../types/Theme';
 
 export type TabType = 'mode' | 'custom';
