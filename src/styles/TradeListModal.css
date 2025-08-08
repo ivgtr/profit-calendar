@@ -1,0 +1,242 @@
+.trade-list-modal .modal-content {
+  max-width: 1200px;
+  width: 90vw;
+  max-height: 80vh;
+}
+
+.trade-list-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-height: 70vh;
+  overflow: hidden;
+}
+
+.empty-state {
+  padding: var(--spacing-xl);
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: var(--font-size-lg);
+}
+
+.trade-list-header {
+  flex-shrink: 0;
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.trade-count {
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+.table-container {
+  flex: 1;
+  overflow: auto;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  margin: var(--spacing-sm) 0;
+  min-height: 0;
+}
+
+.trade-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-sm);
+}
+
+.trade-table thead {
+  position: sticky;
+  top: 0;
+  background-color: var(--bg-primary);
+  z-index: 10;
+}
+
+.trade-table th {
+  padding: var(--spacing-sm) var(--spacing-md);
+  text-align: left;
+  font-weight: 600;
+  color: var(--text-secondary);
+  border-bottom: 2px solid var(--border-color);
+  white-space: nowrap;
+}
+
+.trade-table th.sortable {
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s ease;
+}
+
+.trade-table th.sortable:hover {
+  background-color: var(--bg-secondary);
+}
+
+.trade-table th.numeric {
+  text-align: right;
+}
+
+.trade-table tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+.trade-table tbody tr:hover {
+  background-color: var(--bg-hover);
+}
+
+.trade-table tbody tr:nth-child(even) {
+  background-color: var(--bg-secondary);
+}
+
+.trade-table tbody tr:nth-child(even):hover {
+  background-color: var(--bg-hover);
+}
+
+.trade-table td {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.trade-table td.numeric {
+  text-align: right;
+  font-feature-settings: 'tnum';
+}
+
+.trade-table td.date {
+  white-space: nowrap;
+}
+
+.trade-table td.stock-name {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.trade-table td.stock-code {
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+}
+
+.trade-table td.trade-type {
+  white-space: nowrap;
+}
+
+.trade-table td.profit.positive {
+  color: var(--status-profit);
+  font-weight: 500;
+}
+
+.trade-table td.profit.negative {
+  color: var(--status-loss);
+  font-weight: 500;
+}
+
+.trade-list-footer {
+  flex-shrink: 0;
+  padding-top: var(--spacing-sm);
+  border-top: 1px solid var(--border-color);
+}
+
+.table-summary {
+  padding: var(--spacing-md);
+  background-color: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-lg);
+}
+
+.summary-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-size: var(--font-size-md);
+}
+
+.summary-item span:first-child {
+  color: var(--text-secondary);
+}
+
+.total-profit {
+  font-weight: 600;
+  font-size: var(--font-size-lg);
+}
+
+.total-profit.positive {
+  color: var(--status-profit);
+}
+
+.total-profit.negative {
+  color: var(--status-loss);
+}
+
+/* モバイル対応 */
+@media (max-width: 768px) {
+  .trade-list-modal .modal-content {
+    width: 95vw;
+    max-width: none;
+    max-height: 90vh;
+  }
+  
+  .trade-list-content {
+    max-height: 85vh;
+  }
+  
+  .table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .trade-table {
+    min-width: 700px;
+  }
+  
+  .trade-table th,
+  .trade-table td {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: var(--font-size-xs);
+  }
+  
+  .trade-table td.stock-name {
+    max-width: 120px;
+  }
+  
+  .table-summary {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: var(--spacing-sm);
+  }
+  
+  .summary-item {
+    font-size: var(--font-size-sm);
+  }
+  
+  .total-profit {
+    font-size: var(--font-size-md);
+  }
+}
+
+/* ダークテーマ対応 */
+.theme-dark .trade-table thead {
+  background-color: var(--bg-secondary);
+}
+
+.theme-dark .trade-table th.sortable:hover {
+  background-color: var(--bg-hover);
+}
+
+.theme-dark .trade-table tbody tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+/* カスタムテーマ対応 */
+.theme-custom .trade-table thead {
+  background-color: var(--bg-primary);
+}
+
+.theme-custom .trade-table th.sortable:hover {
+  background-color: var(--bg-secondary);
+}
