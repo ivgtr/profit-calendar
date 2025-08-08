@@ -185,14 +185,21 @@ const YearlyChart = memo(function YearlyChart({ databaseService, isDbReady }: Ye
     },
   };
 
-  // 合計投資額と合計回収額を計算
-  const totalInvestment = chartDataItems.reduce((sum, item) => {
-    return sum + (item.totalProfit < 0 ? Math.abs(item.totalProfit) : 0);
-  }, 0);
+  // デイトレード用の勝敗指標を計算
+  const winCount = chartDataItems.filter(item => item.totalProfit > 0).length;
+  const lossCount = chartDataItems.filter(item => item.totalProfit < 0).length;
+  const totalTrades = winCount + lossCount;
+  const winRate = totalTrades > 0 ? (winCount / totalTrades) * 100 : 0;
 
-  const totalReturn = chartDataItems.reduce((sum, item) => {
+
+
+  const totalProfits = chartDataItems.reduce((sum, item) => {
     return sum + (item.totalProfit > 0 ? item.totalProfit : 0);
   }, 0);
+
+  const totalLosses = Math.abs(chartDataItems.reduce((sum, item) => {
+    return sum + (item.totalProfit < 0 ? item.totalProfit : 0);
+  }, 0));
 
   const netProfit = chartDataItems.reduce((sum, item) => sum + item.totalProfit, 0);
 
@@ -261,28 +268,31 @@ const YearlyChart = memo(function YearlyChart({ databaseService, isDbReady }: Ye
           )}
         </div>
 
-        <div className="investment-summary">
-          <div className="summary-row">
-            <span className="summary-label">合計投資</span>
-            <span className="summary-value negative">¥{totalInvestment.toLocaleString('ja-JP')}</span>
-          </div>
-          <div className="summary-row">
-            <span className="summary-label">合計回収</span>
-            <span className="summary-value positive">¥{totalReturn.toLocaleString('ja-JP')}</span>
-          </div>
-          
-          <div className="summary-bars">
-            <div className="bar-wrapper">
-              <div 
-                className="bar investment-bar" 
-                style={{ width: '100%' }}
-              />
+        <div className="trading-summary">
+          <div className="simple-stats">
+            <div className="net-result">
+              <div className="result-label">純損益</div>
+              <div className={`result-amount ${netProfit >= 0 ? 'positive' : 'negative'}`}>
+                {netProfit >= 0 ? '+' : ''}¥{Math.abs(netProfit).toLocaleString('ja-JP')}
+              </div>
+              <div className="result-breakdown">
+                <span className="profit-part">+¥{totalProfits.toLocaleString('ja-JP')}</span>
+                <span className="loss-part">-¥{totalLosses.toLocaleString('ja-JP')}</span>
+              </div>
             </div>
-            <div className="bar-wrapper">
-              <div 
-                className="bar return-bar" 
-                style={{ width: totalInvestment > 0 ? `${(totalReturn / totalInvestment) * 100}%` : '0%' }}
-              />
+            
+            <div className="win-rate-section">
+              <div className="win-rate-info">
+                <span className="rate-label">勝率</span>
+                <span className="rate-value">{winRate.toFixed(0)}%</span>
+                <span className="record">({winCount}勝{lossCount}敗)</span>
+              </div>
+              <div className="win-rate-bar">
+                <div 
+                  className="win-portion" 
+                  style={{ width: `${winRate}%` }}
+                />
+              </div>
             </div>
           </div>
         </div>
