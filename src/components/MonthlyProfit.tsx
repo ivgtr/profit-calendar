@@ -1,8 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
 import { db } from '../services/database';
-import { formatCurrency, formatMonthYear } from '../utils/formatUtils';
+import { formatMonthYear } from '../utils/formatUtils';
 import { TradeListModal } from './TradeListModal';
 import { useTradeListModal } from '../hooks/useTradeListModal';
+import { useProfitBreakdown } from '../hooks/useProfitBreakdown';
+import { TradeBreakdown } from './ui/TradeBreakdown';
+import { ProfitSummaryHeader } from './ui/ProfitSummaryHeader';
 import '../styles/MonthlyProfit.css';
 
 interface MonthlyProfitProps {
@@ -63,6 +66,19 @@ export function MonthlyProfit({ currentMonth, refreshTrigger, isDbReady }: Month
     setIsMobileExpanded(!isMobileExpanded);
   };
 
+  // 共通フックでbreakdown項目を管理
+  const { breakdownItems, hasBreakdown } = useProfitBreakdown(
+    monthlyData ? {
+      spotProfit: monthlyData.spotProfit,
+      marginProfit: monthlyData.marginProfit,
+      unknownProfit: monthlyData.unknownProfit
+    } : {
+      spotProfit: 0,
+      marginProfit: 0,
+      unknownProfit: 0
+    }
+  );
+
   if (isLoading) {
     return (
       <div className="monthly-profit loading">
@@ -75,111 +91,45 @@ export function MonthlyProfit({ currentMonth, refreshTrigger, isDbReady }: Month
     return (
       <div className="monthly-profit">
         <div className="profit-container">
-          <div className="monthly-summary">
-            <div className="summary-header">
-              <h3>{formatMonthYear(currentMonth)}の収益</h3>
-            </div>
-            <div className="profit-amount">
-              <span className="profit-value">データなし</span>
-            </div>
-          </div>
+          <ProfitSummaryHeader
+            title={`${formatMonthYear(currentMonth)}の収益`}
+            totalProfit={0}
+            tradeCount={0}
+            hasBreakdown={false}
+            isExpanded={false}
+            summaryClassName="monthly-summary"
+          />
         </div>
       </div>
     );
   }
 
-  // 表示する項目をフィルタリング
-  const breakdownItems = [
-    { 
-      label: '現物', 
-      mobileLabel: '現物取引', 
-      profit: monthlyData.spotProfit,
-      type: 'spot' as const
-    },
-    { 
-      label: '信用', 
-      mobileLabel: '信用取引', 
-      profit: monthlyData.marginProfit,
-      type: 'margin' as const
-    },
-    { 
-      label: '不明', 
-      mobileLabel: '不明取引', 
-      profit: monthlyData.unknownProfit,
-      type: 'unknown' as const
-    }
-  ].filter(item => item.profit !== 0);
-  
-  // 内訳が一つもない場合は内訳表示を非表示
-  const hasBreakdown = breakdownItems.length > 0;
-
   return (
     <>
       <div className="monthly-profit">
         <div className="profit-container" onClick={hasBreakdown ? toggleMobileExpanded : undefined}>
-          <div className="monthly-summary">
-            <div className="summary-header">
-              <h3>{formatMonthYear(currentMonth)}の収益</h3>
-              {hasBreakdown && (
-                <div className="mobile-toggle">
-                  <span className="expand-icon">{isMobileExpanded ? '▼' : '▶'}</span>
-                </div>
-              )}
-            </div>
-            <div className="profit-amount">
-              <span className={`profit-value ${monthlyData.totalProfit >= 0 ? 'profit' : 'loss'}`}>
-                {monthlyData.totalProfit >= 0 ? '+' : ''}
-                {formatCurrency(monthlyData.totalProfit)}円
-              </span>
-              <span className="trade-count">({monthlyData.tradeCount}件)</span>
-            </div>
-          </div>
+          <ProfitSummaryHeader
+            title={`${formatMonthYear(currentMonth)}の収益`}
+            totalProfit={monthlyData.totalProfit}
+            tradeCount={monthlyData.tradeCount}
+            hasBreakdown={hasBreakdown}
+            isExpanded={isMobileExpanded}
+            summaryClassName="monthly-summary"
+          />
           
-          {hasBreakdown && (
-            <div className="trade-breakdown desktop-breakdown">
-              <div className="breakdown-list">
-                {breakdownItems.map(item => (
-                  <div 
-                    key={item.label} 
-                    className="breakdown-item clickable"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleTradeTypeClick(item.type, item.label);
-                    }}
-                    title={`${item.label}取引の詳細を表示`}
-                  >
-                    <div className="breakdown-label">{item.label}</div>
-                    <div className={`breakdown-profit ${item.profit >= 0 ? 'profit' : 'loss'}`}>
-                      {item.profit >= 0 ? '+' : ''}
-                      {formatCurrency(item.profit)}円
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
+          <TradeBreakdown
+            breakdownItems={breakdownItems}
+            onTradeTypeClick={handleTradeTypeClick}
+            isDesktop={true}
+          />
         </div>
         
-        {hasBreakdown && isMobileExpanded && (
-          <div className="trade-breakdown mobile-breakdown">
-            <div className="breakdown-list">
-              {breakdownItems.map(item => (
-                <div 
-                  key={item.mobileLabel} 
-                  className="breakdown-item clickable"
-                  onClick={() => handleTradeTypeClick(item.type, item.label)}
-                  title={`${item.label}取引の詳細を表示`}
-                >
-                  <div className="breakdown-label">{item.mobileLabel}</div>
-                  <div className={`breakdown-profit ${item.profit >= 0 ? 'profit' : 'loss'}`}>
-                    {item.profit >= 0 ? '+' : ''}
-                    {formatCurrency(item.profit)}円
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+        <TradeBreakdown
+          breakdownItems={breakdownItems}
+          onTradeTypeClick={handleTradeTypeClick}
+          isDesktop={false}
+          showMobileBreakdown={hasBreakdown && isMobileExpanded}
+        />
       </div>
       
       <TradeListModal
