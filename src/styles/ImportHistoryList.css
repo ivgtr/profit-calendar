@@ -67,13 +67,13 @@
 .file-name {
   font-weight: bold;
   color: var(--text-primary);
-  font-size: 1.1rem;
+  font-size: var(--font-size-lg);
 }
 
 .status-badge {
   padding: 2px 8px;
   border-radius: 12px;
-  font-size: 0.8rem;
+  font-size: var(--font-size-xs);
   font-weight: bold;
 }
 
@@ -92,7 +92,7 @@
   gap: 20px;
   align-items: center;
   color: var(--text-secondary);
-  font-size: 0.9rem;
+  font-size: var(--font-size-sm);
 }
 
 .net-profit {
@@ -109,7 +109,7 @@
 
 .expand-icon {
   color: var(--text-secondary);
-  font-size: 0.8rem;
+  font-size: var(--font-size-xs);
 }
 
 .history-details {
@@ -128,7 +128,7 @@
 .detail-section h4 {
   margin: 15px 0 10px 0;
   color: var(--text-primary);
-  font-size: 0.9rem;
+  font-size: var(--font-size-sm);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -137,7 +137,7 @@
   display: flex;
   justify-content: space-between;
   padding: 4px 0;
-  font-size: 0.9rem;
+  font-size: var(--font-size-sm);
 }
 
 .detail-row span:first-child {
@@ -179,7 +179,7 @@
 }
 
 .error-item {
-  font-size: 0.85rem;
+  font-size: var(--font-size-xs);
   color: var(--status-warning);
   margin-bottom: 5px;
 }
@@ -202,7 +202,7 @@
   padding: 8px 16px;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: var(--font-size-sm);
   transition: background-color 0.3s ease;
 }
 
@@ -232,6 +232,6 @@
   }
 
   .detail-row {
-    font-size: 0.85rem;
+    font-size: var(--font-size-xs);
   }
 }

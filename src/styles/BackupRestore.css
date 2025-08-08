@@ -20,7 +20,7 @@
   border-radius: 0;
   padding: 12px 20px;
   cursor: pointer;
-  font-size: 0.95rem;
+  font-size: var(--font-size-sm);
   color: var(--text-secondary);
   border-bottom: 2px solid transparent;
   transition: all 0.2s ease;
@@ -53,7 +53,7 @@
 .restore-section h3 {
   margin: 0 0 15px 0;
   color: var(--text-primary);
-  font-size: 1.2rem;
+  font-size: var(--font-size-lg);
 }
 
 .backup-section p,
@@ -81,7 +81,7 @@
 .privacy-warning h4 {
   margin: 0 0 10px 0;
   color: var(--status-loss);
-  font-size: 1rem;
+  font-size: var(--font-size-base);
   font-weight: 600;
 }
 
@@ -132,7 +132,7 @@
   border: none;
   border-radius: 6px;
   padding: 12px 24px;
-  font-size: 1rem;
+  font-size: var(--font-size-base);
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -190,7 +190,7 @@
 .file-preview h4 {
   margin: 0 0 15px 0;
   color: var(--text-primary);
-  font-size: 1.1rem;
+  font-size: var(--font-size-lg);
 }
 
 .preview-grid {
@@ -215,7 +215,7 @@
   border-radius: 6px;
   background-color: var(--bg-primary);
   color: var(--text-primary);
-  font-size: 1rem;
+  font-size: var(--font-size-base);
   transition: border-color 0.2s ease;
 }
 
@@ -235,7 +235,7 @@
 .url-info h4 {
   margin: 0 0 10px 0;
   color: var(--text-primary);
-  font-size: 1rem;
+  font-size: var(--font-size-base);
 }
 
 .url-info ul {
@@ -249,7 +249,7 @@
 }
 
 .note {
-  font-size: 0.9rem;
+  font-size: var(--font-size-sm);
   color: var(--text-secondary);
   font-style: italic;
   margin: 10px 0 0 0;
@@ -285,7 +285,7 @@
   
   .tab-button {
     padding: 10px 12px;
-    font-size: 0.9rem;
+    font-size: var(--font-size-sm);
   }
   
   .backup-section,
@@ -303,7 +303,7 @@
   .info-label,
   .preview-label {
     min-width: auto;
-    font-size: 0.9rem;
+    font-size: var(--font-size-sm);
   }
   
   .primary-button {
