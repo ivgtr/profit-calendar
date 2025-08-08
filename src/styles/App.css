@@ -14,15 +14,15 @@
 .app-main {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
+  padding: var(--spacing-lg);
 }
 
 section {
-  margin-bottom: 40px;
+  margin-bottom: var(--spacing-2xl);
 }
 
 section h2 {
-  margin-bottom: 20px;
+  margin-bottom: var(--spacing-lg);
   color: var(--text-primary);
 }
 
