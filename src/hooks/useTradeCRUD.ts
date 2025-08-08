@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 import { db } from '../services/database';
 import { Trade } from '../types/Trade';
 import { ModalType } from './useModalManager';
+import { useUI } from '../contexts/UIContext';
 
 interface UseTradeCRUDProps {
   selectedDate: Date | null;
@@ -18,6 +19,7 @@ export function useTradeCRUD({
   closeModal,
   openModal
 }: UseTradeCRUDProps) {
+  const { showAlert, showConfirm, showToast } = useUI();
   const [editingTrade, setEditingTrade] = useState<Trade | undefined>(undefined);
 
   // 取引フォーム開く処理
@@ -65,15 +67,21 @@ export function useTradeCRUD({
       // モーダルを閉じる
       closeModal();
       setEditingTrade(undefined);
+      showToast('取引を保存しました', 'success');
     } catch (error) {
       console.error('取引の保存エラー:', error);
-      alert('取引の保存に失敗しました');
+      showAlert('取引の保存に失敗しました');
     }
-  }, [editingTrade, selectedDate, loadDailyTrades, setDataVersion, closeModal]);
+  }, [editingTrade, selectedDate, loadDailyTrades, setDataVersion, closeModal, showToast, showAlert]);
 
   // 取引削除処理
   const handleDeleteTrade = useCallback(async (tradeId: string) => {
-    if (!confirm('この取引を削除しますか？')) return;
+    const confirmed = await showConfirm({
+      message: 'この取引を削除しますか？',
+      confirmText: '削除',
+      variant: 'danger'
+    });
+    if (!confirmed) return;
     
     try {
       await db.deleteTrade(tradeId);
@@ -88,11 +96,12 @@ export function useTradeCRUD({
       // モーダルを閉じる
       closeModal();
       setEditingTrade(undefined);
+      showToast('取引を削除しました', 'success');
     } catch (error) {
       console.error('取引の削除エラー:', error);
-      alert('取引の削除に失敗しました');
+      showAlert('取引の削除に失敗しました');
     }
-  }, [selectedDate, loadDailyTrades, setDataVersion, closeModal]);
+  }, [selectedDate, loadDailyTrades, setDataVersion, closeModal, showConfirm, showAlert, showToast]);
 
   // 取引フォームキャンセル処理
   const handleCancelTradeForm = useCallback(() => {

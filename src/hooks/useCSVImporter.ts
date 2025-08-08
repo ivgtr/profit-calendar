@@ -4,12 +4,14 @@ import { db } from '../services/database';
 import { Trade, ImportResult, CSVSummary } from '../types/Trade';
 import { ImportHistory, ImportTradeRelation } from '../types/ImportHistory';
 import { v4 as uuidv4 } from 'uuid';
+import { useUI } from '../contexts/UIContext';
 
 export interface UseCSVImporterProps {
   onImportComplete?: (result: ImportResult) => void;
 }
 
 export function useCSVImporter({ onImportComplete }: UseCSVImporterProps) {
+  const { showAlert } = useUI();
   const [isDragging, setIsDragging] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
   const [importResult, setImportResult] = useState<ImportResult | null>(null);
@@ -73,9 +75,9 @@ export function useCSVImporter({ onImportComplete }: UseCSVImporterProps) {
     if (csvFile) {
       await processFile(csvFile);
     } else {
-      alert('CSVファイルをドロップしてください');
+      showAlert('CSVファイルをドロップしてください');
     }
-  }, [processFile]);
+  }, [processFile, showAlert]);
 
   const handleFileSelect = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
