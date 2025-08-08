@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback, memo } from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -39,7 +39,7 @@ interface ChartDataItem {
   tradeCount: number;
 }
 
-export function YearlyChart({ databaseService, isDbReady }: YearlyChartProps) {
+const YearlyChart = memo(function YearlyChart({ databaseService, isDbReady }: YearlyChartProps) {
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   const [chartDataItems, setChartDataItems] = useState<ChartDataItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -98,18 +98,27 @@ export function YearlyChart({ databaseService, isDbReady }: YearlyChartProps) {
     loadData();
   }, [loadData]);
 
-  // グラフデータを生成
+  // グラフデータを生成（最適化：4回のmap → 1回のmapに統合）
   const chartData = useMemo(() => {
+    const labels: string[] = [];
+    const data: number[] = [];
+    const backgroundColor: string[] = [];
+    const borderColor: string[] = [];
+
+    chartDataItems.forEach(item => {
+      labels.push(item.label);
+      data.push(item.totalProfit);
+      const isPositive = item.totalProfit >= 0;
+      backgroundColor.push(isPositive ? 'rgba(52, 144, 220, 0.8)' : 'rgba(239, 68, 68, 0.8)');
+      borderColor.push(isPositive ? 'rgb(52, 144, 220)' : 'rgb(239, 68, 68)');
+    });
+
     return {
-      labels: chartDataItems.map(item => item.label),
+      labels,
       datasets: [{
-        data: chartDataItems.map(item => item.totalProfit),
-        backgroundColor: chartDataItems.map(item => 
-          item.totalProfit >= 0 ? 'rgba(52, 144, 220, 0.8)' : 'rgba(239, 68, 68, 0.8)'
-        ),
-        borderColor: chartDataItems.map(item => 
-          item.totalProfit >= 0 ? 'rgb(52, 144, 220)' : 'rgb(239, 68, 68)'
-        ),
+        data,
+        backgroundColor,
+        borderColor,
         borderWidth: 0,
         borderRadius: 4,
       }],
@@ -298,4 +307,6 @@ export function YearlyChart({ databaseService, isDbReady }: YearlyChartProps) {
       )}
     </div>
   );
-}
+});
+
+export { YearlyChart };
