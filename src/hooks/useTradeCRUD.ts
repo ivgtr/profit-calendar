@@ -24,24 +24,27 @@ export function useTradeCRUD({
 
   // 取引フォーム開く処理
   const handleOpenTradeForm = useCallback((trade?: Trade, defaultDate?: Date) => {
-    setEditingTrade(trade);
-    // 新規作成時にデフォルト日付を設定
-    if (!trade && defaultDate) {
+    if (trade) {
+      setEditingTrade(trade);
+    } else if (defaultDate) {
+      // 新規作成時は日付のみ設定し、他は未定義のままにする
       setEditingTrade({
         id: '',
         date: defaultDate,
-        accountType: 'NISA',
-        stockName: '',
-        tradeType: '現物買',
-        quantity: 0,
-        amount: 0,
-        unitPrice: 0,
-        averageAcquisitionPrice: 0,
-        realizedProfitLoss: 0,
+        accountType: null,
+        stockName: null,
+        tradeType: null,
+        quantity: null,
+        amount: null,
+        unitPrice: null,
+        averageAcquisitionPrice: null,
+        realizedProfitLoss: 0, // 必須項目だが、フォームでは空に表示する
         csvImported: false,
         createdAt: new Date(),
         updatedAt: new Date(),
       } as Trade);
+    } else {
+      setEditingTrade(undefined);
     }
     openModal('tradeForm');
   }, [openModal]);

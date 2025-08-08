@@ -163,17 +163,29 @@ function AppInner() {
               <>
                 {(() => {
                   const totalProfit = calculateTotalProfit(dailyTrades);
-                  const { spotProfit, marginProfit } = calculateTradeBreakdown(dailyTrades);
+                  const { spotProfit, marginProfit, unknownProfit } = calculateTradeBreakdown(dailyTrades);
+                  
+                  // 表示する項目をフィルタリング
+                  const breakdownItems = [
+                    { label: '現物', mobileLabel: '現物取引', profit: spotProfit },
+                    { label: '信用', mobileLabel: '信用取引', profit: marginProfit },
+                    { label: '不明', mobileLabel: '不明取引', profit: unknownProfit }
+                  ].filter(item => item.profit !== 0);
+                  
+                  // 内訳が一つもない場合は内訳表示を非表示
+                  const hasBreakdown = breakdownItems.length > 0;
                   
                   return (
                     <div className="daily-profit">
-                      <div className="profit-container" onClick={toggleDailyBreakdown}>
+                      <div className="profit-container" onClick={hasBreakdown ? toggleDailyBreakdown : undefined}>
                         <div className="daily-summary">
                           <div className="summary-header">
                             <h3>この日の収益</h3>
-                            <div className="mobile-toggle">
-                              <span className="expand-icon">{isDailyBreakdownExpanded ? '▼' : '▶'}</span>
-                            </div>
+                            {hasBreakdown && (
+                              <div className="mobile-toggle">
+                                <span className="expand-icon">{isDailyBreakdownExpanded ? '▼' : '▶'}</span>
+                              </div>
+                            )}
                           </div>
                           <div className="profit-amount">
                             <span className={`profit-value ${totalProfit >= 0 ? 'profit' : 'loss'}`}>
@@ -184,43 +196,35 @@ function AppInner() {
                           </div>
                         </div>
                         
-                        <div className="trade-breakdown desktop-breakdown">
-                          <div className="breakdown-list">
-                            <div className="breakdown-item">
-                              <div className="breakdown-label">現物</div>
-                              <div className={`breakdown-profit ${spotProfit >= 0 ? 'profit' : 'loss'}`}>
-                                {spotProfit >= 0 ? '+' : ''}
-                                {formatCurrency(spotProfit)}円
-                              </div>
-                            </div>
-                            <div className="breakdown-item">
-                              <div className="breakdown-label">信用</div>
-                              <div className={`breakdown-profit ${marginProfit >= 0 ? 'profit' : 'loss'}`}>
-                                {marginProfit >= 0 ? '+' : ''}
-                                {formatCurrency(marginProfit)}円
-                              </div>
+                        {hasBreakdown && (
+                          <div className="trade-breakdown desktop-breakdown">
+                            <div className="breakdown-list">
+                              {breakdownItems.map(item => (
+                                <div key={item.label} className="breakdown-item">
+                                  <div className="breakdown-label">{item.label}</div>
+                                  <div className={`breakdown-profit ${item.profit >= 0 ? 'profit' : 'loss'}`}>
+                                    {item.profit >= 0 ? '+' : ''}
+                                    {formatCurrency(item.profit)}円
+                                  </div>
+                                </div>
+                              ))}
                             </div>
                           </div>
-                        </div>
+                        )}
                       </div>
                       
-                      {isDailyBreakdownExpanded && (
+                      {hasBreakdown && isDailyBreakdownExpanded && (
                         <div className="trade-breakdown mobile-breakdown">
                           <div className="breakdown-list">
-                            <div className="breakdown-item">
-                              <div className="breakdown-label">現物取引</div>
-                              <div className={`breakdown-profit ${spotProfit >= 0 ? 'profit' : 'loss'}`}>
-                                {spotProfit >= 0 ? '+' : ''}
-                                {formatCurrency(spotProfit)}円
+                            {breakdownItems.map(item => (
+                              <div key={item.mobileLabel} className="breakdown-item">
+                                <div className="breakdown-label">{item.mobileLabel}</div>
+                                <div className={`breakdown-profit ${item.profit >= 0 ? 'profit' : 'loss'}`}>
+                                  {item.profit >= 0 ? '+' : ''}
+                                  {formatCurrency(item.profit)}円
+                                </div>
                               </div>
-                            </div>
-                            <div className="breakdown-item">
-                              <div className="breakdown-label">信用取引</div>
-                              <div className={`breakdown-profit ${marginProfit >= 0 ? 'profit' : 'loss'}`}>
-                                {marginProfit >= 0 ? '+' : ''}
-                                {formatCurrency(marginProfit)}円
-                              </div>
-                            </div>
+                            ))}
                           </div>
                         </div>
                       )}
@@ -248,12 +252,12 @@ function AppInner() {
                         onClick={() => handleOpenTradeForm(trade)}
                         title="クリックして編集"
                       >
-                        <td data-label="銘柄コード">{trade.stockCode || '-'}</td>
-                        <td data-label="銘柄名">{trade.stockName}</td>
-                        <td data-label="取引">{trade.tradeType}</td>
-                        <td data-label="数量">{trade.quantity.toLocaleString()}</td>
-                        <td data-label="平均取得価額">{formatCurrency(trade.averageAcquisitionPrice)}円</td>
-                        <td data-label="単価">{formatCurrency(trade.unitPrice)}円</td>
+                        <td data-label="銘柄コード">{trade.stockCode || '不明'}</td>
+                        <td data-label="銘柄名">{trade.stockName || '不明'}</td>
+                        <td data-label="取引">{trade.tradeType || '未入力'}</td>
+                        <td data-label="数量">{trade.quantity?.toLocaleString() || '未入力'}</td>
+                        <td data-label="平均取得価額">{trade.averageAcquisitionPrice ? formatCurrency(trade.averageAcquisitionPrice) + '円' : '未入力'}</td>
+                        <td data-label="単価">{trade.unitPrice ? formatCurrency(trade.unitPrice) + '円' : '未入力'}</td>
                         <td data-label="損益" className={trade.realizedProfitLoss >= 0 ? 'profit' : 'loss'}>
                           {trade.realizedProfitLoss >= 0 ? '+' : ''}
                           {formatCurrency(trade.realizedProfitLoss)}円
@@ -294,7 +298,7 @@ function AppInner() {
       <Modal
         isOpen={isModalOpen('tradeForm')}
         onClose={handleCancelTradeForm}
-        title={editingTrade ? '取引を編集' : '新規取引入力'}
+        title={editingTrade && editingTrade.id ? '取引を編集' : '取引を追加'}
         size="large"
       >
         <TradeForm
