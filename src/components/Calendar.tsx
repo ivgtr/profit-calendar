@@ -14,7 +14,6 @@ const Calendar = memo(function Calendar({ onDateSelect, onMonthChange, monthlyTr
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
 
-
   // 今日の日付をメモ化（毎回のnew Date()生成を防止）
   const today = useMemo(() => new Date(), []);
   const todayString = useMemo(() => today.toDateString(), [today]);
@@ -72,7 +71,6 @@ const Calendar = memo(function Calendar({ onDateSelect, onMonthChange, monthlyTr
     onMonthChange?.(today);
     onDateSelect?.(today);
   };
-
 
   const days = calendarDays;
   const weekDays = ['日', '月', '火', '水', '木', '金', '土'];
