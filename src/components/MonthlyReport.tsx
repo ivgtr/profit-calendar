@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, memo } from 'react';
 import { useMonthlyStats } from '../hooks/useMonthlyStats';
 
 import { formatCurrency, formatMonthYear } from '../utils/formatUtils';
@@ -15,7 +15,7 @@ interface MonthlyReportProps {
   isDbReady: boolean;
 }
 
-export function MonthlyReport({ currentMonth, refreshTrigger, isDbReady }: MonthlyReportProps) {
+const MonthlyReport = memo(function MonthlyReport({ currentMonth, refreshTrigger, isDbReady }: MonthlyReportProps) {
   const [reportMonth, setReportMonth] = useState<Date>(currentMonth);
   const { stats, isLoading, error } = useMonthlyStats(reportMonth, refreshTrigger, isDbReady);
 
@@ -24,21 +24,21 @@ export function MonthlyReport({ currentMonth, refreshTrigger, isDbReady }: Month
     setReportMonth(currentMonth);
   }, [currentMonth]);
 
-  const formatPercentage = (value: number) => {
+  const formatPercentage = useCallback((value: number) => {
     return `${value.toFixed(1)}%`;
-  };
+  }, []);
 
-  const handlePrevMonth = () => {
-    setReportMonth(new Date(reportMonth.getFullYear(), reportMonth.getMonth() - 1, 1));
-  };
+  const handlePrevMonth = useCallback(() => {
+    setReportMonth(prev => new Date(prev.getFullYear(), prev.getMonth() - 1, 1));
+  }, []);
 
-  const handleNextMonth = () => {
-    setReportMonth(new Date(reportMonth.getFullYear(), reportMonth.getMonth() + 1, 1));
-  };
+  const handleNextMonth = useCallback(() => {
+    setReportMonth(prev => new Date(prev.getFullYear(), prev.getMonth() + 1, 1));
+  }, []);
 
-  const resetToCurrentMonth = () => {
+  const resetToCurrentMonth = useCallback(() => {
     setReportMonth(currentMonth);
-  };
+  }, [currentMonth]);
 
   if (isLoading) {
     return (
@@ -294,4 +294,6 @@ export function MonthlyReport({ currentMonth, refreshTrigger, isDbReady }: Month
       </div>
     </div>
   );
-}
+});
+
+export { MonthlyReport };

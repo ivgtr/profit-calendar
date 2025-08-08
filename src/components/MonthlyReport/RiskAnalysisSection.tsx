@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { formatCurrency } from '../../utils/formatUtils';
 import { RiskAnalysis } from '../../utils/statisticsUtils';
 import { Tooltip } from '../Tooltip';
@@ -7,7 +7,7 @@ interface RiskAnalysisSectionProps {
   riskAnalysis: RiskAnalysis;
 }
 
-export const RiskAnalysisSection: React.FC<RiskAnalysisSectionProps> = ({
+const RiskAnalysisSection: React.FC<RiskAnalysisSectionProps> = memo(({
   riskAnalysis
 }) => {
   return (
@@ -53,4 +53,6 @@ export const RiskAnalysisSection: React.FC<RiskAnalysisSectionProps> = ({
       </div>
     </div>
   );
-};
+});
+
+export { RiskAnalysisSection };

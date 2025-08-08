@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { formatCurrency } from '../../utils/formatUtils';
 import { TrendAnalysis } from '../../utils/statisticsUtils';
 import { Tooltip } from '../Tooltip';
@@ -7,7 +7,7 @@ interface TrendAnalysisSectionProps {
   trendAnalysis: TrendAnalysis;
 }
 
-export const TrendAnalysisSection: React.FC<TrendAnalysisSectionProps> = ({
+const TrendAnalysisSection: React.FC<TrendAnalysisSectionProps> = memo(({
   trendAnalysis
 }) => {
   return (
@@ -50,4 +50,6 @@ export const TrendAnalysisSection: React.FC<TrendAnalysisSectionProps> = ({
       </div>
     </div>
   );
-};
+});
+
+export { TrendAnalysisSection };

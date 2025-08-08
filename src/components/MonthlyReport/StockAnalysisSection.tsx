@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { formatCurrency } from '../../utils/formatUtils';
 import { formatStockDisplay } from '../../utils/stockUtils';
 import { StockAnalysis } from '../../utils/statisticsUtils';
@@ -9,7 +9,7 @@ interface StockAnalysisSectionProps {
   stockAnalysis: StockAnalysis;
 }
 
-export const StockAnalysisSection: React.FC<StockAnalysisSectionProps> = ({
+const StockAnalysisSection: React.FC<StockAnalysisSectionProps> = memo(({
   stockAnalysis
 }) => {
   return (
@@ -52,4 +52,6 @@ export const StockAnalysisSection: React.FC<StockAnalysisSectionProps> = ({
       </div>
     </div>
   );
-};
+});
+
+export { StockAnalysisSection };

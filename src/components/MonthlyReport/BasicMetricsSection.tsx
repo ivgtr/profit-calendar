@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo, useCallback } from 'react';
 import { formatCurrency } from '../../utils/formatUtils';
 import { Tooltip } from '../Tooltip';
 
@@ -13,7 +13,7 @@ interface BasicMetricsSectionProps {
   lossCount: number;
 }
 
-export const BasicMetricsSection: React.FC<BasicMetricsSectionProps> = ({
+const BasicMetricsSection: React.FC<BasicMetricsSectionProps> = memo(({
   profitFactor,
   winRate,
   avgWin,
@@ -23,7 +23,7 @@ export const BasicMetricsSection: React.FC<BasicMetricsSectionProps> = ({
   winCount,
   lossCount
 }) => {
-  const formatPercentage = (value: number) => `${(value * 100).toFixed(1)}%`;
+  const formatPercentage = useCallback((value: number) => `${(value * 100).toFixed(1)}%`, []);
 
   return (
     <>
@@ -92,4 +92,6 @@ export const BasicMetricsSection: React.FC<BasicMetricsSectionProps> = ({
       </div>
     </>
   );
-};
+});
+
+export { BasicMetricsSection };
