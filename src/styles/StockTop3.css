@@ -9,7 +9,7 @@
 .section-title {
   font-size: 18px;
   font-weight: 600;
-  color: #ffffff;
+  color: var(--text-primary);
   margin: 0 0 16px 0;
   text-align: center;
 }
@@ -172,24 +172,24 @@
 .stock-list-title {
   font-size: 14px;
   font-weight: 600;
-  color: #ffffff;
+  color: var(--text-primary);
   margin: 0 0 12px 0;
   text-align: center;
   padding-bottom: 8px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--border-primary);
 }
 
 .stock-list.profit .stock-list-title {
-  color: #10b981;
+  color: var(--status-profit);
 }
 
 .stock-list.loss .stock-list-title {
-  color: #ef4444;
+  color: var(--status-loss);
 }
 
 .no-stocks {
   text-align: center;
-  color: #999;
+  color: var(--text-tertiary);
   font-size: 12px;
   padding: 20px 0;
 }
@@ -208,7 +208,7 @@
   align-items: flex-start;
   gap: 12px;
   padding: 8px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid var(--border-secondary);
   width: 100%;
   min-width: 0;
 }
@@ -253,7 +253,7 @@
 .stock-name {
   font-size: 13px;
   font-weight: 500;
-  color: #ffffff;
+  color: var(--text-primary);
   margin-bottom: 4px;
   word-break: break-all;
   word-wrap: break-word;
@@ -282,16 +282,16 @@
 }
 
 .stock-top3-container .profit.positive {
-  color: #10b981;
+  color: var(--status-profit);
 }
 
 .stock-top3-container .profit.negative {
-  color: #ef4444;
+  color: var(--status-loss);
 }
 
 .trade-count {
   font-size: 11px;
-  color: #999;
+  color: var(--text-secondary);
   white-space: nowrap;
   flex-shrink: 0;
 }
@@ -299,7 +299,7 @@
 .stock-top3-loading,
 .stock-top3-no-data {
   text-align: center;
-  color: #999;
+  color: var(--text-secondary);
   padding: 40px 20px;
   font-size: 14px;
 }
