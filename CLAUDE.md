@@ -4,6 +4,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 前提
 - 勝手に開発サーバーを起動しないでください
+- 勝手にdevサーバーを起動しないで
+- 勝手にpushしないで
 
 ## プロジェクト概要
 - 利益カレンダー (profit-calendar) - React + TypeScript + Viteで構築されたWebアプリケーション
