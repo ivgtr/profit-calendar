@@ -274,6 +274,9 @@ section h2 {
     display: block;
     overflow-x: auto;
     white-space: nowrap;
+    background: none;
+    border-radius: 0;
+    box-shadow: none;
   }
 
   .trades-table thead,
