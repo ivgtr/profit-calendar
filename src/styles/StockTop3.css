@@ -1,9 +1,10 @@
 .stock-top3-container {
   margin-top: 24px;
-  padding: 20px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 24px;
+  background: var(--bg-secondary);
+  border-radius: 16px;
+  color: var(--text-primary);
+  min-height: 200px;
 }
 
 .section-title {
@@ -25,8 +26,8 @@
 @media (max-width: 768px) {
   .stock-top3-container {
     margin-top: 16px;
-    padding: 16px;
-    border-radius: 8px;
+    padding: 20px;
+    border-radius: 12px;
   }
   
   .section-title {
@@ -40,8 +41,8 @@
   }
   
   .stock-list {
-    padding: 12px;
-    border-radius: 6px;
+    padding: 16px;
+    border-radius: 10px;
   }
   
   .stock-list-title {
@@ -109,8 +110,9 @@
 /* より小さな画面向けの追加対応 */
 @media (max-width: 480px) {
   .stock-top3-container {
-    padding: 12px;
+    padding: 16px;
     margin-top: 12px;
+    border-radius: 12px;
   }
   
   .section-title {
@@ -119,7 +121,8 @@
   }
   
   .stock-list {
-    padding: 10px;
+    padding: 14px;
+    border-radius: 8px;
   }
   
   .stock-list-title {
@@ -161,12 +164,13 @@
 }
 
 .stock-list {
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 8px;
-  padding: 16px;
+  background: var(--bg-primary);
+  border-radius: 12px;
+  padding: 20px;
   width: 100%;
   min-width: 0;
   overflow: hidden;
+  box-shadow: var(--shadow-primary);
 }
 
 .stock-list-title {
