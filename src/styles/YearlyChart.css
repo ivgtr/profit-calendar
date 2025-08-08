@@ -19,14 +19,14 @@
 
 .chart-title h2 {
   margin: 0;
-  font-size: 1.5rem;
+  font-size: var(--font-size-xl);
   font-weight: 600;
   color: var(--text-primary);
 }
 
 .period-label {
   color: var(--text-secondary);
-  font-size: 0.9rem;
+  font-size: var(--font-size-sm);
 }
 
 .period-selector {
@@ -44,7 +44,7 @@
   background: transparent;
   color: var(--text-secondary);
   border-radius: 8px;
-  font-size: 0.9rem;
+  font-size: var(--font-size-sm);
   cursor: pointer;
   transition: all 0.3s ease;
   white-space: nowrap;
@@ -73,12 +73,12 @@
 
 .profit-label {
   color: var(--text-secondary);
-  font-size: 0.9rem;
+  font-size: var(--font-size-sm);
   margin-bottom: 4px;
 }
 
 .profit-amount {
-  font-size: 2rem;
+  font-size: var(--font-size-4xl);
   font-weight: 700;
   letter-spacing: -0.02em;
 }
@@ -112,11 +112,11 @@
 
 .summary-label {
   color: var(--text-secondary);
-  font-size: 0.95rem;
+  font-size: var(--font-size-sm);
 }
 
 .summary-value {
-  font-size: 1.1rem;
+  font-size: var(--font-size-lg);
   font-weight: 600;
 }
 
@@ -173,7 +173,7 @@
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-size: 0.9rem;
+  font-size: var(--font-size-sm);
 }
 
 .year-nav-button:hover {
@@ -196,7 +196,7 @@
   justify-content: center;
   height: 200px;
   color: var(--text-secondary);
-  font-size: 0.9rem;
+  font-size: var(--font-size-sm);
 }
 
 /* レスポンシブ対応 */
@@ -206,7 +206,7 @@
   }
 
   .chart-title h2 {
-    font-size: 1.3rem;
+    font-size: var(--font-size-lg);
   }
 
   .period-selector {
@@ -214,12 +214,12 @@
   }
 
   .period-button {
-    font-size: 0.8rem;
+    font-size: var(--font-size-xs);
     padding: 6px 12px;
   }
 
   .profit-amount {
-    font-size: 1.5rem;
+    font-size: var(--font-size-2xl);
   }
 
   .chart-wrapper {
@@ -231,7 +231,7 @@
   }
 
   .summary-value {
-    font-size: 1rem;
+    font-size: var(--font-size-base);
   }
 
   .year-navigation {
@@ -239,7 +239,7 @@
   }
 
   .year-nav-button {
-    font-size: 0.8rem;
+    font-size: var(--font-size-xs);
     padding: 6px 12px;
   }
 }

@@ -32,7 +32,7 @@
 
 .summary-header h3 {
   margin: 0;
-  font-size: 1.1rem;
+  font-size: var(--font-size-lg);
   color: var(--text-primary);
   font-weight: 600;
 }
@@ -45,7 +45,7 @@
 
 .expand-icon {
   color: var(--text-secondary);
-  font-size: 0.9rem;
+  font-size: var(--font-size-sm);
 }
 
 
@@ -56,7 +56,7 @@
 }
 
 .profit-value {
-  font-size: 1.3rem;
+  font-size: var(--font-size-xl);
   font-weight: bold;
 }
 
@@ -70,7 +70,7 @@
 
 .trade-count {
   color: var(--text-secondary);
-  font-size: 0.9rem;
+  font-size: var(--font-size-sm);
 }
 
 .desktop-breakdown {
@@ -101,14 +101,14 @@
 }
 
 .breakdown-label {
-  font-size: 0.8rem;
+  font-size: var(--font-size-xs);
   color: var(--text-secondary);
   font-weight: 500;
 }
 
 .breakdown-profit {
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: var(--font-size-sm);
 }
 
 .breakdown-profit.profit {
@@ -121,7 +121,7 @@
 
 .breakdown-count {
   color: var(--text-secondary);
-  font-size: 0.85rem;
+  font-size: var(--font-size-sm);
 }
 
 /* スクロールバーのスタイリング */
@@ -184,18 +184,18 @@
   }
   
   .mobile-breakdown .breakdown-label {
-    font-size: 0.95rem;
+    font-size: var(--font-size-sm);
   }
   
   .mobile-breakdown .breakdown-profit {
-    font-size: 0.95rem;
+    font-size: var(--font-size-sm);
   }
   
   .summary-header h3 {
-    font-size: 1rem;
+    font-size: var(--font-size-base);
   }
   
   .profit-value {
-    font-size: 1.2rem;
+    font-size: var(--font-size-xl);
   }
 }

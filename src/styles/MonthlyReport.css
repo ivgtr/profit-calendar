@@ -28,7 +28,7 @@
 
 .report-header h2 {
   margin: 0;
-  font-size: 1.8rem;
+  font-size: var(--font-size-3xl);
   font-weight: 700;
   color: var(--text-primary);
   min-width: 280px;
@@ -41,7 +41,7 @@
   border-radius: 50%;
   width: 45px;
   height: 45px;
-  font-size: 1.2rem;
+  font-size: var(--font-size-xl);
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -69,7 +69,7 @@
   border: 1px solid var(--border-primary);
   border-radius: 6px;
   padding: 8px 16px;
-  font-size: 0.9rem;
+  font-size: var(--font-size-sm);
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -108,7 +108,7 @@
 
 .stats-section h3 {
   margin: 0 0 20px 0;
-  font-size: 1.3rem;
+  font-size: var(--font-size-2xl);
   font-weight: 600;
   color: var(--text-primary);
   border-bottom: 2px solid var(--border-secondary);
@@ -152,7 +152,7 @@
 }
 
 .stat-label {
-  font-size: 0.85rem;
+  font-size: var(--font-size-sm);
   font-weight: 500;
   color: var(--text-secondary);
   margin-bottom: 8px;
@@ -161,7 +161,7 @@
 }
 
 .stat-value {
-  font-size: 1.4rem;
+  font-size: var(--font-size-2xl);
   font-weight: 700;
   color: var(--text-primary);
   line-height: 1.2;
@@ -196,7 +196,7 @@
 
 .trade-type-card h4 {
   margin: 0 0 16px 0;
-  font-size: 1.1rem;
+  font-size: var(--font-size-lg);
   font-weight: 600;
   color: var(--text-primary);
   text-align: center;
@@ -220,13 +220,13 @@
 }
 
 .stat-item .label {
-  font-size: 0.9rem;
+  font-size: var(--font-size-sm);
   color: var(--text-secondary);
   font-weight: 500;
 }
 
 .stat-item .value {
-  font-size: 1rem;
+  font-size: var(--font-size-base);
   font-weight: 600;
   color: var(--text-primary);
 }
@@ -246,7 +246,7 @@
   }
 
   .report-header h2 {
-    font-size: 1.5rem;
+    font-size: var(--font-size-xl);
     min-width: 240px;
   }
 
@@ -257,7 +257,7 @@
   .nav-button {
     width: 40px;
     height: 40px;
-    font-size: 1.1rem;
+    font-size: var(--font-size-lg);
   }
 
   .stats-section {
@@ -265,7 +265,7 @@
   }
 
   .stats-section h3 {
-    font-size: 1.2rem;
+    font-size: var(--font-size-lg);
   }
 
   .stats-grid {
@@ -278,11 +278,11 @@
   }
 
   .stat-label {
-    font-size: 0.8rem;
+    font-size: var(--font-size-xs);
   }
 
   .stat-value {
-    font-size: 1.2rem;
+    font-size: var(--font-size-lg);
   }
 
   .trade-type-stats {
@@ -299,11 +299,11 @@
   }
 
   .stat-item .label {
-    font-size: 0.85rem;
+    font-size: var(--font-size-sm);
   }
 
   .stat-item .value {
-    font-size: 0.9rem;
+    font-size: var(--font-size-sm);
   }
 }
 
@@ -313,7 +313,7 @@
   }
 
   .report-header h2 {
-    font-size: 1.3rem;
+    font-size: var(--font-size-lg);
     min-width: 200px;
   }
 
@@ -324,7 +324,7 @@
   .nav-button {
     width: 36px;
     height: 36px;
-    font-size: 1rem;
+    font-size: var(--font-size-base);
   }
 
   .stats-grid {
@@ -337,12 +337,12 @@
   }
 
   .stat-label {
-    font-size: 0.75rem;
+    font-size: var(--font-size-xs);
     margin-bottom: 6px;
   }
 
   .stat-value {
-    font-size: 1.1rem;
+    font-size: var(--font-size-lg);
   }
 
   .trade-type-card {
@@ -350,7 +350,7 @@
   }
 
   .trade-type-card h4 {
-    font-size: 1rem;
+    font-size: var(--font-size-base);
   }
 }
 
