@@ -16,7 +16,7 @@
 
 .calendar-header h2 {
   margin: 0;
-  font-size: 1.5rem;
+  font-size: var(--font-size-2xl);
 }
 
 .nav-button {
@@ -26,7 +26,7 @@
   border-radius: 8px;
   width: 40px;
   height: 40px;
-  font-size: 1.1rem;
+  font-size: var(--font-size-lg);
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -80,7 +80,7 @@
   padding: 10px;
   text-align: center;
   font-weight: bold;
-  font-size: 0.9rem;
+  font-size: var(--font-size-sm);
   color: var(--text-primary);
 }
 
@@ -125,7 +125,7 @@
 }
 
 .day-summary {
-  font-size: 0.8rem;
+  font-size: var(--font-size-xs);
 }
 
 .profit-loss {
@@ -143,7 +143,7 @@
 
 .trade-count {
   color: var(--text-secondary);
-  font-size: 0.75rem;
+  font-size: var(--font-size-xs);
 }
 
 /* 今日の日付の取引件数の色調整 */
@@ -176,22 +176,22 @@
   .nav-button {
     width: 36px;
     height: 36px;
-    font-size: 1rem;
+    font-size: var(--font-size-base);
   }
 
   .today-button {
     padding: 6px 12px;
-    font-size: 0.9rem;
+    font-size: var(--font-size-sm);
   }
 
   .calendar-day {
     min-height: 60px;
     padding: 4px;
-    font-size: 0.9rem;
+    font-size: var(--font-size-sm);
   }
 
   .day-summary {
-    font-size: 0.7rem;
+    font-size: var(--font-size-xs);
   }
 
   .trade-count {

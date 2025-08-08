@@ -65,7 +65,7 @@
 
 .modal-title {
   margin: 0;
-  font-size: 1.25rem;
+  font-size: var(--font-size-xl);
   font-weight: 600;
   color: var(--text-primary);
 }
@@ -73,7 +73,7 @@
 .modal-close-button {
   background: none;
   border: none;
-  font-size: 1.5rem;
+  font-size: var(--font-size-2xl);
   color: var(--text-secondary);
   cursor: pointer;
   padding: 4px 8px;
@@ -158,13 +158,13 @@
   }
   
   .modal-title {
-    font-size: 1.15rem;
+    font-size: var(--font-size-lg);
     line-height: 1.4;
     font-weight: 600;
   }
   
   .modal-close-button {
-    font-size: 1.4rem;
+    font-size: var(--font-size-xl);
     padding: 4px 8px;
   }
   
@@ -202,13 +202,13 @@
   }
   
   .modal-title {
-    font-size: 1.1rem;
+    font-size: var(--font-size-lg);
     line-height: 1.4;
     font-weight: 600;
   }
   
   .modal-close-button {
-    font-size: 1.3rem;
+    font-size: var(--font-size-xl);
     padding: 3px 6px;
   }
   
@@ -245,12 +245,12 @@
   }
   
   .modal-title {
-    font-size: 1rem;
+    font-size: var(--font-size-base);
     line-height: 1.3;
   }
   
   .modal-close-button {
-    font-size: 1.2rem;
+    font-size: var(--font-size-lg);
     padding: 2px 5px;
   }
 }

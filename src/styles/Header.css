@@ -19,7 +19,7 @@
 
 .app-header h1 {
   margin: 0;
-  font-size: 1.8rem;
+  font-size: var(--font-size-3xl);
   font-weight: 600;
 }
 
@@ -31,7 +31,7 @@
   background: none;
   border: none;
   color: var(--text-inverse);
-  font-size: 1.5rem;
+  font-size: var(--font-size-2xl);
   cursor: pointer;
   padding: 8px 12px;
   border-radius: 4px;
@@ -79,7 +79,7 @@
   align-items: center;
   gap: 12px;
   color: var(--text-primary);
-  font-size: 0.95rem;
+  font-size: var(--font-size-sm);
   transition: background-color 0.2s ease;
 }
 
@@ -92,7 +92,7 @@
 }
 
 .menu-icon {
-  font-size: 1.1rem;
+  font-size: var(--font-size-lg);
   width: 20px;
   text-align: center;
 }
@@ -130,7 +130,7 @@
 .menu-arrow {
   margin-left: auto;
   color: var(--text-secondary);
-  font-size: 0.9rem;
+  font-size: var(--font-size-sm);
 }
 
 .menu-item.menu-back {
@@ -149,12 +149,12 @@
   }
   
   .app-header h1 {
-    font-size: 1.5rem;
+    font-size: var(--font-size-2xl);
   }
   
   .menu-toggle {
     padding: 6px 10px;
-    font-size: 1.3rem;
+    font-size: var(--font-size-xl);
   }
   
   .menu-items {

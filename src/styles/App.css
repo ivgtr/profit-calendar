@@ -40,7 +40,7 @@ section h2 {
   border: 2px solid transparent;
   padding: 10px 16px;
   border-radius: 6px;
-  font-size: 0.9rem;
+  font-size: var(--font-size-sm);
   font-weight: 600;
   cursor: pointer;
   display: flex;
@@ -56,7 +56,7 @@ section h2 {
 }
 
 .button-icon {
-  font-size: 16px;
+  font-size: var(--font-size-base);
   font-weight: bold;
   color: white;
   line-height: 1;
@@ -90,7 +90,7 @@ section h2 {
 
 .daily-profit .summary-header h3 {
   margin: 0;
-  font-size: 1.1rem;
+  font-size: var(--font-size-lg);
   color: var(--text-primary);
   font-weight: 600;
 }
@@ -103,7 +103,7 @@ section h2 {
 
 .daily-profit .expand-icon {
   color: var(--text-secondary);
-  font-size: 0.9rem;
+  font-size: var(--font-size-sm);
 }
 
 .daily-profit .profit-amount {
@@ -113,7 +113,7 @@ section h2 {
 }
 
 .daily-profit .profit-value {
-  font-size: 1.3rem;
+  font-size: var(--font-size-xl);
   font-weight: bold;
 }
 
@@ -127,7 +127,7 @@ section h2 {
 
 .daily-profit .trade-count {
   color: var(--text-secondary);
-  font-size: 0.9rem;
+  font-size: var(--font-size-sm);
 }
 
 .daily-profit .desktop-breakdown {
@@ -158,14 +158,14 @@ section h2 {
 }
 
 .daily-profit .breakdown-label {
-  font-size: 0.8rem;
+  font-size: var(--font-size-xs);
   color: var(--text-secondary);
   font-weight: 500;
 }
 
 .daily-profit .breakdown-profit {
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: var(--font-size-sm);
 }
 
 .daily-profit .breakdown-profit.profit {
@@ -224,11 +224,13 @@ section h2 {
 .profit {
   color: var(--status-profit);
   font-weight: bold;
+  font-size: var(--font-size-base);
 }
 
 .loss {
   color: var(--status-loss);
   font-weight: bold;
+  font-size: var(--font-size-base);
 }
 
 .no-trades {
@@ -260,15 +262,15 @@ section h2 {
   .add-daily-trade-button {
     justify-content: center;
     padding: 12px 16px;
-    font-size: 0.95rem;
+    font-size: var(--font-size-sm);
   }
 
   .button-icon {
-    font-size: 15px;
+    font-size: var(--font-size-sm);
   }
 
   .trades-table {
-    font-size: 0.85rem;
+    font-size: var(--font-size-xs);
     display: block;
     overflow-x: auto;
     white-space: nowrap;
@@ -317,7 +319,7 @@ section h2 {
     white-space: nowrap;
     font-weight: bold;
     color: var(--text-secondary);
-    font-size: 0.8rem;
+    font-size: var(--font-size-xs);
   }
 
   .daily-profit .profit-container {
@@ -360,18 +362,18 @@ section h2 {
   }
   
   .daily-profit .mobile-breakdown .breakdown-label {
-    font-size: 0.95rem;
+    font-size: var(--font-size-sm);
   }
   
   .daily-profit .mobile-breakdown .breakdown-profit {
-    font-size: 0.95rem;
+    font-size: var(--font-size-sm);
   }
   
   .daily-profit .summary-header h3 {
-    font-size: 1rem;
+    font-size: var(--font-size-base);
   }
   
   .daily-profit .profit-value {
-    font-size: 1.2rem;
+    font-size: var(--font-size-xl);
   }
 }
