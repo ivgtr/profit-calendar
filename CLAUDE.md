@@ -53,7 +53,7 @@ npm run preview
     - `/ui` - 汎用UIコンポーネント（Modal, Toast, ConfirmDialog）
     - `/MonthlyReport` - 月次レポート関連コンポーネント
   - `/contexts` - React Context（UIContext, ThemeContext）
-  - `/hooks` - カスタムReact Hooks
+  - `/hooks` - カスタムReact Hooks（useCallback/useMemoによるパフォーマンス最適化採用）
   - `/utils` - 汎用的なユーティリティ関数
   - `/types` - TypeScriptの型定義
   - `/styles` - CSSファイル（デザインシステム準拠）
@@ -90,6 +90,7 @@ npm run preview
 - CSVインポート機能はShift-JISエンコーディングを前提
 - CSS設計システムに従った統一的なスタイル管理
 - `!important`の使用禁止（CSS_DESIGN_SYSTEM.mdを参照）
+- 型安全性重視: TypeScript型アサーション（`as`）の使用を極力避け、型ガード関数による実行時型チェックを採用
 
 ## CSS設計システム
 詳細は`CSS_DESIGN_SYSTEM.md`を参照。主要な原則：
@@ -103,6 +104,9 @@ npm run preview
 - モダンUIシステム導入済み（ConfirmDialog, Toast, Modal）
 - テーマ切り替え機能（ライト・ダーク・カスタムテーマ）
 - レスポンシブデザイン対応
+- 取引フォーム: 必須項目を上部配置、詳細項目をトグル表示
+- フォームボタン下部固定でスクロール改善
+- null値の適切な表示処理（「未入力」「不明」表示）
 
 ## デプロイ設定
 - GitHub Pages対応（`npm run deploy`）
