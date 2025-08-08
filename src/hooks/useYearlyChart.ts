@@ -106,13 +106,13 @@ export function useYearlyChart({ isDbReady }: UseYearlyChartProps) {
           min: minProfit - padding,
           max: maxProfit + padding,
           ticks: {
-            callback: (value: any) => {
+            callback: (value: string | number) => {
               const numValue = typeof value === 'number' ? value : Number(value);
               return numValue >= 0 ? `+¥${numValue.toLocaleString()}` : `-¥${Math.abs(numValue).toLocaleString()}`;
             }
           },
           grid: {
-            color: (context: any) => {
+            color: (context: { tick: { value: number } }) => {
               return context.tick.value === 0 ? '#374151' : '#e5e7eb';
             }
           }

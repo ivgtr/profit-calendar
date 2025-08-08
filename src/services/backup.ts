@@ -174,7 +174,7 @@ export class BackupService {
         metadata: backupData.metadata,
         exportDate: backupData.exportDate
       };
-    } catch (error) {
+    } catch {
       return {
         isValid: false,
         error: 'ファイルの読み込みまたは解析に失敗しました'

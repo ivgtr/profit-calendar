@@ -10,7 +10,12 @@ export function useBackupRestore() {
   const [message, setMessage] = useState<MessageType | null>(null);
   const [restoreUrl, setRestoreUrl] = useState('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [filePreview, setFilePreview] = useState<any>(null);
+  const [filePreview, setFilePreview] = useState<{
+    tradesCount: number;
+    importHistoryCount: number;
+    exportDate: Date | null;
+    version: string;
+  } | null>(null);
   
   // BackupServiceは静的メソッドベース
 
