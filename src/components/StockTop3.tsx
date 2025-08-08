@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Database } from '../services/database';
 import { formatStockDisplay } from '../utils/stockUtils';
 import '../styles/StockTop3.css';
@@ -22,7 +22,7 @@ export function StockTop3({ databaseService, isDbReady, periodType, currentYear 
   const [lossStocks, setLossStocks] = useState<StockProfitData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const loadStockData = async () => {
+  const loadStockData = useCallback(async () => {
     if (!isDbReady) return;
     
     setIsLoading(true);
@@ -58,11 +58,11 @@ export function StockTop3({ databaseService, isDbReady, periodType, currentYear 
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [databaseService, isDbReady, periodType, currentYear]);
 
   useEffect(() => {
     loadStockData();
-  }, [periodType, currentYear, isDbReady, databaseService]);
+  }, [loadStockData]);
 
   if (isLoading) {
     return <div className="stock-top3-loading">読み込み中...</div>;
