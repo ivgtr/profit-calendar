@@ -32,6 +32,7 @@ export default function TradeForm({ trade, onSave, onCancel, onDelete }: TradeFo
     <div className="trade-form">
       <form onSubmit={handleSubmit}>
         <div className="form-grid">
+          {/* 1行目: 約定日・口座・銘柄名 */}
           <div className="form-group">
             <label htmlFor="date">約定日 *</label>
             <input
@@ -73,6 +74,7 @@ export default function TradeForm({ trade, onSave, onCancel, onDelete }: TradeFo
             {errors.stockName && <span className="error-message">{errors.stockName}</span>}
           </div>
 
+          {/* 2行目: 銘柄コード・取引種別・数量 */}
           <div className="form-group">
             <label htmlFor="stockCode">銘柄コード</label>
             <input
@@ -114,6 +116,7 @@ export default function TradeForm({ trade, onSave, onCancel, onDelete }: TradeFo
             {errors.quantity && <span className="error-message">{errors.quantity}</span>}
           </div>
 
+          {/* 3行目: 単価・取引金額・平均取得価額 */}
           <div className="form-group">
             <label htmlFor="unitPrice">単価</label>
             <input
@@ -157,7 +160,8 @@ export default function TradeForm({ trade, onSave, onCancel, onDelete }: TradeFo
             {errors.averageAcquisitionPrice && <span className="error-message">{errors.averageAcquisitionPrice}</span>}
           </div>
 
-          <div className="form-group">
+          {/* 4行目: 実現損益（単独行） */}
+          <div className="form-group full-width">
             <label htmlFor="realizedProfitLoss">実現損益 *</label>
             <input
               type="number"
@@ -172,6 +176,7 @@ export default function TradeForm({ trade, onSave, onCancel, onDelete }: TradeFo
           </div>
         </div>
 
+        {/* 5行目: メモ（単独行） */}
         <div className="form-group full-width">
           <label htmlFor="memo">メモ</label>
           <textarea
