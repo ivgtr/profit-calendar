@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import '../../../styles/Modal.css';
+import './Modal.css';
 
 export type ModalSize = 'small' | 'medium' | 'large' | 'xlarge' | 'fullscreen';
 
