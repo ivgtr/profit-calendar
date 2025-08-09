@@ -53,7 +53,7 @@ export const ModalManager: React.FC<ModalManagerProps> = ({
         isOpen={isModalOpen('import')}
         onClose={closeModal}
         title="CSVインポート"
-        size="large"
+        size="medium"
       >
         <CSVImporter onImportComplete={onImportComplete} />
       </Modal>
@@ -126,7 +126,7 @@ export const ModalManager: React.FC<ModalManagerProps> = ({
         isOpen={isModalOpen('history')}
         onClose={closeModal}
         title="インポート履歴"
-        size="large"
+        size="medium"
       >
         <ImportHistoryList />
       </Modal>
