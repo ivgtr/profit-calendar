@@ -1,0 +1,98 @@
+/* Tooltip Component Styles */
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip-content {
+  position: absolute;
+  z-index: 1001;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background-color: var(--text-primary);
+  color: var(--text-inverse);
+  font-size: var(--font-size-sm);
+  border-radius: 0.25rem;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+  pointer-events: none;
+}
+
+.tooltip:hover .tooltip-content {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Position variants */
+.tooltip-content--top {
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-0.25rem);
+  margin-bottom: 0.25rem;
+}
+
+.tooltip-content--bottom {
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(0.25rem);
+  margin-top: 0.25rem;
+}
+
+.tooltip-content--left {
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%) translateX(-0.25rem);
+  margin-right: 0.25rem;
+}
+
+.tooltip-content--right {
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%) translateX(0.25rem);
+  margin-left: 0.25rem;
+}
+
+/* Arrow */
+.tooltip-content::before {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+.tooltip-content--top::before {
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 4px solid var(--text-primary);
+}
+
+.tooltip-content--bottom::before {
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-bottom: 4px solid var(--text-primary);
+}
+
+.tooltip-content--left::before {
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  border-left: 4px solid var(--text-primary);
+}
+
+.tooltip-content--right::before {
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  border-right: 4px solid var(--text-primary);
+}

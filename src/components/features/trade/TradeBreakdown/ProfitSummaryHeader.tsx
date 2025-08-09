@@ -1,4 +1,4 @@
-import { formatCurrency } from '../../utils/formatUtils';
+import { formatCurrency } from '../../../../utils/formatUtils';
 
 interface ProfitSummaryHeaderProps {
   title: string;

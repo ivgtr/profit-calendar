@@ -1,4 +1,4 @@
-import { formatCurrency } from '../../utils/formatUtils';
+import { formatCurrency } from '../../../../utils/formatUtils';
 
 export interface BreakdownItemData {
   label: string;

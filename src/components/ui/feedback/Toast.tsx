@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { Icon } from '../base/Icon';
 import './Toast.css';
 
 export type ToastType = 'success' | 'error' | 'info' | 'warning';
@@ -30,14 +31,14 @@ const ToastItem: React.FC<{ toast: ToastMessage; onRemove: () => void }> = ({
   const getIcon = () => {
     switch (toast.type) {
       case 'success':
-        return '✓';
+        return <Icon name="success" size="small" />;
       case 'error':
-        return '✕';
+        return <Icon name="error" size="small" />;
       case 'warning':
-        return '⚠';
+        return <Icon name="warning" size="small" />;
       case 'info':
       default:
-        return 'ℹ';
+        return <Icon name="info" size="small" />;
     }
   };
 
@@ -45,8 +46,8 @@ const ToastItem: React.FC<{ toast: ToastMessage; onRemove: () => void }> = ({
     <div className={`toast-item toast-${toast.type}`}>
       <span className="toast-icon">{getIcon()}</span>
       <span className="toast-message">{toast.message}</span>
-      <button className="toast-close" onClick={onRemove}>
-        ×
+      <button className="toast-close" onClick={onRemove} aria-label="通知を閉じる">
+        <Icon name="close" size="small" />
       </button>
     </div>
   );

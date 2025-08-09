@@ -1,5 +1,6 @@
 import React from 'react';
 import { Modal } from './Modal';
+import { Button } from '../base/Button';
 import './ConfirmDialog.css';
 
 interface ConfirmDialogProps {
@@ -28,15 +29,15 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
       <div className="confirm-dialog">
         <p className="confirm-message">{message}</p>
         <div className="confirm-actions">
-          <button className="confirm-cancel" onClick={onCancel}>
+          <Button variant="ghost" onClick={onCancel}>
             {cancelText}
-          </button>
-          <button 
-            className={`confirm-ok ${variant === 'danger' ? 'confirm-danger' : ''}`} 
+          </Button>
+          <Button 
+            variant={variant === 'danger' ? 'danger' : 'primary'}
             onClick={onConfirm}
           >
             {confirmText}
-          </button>
+          </Button>
         </div>
       </div>
     </Modal>
