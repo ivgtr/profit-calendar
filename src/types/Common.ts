@@ -31,3 +31,30 @@ export type DateRangeHandler = EventHandlerWithParam<{ start: Date; end: Date }>
 // データ操作の共通型
 export type DataUpdateHandler<T> = EventHandlerWithParam<T>;
 export type DataDeleteHandler = EventHandlerWithParam<string>;
+
+// Database関連の共通型
+export interface DatabaseProps {
+  databaseService: Database; // services/database.ts のDatabase型を参照
+  isDbReady: boolean;
+}
+
+import { Trade } from './Trade';
+
+// Databaseクラスの型定義（型チェック用）
+type Database = {
+  init(): Promise<void>;
+  addTrade(trade: Trade): Promise<void>;
+  updateTrade(trade: Trade): Promise<void>;
+  deleteTrade(id: string): Promise<void>;
+  getTradeById(id: string): Promise<Trade | null>;
+  getTradesByDateRange(startDate: Date, endDate: Date): Promise<Trade[]>;
+  getMonthlyProfit(year: number, month: number): Promise<{ totalProfit: number; totalLoss: number; netProfit: number }>;
+  getAllTrades(): Promise<Trade[]>;
+  // 他のメソッドは必要に応じて追加
+};
+
+// 月次データ表示コンポーネント共通Props
+export interface MonthlyDataProps extends DatabaseProps {
+  currentMonth: Date;
+  refreshTrigger: number;
+}
