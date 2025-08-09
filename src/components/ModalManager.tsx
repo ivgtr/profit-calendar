@@ -63,7 +63,7 @@ export const ModalManager: React.FC<ModalManagerProps> = ({
         isOpen={isModalOpen('tradeForm')}
         onClose={closeModal}
         title={editingTrade ? '取引を編集' : '新しい取引を追加'}
-        size="medium"
+        size="large"
         preventEscapeWhenEditing={true}
       >
         <TradeForm
