@@ -1,24 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Header } from './components/Header';
-import { Modal } from './components/Modal';
-import { CSVImporter } from './components/CSVImporter';
-import { Calendar } from './components/Calendar';
-import { ImportHistoryList } from './components/ImportHistoryList';
-import TradeForm from './components/TradeForm';
-import { BulkDeleteTrades } from './components/BulkDeleteTrades';
-import { MonthlyProfit } from './components/MonthlyProfit';
-import { DailyTradesSection } from './components/DailyTradesSection';
-import { MonthlyReport } from './components/MonthlyReport';
-import { YearlyChart } from './components/YearlyChart';
-import { ThemeSettings } from './components/ThemeSettings';
-import { TermsOfService } from './components/TermsOfService';
-import { PrivacyPolicy } from './components/PrivacyPolicy';
-import { Disclaimer } from './components/Disclaimer';
-import { UserGuide } from './components/UserGuide';
-import { BackupRestore } from './components/BackupRestore';
+import { Header } from './components/ui/layout/Header';
+import { ModalManager } from './components/ModalManager';
+import { Calendar } from './components/features/calendar/Calendar';
+import { MonthlyProfit } from './components/features/analytics/MonthlyProfit';
+import { DailyTradesSection } from './components/features/trade/DailyTrades/DailyTradesSection';
 import { useMonthlyTrades } from './hooks/useMonthlyTrades';
 import { useTradeListModal } from './hooks/useTradeListModal';
-import { TradeListModal } from './components/TradeListModal';
 import { db, Database } from './services/database';
 import { Trade } from './types/Trade';
 import { useModalManager } from './hooks/useModalManager';
@@ -75,13 +62,12 @@ function AppInner() {
     }
   }, []);
 
-  // CRUD操作ロジック
+  // 取引フォーム操作ロジック
   const {
     editingTrade,
     handleOpenTradeForm,
     handleSaveTrade,
-    handleDeleteTrade,
-    handleCancelTradeForm
+    handleDeleteTrade
   } = useTradeCRUD({
     selectedDate,
     loadDailyTrades,
@@ -91,14 +77,7 @@ function AppInner() {
   });
 
   // 日次取引一覧モーダル管理
-  const {
-    modalTrades: dailyModalTrades,
-    modalTitle: dailyModalTitle,
-    isModalOpen: isDailyModalOpen,
-    modalFilterType: dailyModalFilterType,
-    showTradesForDate,
-    closeModal: closeDailyModal
-  } = useTradeListModal();
+  const { showTradesForDate } = useTradeListModal();
 
   // 日次breakdown-itemクリック処理
   const handleDailyTradeTypeClick = useCallback(async (type: 'spot' | 'margin' | 'unknown', label: string) => {
@@ -113,9 +92,7 @@ function AppInner() {
     handleDateSelect,
     handleMonthChange,
     handleImportComplete,
-    handleHistoryUpdate,
     handleBulkDeleteComplete,
-
     handleHeaderAction,
     toggleDailyBreakdown
   } = useTradeHandlers({
@@ -165,145 +142,18 @@ function AppInner() {
         />
       </main>
 
-      {/* CSVインポートモーダル */}
-      <Modal
-        isOpen={isModalOpen('import')}
-        onClose={closeModal}
-        title="CSVインポート"
-        size="medium"
-      >
-        <CSVImporter onImportComplete={handleImportComplete} />
-      </Modal>
-
-      {/* インポート履歴モーダル */}
-      <Modal
-        isOpen={isModalOpen('history')}
-        onClose={closeModal}
-        title="CSVインポート履歴"
-        size="large"
-      >
-        <ImportHistoryList onHistoryUpdate={handleHistoryUpdate} />
-      </Modal>
-
-      {/* 取引入力・編集モーダル */}
-      <Modal
-        isOpen={isModalOpen('tradeForm')}
-        onClose={handleCancelTradeForm}
-        title={editingTrade && editingTrade.id ? '取引を編集' : '取引を追加'}
-        size="large"
-      >
-        <TradeForm
-          trade={editingTrade}
-          onSave={handleSaveTrade}
-          onCancel={handleCancelTradeForm}
-          onDelete={handleDeleteTrade}
-        />
-      </Modal>
-
-      {/* 一括削除モーダル */}
-      <Modal
-        isOpen={isModalOpen('bulkDelete')}
-        onClose={closeModal}
-        title="取引の一括削除"
-        size="medium"
-      >
-        <BulkDeleteTrades onComplete={handleBulkDeleteComplete} />
-      </Modal>
-
-      {/* 月別レポートモーダル */}
-      <Modal
-        isOpen={isModalOpen('monthlyReport')}
-        onClose={closeModal}
-        title=""
-        size="large"
-      >
-        <MonthlyReport 
-          currentMonth={currentMonth} 
-          refreshTrigger={dataVersion} 
-          isDbReady={isDbReady} 
-        />
-      </Modal>
-
-      {/* 年間推移グラフモーダル */}
-      <Modal
-        isOpen={isModalOpen('yearlyChart')}
-        onClose={closeModal}
-        title=""
-        size="large"
-      >
-        <YearlyChart 
-          databaseService={databaseService}
-          isDbReady={isDbReady} 
-        />
-      </Modal>
-
-      {/* テーマ設定モーダル */}
-      <Modal
-        isOpen={isModalOpen('themeSettings')}
-        onClose={closeModal}
-        title=""
-        size="medium"
-      >
-        <ThemeSettings />
-      </Modal>
-
-      {/* 使い方ガイドモーダル */}
-      <Modal
-        isOpen={isModalOpen('userGuide')}
-        onClose={closeModal}
-        title=""
-        size="large"
-      >
-        <UserGuide />
-      </Modal>
-
-      {/* 利用規約モーダル */}
-      <Modal
-        isOpen={isModalOpen('terms')}
-        onClose={closeModal}
-        title=""
-        size="large"
-      >
-        <TermsOfService />
-      </Modal>
-
-      {/* プライバシーポリシーモーダル */}
-      <Modal
-        isOpen={isModalOpen('privacy')}
-        onClose={closeModal}
-        title=""
-        size="large"
-      >
-        <PrivacyPolicy />
-      </Modal>
-
-      {/* 免責事項モーダル */}
-      <Modal
-        isOpen={isModalOpen('disclaimer')}
-        onClose={closeModal}
-        title=""
-        size="large"
-      >
-        <Disclaimer />
-      </Modal>
-
-      {/* バックアップ・復元モーダル */}
-      <Modal
-        isOpen={isModalOpen('backupRestore')}
-        onClose={closeModal}
-        title="📦 データバックアップ・復元"
-        size="large"
-      >
-        <BackupRestore />
-      </Modal>
-
-      {/* 日次取引一覧モーダル */}
-      <TradeListModal
-        trades={dailyModalTrades}
-        isOpen={isDailyModalOpen}
-        onClose={closeDailyModal}
-        title={dailyModalTitle}
-        filterType={dailyModalFilterType}
+      <ModalManager
+        isModalOpen={isModalOpen}
+        closeModal={closeModal}
+        editingTrade={editingTrade}
+        currentMonth={currentMonth}
+        refreshTrigger={dataVersion}
+        isDbReady={isDbReady}
+        databaseService={databaseService}
+        onImportComplete={handleImportComplete}
+        onTradeSave={handleSaveTrade}
+        onTradeDelete={handleDeleteTrade}
+        onBulkDeleteComplete={handleBulkDeleteComplete}
       />
     </div>
   );

@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { BreakdownItemData } from '../components/ui/BreakdownItem';
+import { BreakdownItemData } from '../components/features/trade/TradeBreakdown/BreakdownItem';
 
 interface ProfitData {
   spotProfit: number;

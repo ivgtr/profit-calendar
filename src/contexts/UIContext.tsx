@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
-import { Toast, ToastMessage, ToastType } from '../components/ui/Toast';
-import { ConfirmDialog } from '../components/ui/ConfirmDialog';
-import { Modal } from '../components/ui/Modal';
+import { Toast, ToastMessage, ToastType } from '../components/ui/feedback/Toast';
+import { ConfirmDialog } from '../components/ui/feedback/ConfirmDialog';
+import { Modal } from '../components/ui/feedback/Modal';
 
 interface ConfirmOptions {
   title?: string;
