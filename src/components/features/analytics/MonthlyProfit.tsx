@@ -6,7 +6,7 @@ import { useTradeListModal } from '../../../hooks/useTradeListModal';
 import { useProfitBreakdown } from '../../../hooks/useProfitBreakdown';
 import { TradeBreakdown } from '../trade/TradeBreakdown/TradeBreakdown';
 import { ProfitSummaryHeader } from '../trade/TradeBreakdown/ProfitSummaryHeader';
-import '../../../styles/MonthlyProfit.css';
+import './MonthlyProfit.css';
 
 interface MonthlyProfitProps {
   currentMonth: Date;

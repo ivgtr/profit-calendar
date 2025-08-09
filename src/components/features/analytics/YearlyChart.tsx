@@ -13,7 +13,7 @@ import { Bar } from 'react-chartjs-2';
 import { Database } from '../../../services/database';
 import { DatabaseProps } from '../../../types/Common';
 import { StockTop3 } from './StockTop3';
-import '../../../styles/YearlyChart.css';
+import './YearlyChart.css';
 
 // Chart.jsのコンポーネントを登録
 ChartJS.register(

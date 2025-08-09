@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useMemo, memo } from 'react';
 import { DailySummary } from '../../../types/Trade';
 import { LoadingProps, DateHandler } from '../../../types/Common';
 import { formatCurrency } from '../../../utils/formatUtils';
-import '../../../styles/Calendar.css';
+import './Calendar.css';
 
 interface CalendarProps extends LoadingProps {
   onDateSelect?: DateHandler;

@@ -1,5 +1,5 @@
 import { useBackupRestore } from '../../../hooks/useBackupRestore';
-import '../../../styles/BackupRestore.css';
+import './BackupRestore.css';
 
 export function BackupRestore() {
   const {

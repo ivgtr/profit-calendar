@@ -1,4 +1,4 @@
-import '../../styles/LegalPages.css';
+import './LegalPages.css';
 
 export function PrivacyPolicy() {
   return (

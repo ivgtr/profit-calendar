@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { db } from '../../../services/database';
 import { useUI } from '../../../contexts/UIContext';
-import '../../../styles/BulkDeleteTrades.css';
+import './BulkDeleteTrades.css';
 
 interface BulkDeleteTradesProps {
   onComplete: () => void;

@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useMemo, memo } from 'react';
 import { Database } from '../../../services/database';
 import { DatabaseProps } from '../../../types/Common';
 import { formatStockDisplay } from '../../../utils/stockUtils';
-import '../../../styles/StockTop3.css';
+import './StockTop3.css';
 
 interface StockTop3Props extends Omit<DatabaseProps, 'databaseService'> {
   databaseService: Database; // 具体的な型を使用

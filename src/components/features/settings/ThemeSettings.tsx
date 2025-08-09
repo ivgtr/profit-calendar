@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTheme } from '../../../hooks/useTheme';
 import { ThemeMode } from '../../../types/Theme';
-import '../../../styles/ThemeSettings.css';
+import './ThemeSettings.css';
 
 export function ThemeSettings() {
   const { theme, themeMode, setThemeMode, updateCustomTheme, resetCustomTheme } = useTheme();

@@ -3,7 +3,7 @@ import { ImportResult } from '../../../types/Trade';
 import { useCSVImporter } from '../../../hooks/useCSVImporter';
 import { Modal } from '../../ui/feedback/Modal';
 import { formatStockDisplay } from '../../../utils/stockUtils';
-import '../../../styles/CSVImporter.css';
+import './CSVImporter.css';
 
 interface CSVImporterProps {
   onImportComplete?: DataUpdateHandler<ImportResult>;

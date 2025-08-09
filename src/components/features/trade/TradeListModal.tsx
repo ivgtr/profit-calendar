@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react';
 import { Modal } from '../../ui/feedback/Modal';
 import { Trade, TradeType } from '../../../types/Trade';
 import { formatCurrency, formatDate } from '../../../utils/formatUtils';
-import '../../../styles/TradeListModal.css';
+import './TradeListModal.css';
 
 interface TradeListModalProps {
   trades: Trade[];

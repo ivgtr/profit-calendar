@@ -7,7 +7,7 @@ import { RiskAnalysisSection } from './MonthlyReport/RiskAnalysisSection';
 import { StockAnalysisSection } from './MonthlyReport/StockAnalysisSection';
 import { TrendAnalysisSection } from './MonthlyReport/TrendAnalysisSection';
 import { Tooltip } from '../../ui/feedback/Tooltip';
-import '../../../styles/MonthlyReport.css';
+import './MonthlyReport.css';
 
 interface MonthlyReportProps {
   currentMonth: Date;

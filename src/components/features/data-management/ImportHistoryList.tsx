@@ -3,7 +3,7 @@ import { db } from '../../../services/database';
 import { ImportHistory } from '../../../types/ImportHistory';
 import { formatCurrency } from '../../../utils/formatUtils';
 import { useUI } from '../../../contexts/UIContext';
-import '../../../styles/ImportHistoryList.css';
+import './ImportHistoryList.css';
 
 interface ImportHistoryListProps {
   onHistoryUpdate?: () => void;

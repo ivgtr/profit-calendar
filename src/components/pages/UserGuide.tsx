@@ -1,4 +1,4 @@
-import '../../styles/UserGuide.css';
+import './UserGuide.css';
 import {
   IntroductionSection,
   CSVImportSection,
