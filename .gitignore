@@ -24,7 +24,9 @@ dist-ssr
 *.sw?
 
 # Serena cache
-.serena/cache
+.serena/cache/
+.serena/memories/
+.serena/logs/
 
 # 計画ディレクトリ
 計画/*
