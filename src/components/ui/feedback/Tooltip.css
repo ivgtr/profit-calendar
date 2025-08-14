@@ -1,67 +1,94 @@
 /* Tooltip Component Styles */
-.tooltip {
+.tooltip-container {
   position: relative;
-  display: inline-block;
+  /* グリッドアイテムの場合はblockとして振る舞う */
+  display: block;
+}
+
+.tooltip {
+  /* 絶対配置でドキュメントフローから外す */
+  position: absolute;
+  z-index: 1001;
+  /* デフォルトでは非表示 */
+  pointer-events: none;
 }
 
 .tooltip-content {
-  position: absolute;
-  z-index: 1001;
   padding: var(--spacing-xs) var(--spacing-sm);
   background-color: var(--text-primary);
   color: var(--text-inverse);
   font-size: var(--font-size-sm);
   border-radius: 0.25rem;
-  white-space: nowrap;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
-  pointer-events: none;
+  /* 最大幅を設定し、文字の折り返しを許可 */
+  max-width: 280px;
+  white-space: normal;
+  word-wrap: break-word;
+  line-height: 1.4;
+  text-align: center;
 }
 
-.tooltip:hover .tooltip-content {
-  opacity: 1;
-  visibility: visible;
+/* モバイル画面での対応 */
+@media (max-width: 768px) {
+  .tooltip-content {
+    max-width: 200px;
+    font-size: calc(var(--font-size-sm) * 0.9);
+  }
 }
+
+/* 小さな画面での対応 */
+@media (max-width: 480px) {
+  .tooltip-content {
+    max-width: 160px;
+    font-size: calc(var(--font-size-sm) * 0.85);
+  }
+}
+
 
 /* Position variants */
-.tooltip-content--top {
+.tooltip-top {
   bottom: 100%;
   left: 50%;
-  transform: translateX(-50%) translateY(-0.25rem);
-  margin-bottom: 0.25rem;
+  transform: translateX(-50%);
+  margin-bottom: 8px;
+  /* 画面端からはみ出さないように制御 */
+  max-width: calc(100vw - 20px);
 }
 
-.tooltip-content--bottom {
+.tooltip-bottom {
   top: 100%;
   left: 50%;
-  transform: translateX(-50%) translateY(0.25rem);
-  margin-top: 0.25rem;
+  transform: translateX(-50%);
+  margin-top: 8px;
+  /* 画面端からはみ出さないように制御 */
+  max-width: calc(100vw - 20px);
 }
 
-.tooltip-content--left {
+.tooltip-left {
   right: 100%;
   top: 50%;
-  transform: translateY(-50%) translateX(-0.25rem);
-  margin-right: 0.25rem;
+  transform: translateY(-50%);
+  margin-right: 8px;
+  /* 画面端からはみ出さないように制御 */
+  max-width: calc(100vw - 20px);
 }
 
-.tooltip-content--right {
+.tooltip-right {
   left: 100%;
   top: 50%;
-  transform: translateY(-50%) translateX(0.25rem);
-  margin-left: 0.25rem;
+  transform: translateY(-50%);
+  margin-left: 8px;
+  /* 画面端からはみ出さないように制御 */
+  max-width: calc(100vw - 20px);
 }
 
 /* Arrow */
-.tooltip-content::before {
-  content: '';
+.tooltip-arrow {
   position: absolute;
   width: 0;
   height: 0;
 }
 
-.tooltip-content--top::before {
+.tooltip-top .tooltip-arrow {
   top: 100%;
   left: 50%;
   transform: translateX(-50%);
@@ -70,7 +97,7 @@
   border-top: 4px solid var(--text-primary);
 }
 
-.tooltip-content--bottom::before {
+.tooltip-bottom .tooltip-arrow {
   bottom: 100%;
   left: 50%;
   transform: translateX(-50%);
@@ -79,7 +106,7 @@
   border-bottom: 4px solid var(--text-primary);
 }
 
-.tooltip-content--left::before {
+.tooltip-left .tooltip-arrow {
   left: 100%;
   top: 50%;
   transform: translateY(-50%);
@@ -88,7 +115,7 @@
   border-left: 4px solid var(--text-primary);
 }
 
-.tooltip-content--right::before {
+.tooltip-right .tooltip-arrow {
   right: 100%;
   top: 50%;
   transform: translateY(-50%);
