@@ -161,6 +161,14 @@ export function Header({ onAction }: HeaderProps) {
               <span className="menu-icon">📈</span>
               年間推移グラフ
             </button>
+            
+            <button 
+              className="menu-item"
+              onClick={() => handleMenuItemClick({ type: 'OPEN_STATISTICS_EXPORT_MODAL' })}
+            >
+              <span className="menu-icon">🤖</span>
+              AI分析用データ出力
+            </button>
           </>
         );
       

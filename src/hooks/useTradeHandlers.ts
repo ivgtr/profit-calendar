@@ -100,6 +100,9 @@ export function useTradeHandlers({
       case 'OPEN_BACKUP_RESTORE_MODAL':
         openModal('backupRestore');
         break;
+      case 'OPEN_STATISTICS_EXPORT_MODAL':
+        openModal('statisticsExport');
+        break;
       case 'OPEN_TERMS_MODAL':
         openModal('terms');
         break;

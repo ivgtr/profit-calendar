@@ -10,6 +10,7 @@ import TradeForm from './features/trade/TradeForm';
 import { MonthlyReport } from './features/analytics/MonthlyReport';
 import { YearlyChart } from './features/analytics/YearlyChart';
 import { BackupRestore } from './features/data-management/BackupRestore';
+import { StatisticsExport } from './StatisticsExport/StatisticsExport';
 import { BulkDeleteTrades } from './features/data-management/BulkDeleteTrades';
 import { ImportHistoryList } from './features/data-management/ImportHistoryList';
 import { Trade, ImportResult } from '../types/Trade';
@@ -109,6 +110,16 @@ export const ModalManager: React.FC<ModalManagerProps> = ({
         size="medium"
       >
         <BackupRestore />
+      </Modal>
+
+      {/* 統計データエクスポートモーダル */}
+      <Modal
+        isOpen={isModalOpen('statisticsExport')}
+        onClose={closeModal}
+        title=""
+        size="large"
+      >
+        <StatisticsExport />
       </Modal>
 
       {/* 一括削除モーダル */}

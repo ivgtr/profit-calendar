@@ -15,7 +15,8 @@ export type ModalType =
   | 'terms'
   | 'privacy'
   | 'disclaimer'
-  | 'backupRestore';
+  | 'backupRestore'
+  | 'statisticsExport';
 
 /**
  * モーダル状態管理のカスタムフック
