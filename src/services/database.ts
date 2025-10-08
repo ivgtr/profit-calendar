@@ -1,5 +1,6 @@
 import { Trade } from '../types/Trade';
 import { ImportHistory, ImportTradeRelation } from '../types/ImportHistory';
+import { formatDateKey } from '../utils/dateUtils';
 
 const DB_NAME = 'ProfitCalendarDB';
 const DB_VERSION = 2;
@@ -313,7 +314,7 @@ class Database {
 
     // 全ての日付を初期化
     for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
-      const dateKey = d.toISOString().split('T')[0];
+      const dateKey = formatDateKey(d);
       dailyMap.set(dateKey, {
         date: new Date(d),
         totalProfit: 0,

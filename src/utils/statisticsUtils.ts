@@ -1,4 +1,5 @@
 import { Trade } from '../types/Trade';
+import { formatDateKey, parseDateKey } from './dateUtils';
 
 /**
  * 統計計算結果の型定義
@@ -148,7 +149,7 @@ export const calculateStreakAnalysis = (trades: Trade[]): StreakAnalysis => {
   const dailyProfits = new Map<string, number>();
   
   trades.forEach(trade => {
-    const dateKey = trade.date.toISOString().split('T')[0];
+    const dateKey = formatDateKey(trade.date);
     const currentProfit = dailyProfits.get(dateKey) || 0;
     dailyProfits.set(dateKey, currentProfit + trade.realizedProfitLoss);
   });
@@ -276,12 +277,12 @@ export const calculateTrendAnalysis = (trades: Trade[], dailyProfits: Map<string
   const weeklyStats = new Map<number, { profit: number; trades: number }>();
   
   dailyProfits.forEach((profit, dateStr) => {
-    const date = new Date(dateStr);
+    const date = parseDateKey(dateStr);
     const week = Math.ceil(date.getDate() / 7);
     const current = weeklyStats.get(week) || { profit: 0, trades: 0 };
     
     const dayTrades = trades.filter(t => 
-      t.date.toISOString().split('T')[0] === dateStr
+      formatDateKey(t.date) === dateStr
     ).length;
     
     weeklyStats.set(week, {
@@ -301,12 +302,12 @@ export const calculateTrendAnalysis = (trades: Trade[], dailyProfits: Map<string
   const dayStats = new Map<string, { profit: number; trades: number; wins: number }>();
   
   dailyProfits.forEach((profit, dateStr) => {
-    const date = new Date(dateStr);
+    const date = parseDateKey(dateStr);
     const dayName = dayNames[date.getDay()];
     const current = dayStats.get(dayName) || { profit: 0, trades: 0, wins: 0 };
     
     const dayTrades = trades.filter(t => 
-      t.date.toISOString().split('T')[0] === dateStr
+      formatDateKey(t.date) === dateStr
     );
     
     dayStats.set(dayName, {
@@ -358,7 +359,7 @@ export const calculateAdvancedMetrics = (trades: Trade[], dailyProfits: number[]
   const lossRate = 1 - winRate;
   
   // 取引日数を計算
-  const tradingDays = new Set(trades.map(t => t.date.toISOString().split('T')[0])).size;
+  const tradingDays = new Set(trades.map(t => formatDateKey(t.date))).size;
   const avgTradesPerDay = tradingDays > 0 ? trades.length / tradingDays : 0;
   
   // 日別統計

@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { db } from '../services/database';
 import { DailySummary } from '../types/Trade';
+import { formatDateKey } from '../utils/dateUtils';
 
 export function useMonthlyTrades(currentMonth: Date, dataVersion: number, isDbReady: boolean) {
   const [monthlyTrades, setMonthlyTrades] = useState<Map<string, DailySummary>>(new Map());
@@ -29,7 +30,7 @@ export function useMonthlyTrades(currentMonth: Date, dataVersion: number, isDbRe
         // 実現損益が記録されている取引のみを処理（tradeTypeがnullでも損益があれば表示）
         if (trade.realizedProfitLoss == null || trade.realizedProfitLoss === 0) return;
         
-        const dateKey = trade.date.toISOString().split('T')[0];
+        const dateKey = formatDateKey(trade.date);
         
         if (!dailySummaryMap.has(dateKey)) {
           dailySummaryMap.set(dateKey, {

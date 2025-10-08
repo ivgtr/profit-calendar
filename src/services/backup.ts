@@ -1,6 +1,7 @@
 import { db } from './database';
 import { Trade } from '../types/Trade';
 import { ImportHistory } from '../types/ImportHistory';
+import { formatDateKey } from '../utils/dateUtils';
 
 export interface BackupData {
   version: string;
@@ -56,7 +57,7 @@ export class BackupService {
       const blob = new Blob([jsonString], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       
-      const fileName = `profit-calendar-backup-${new Date().toISOString().split('T')[0]}.json`;
+      const fileName = `profit-calendar-backup-${formatDateKey(new Date())}.json`;
       const link = document.createElement('a');
       link.href = url;
       link.download = fileName;

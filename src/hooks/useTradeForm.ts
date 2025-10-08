@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { Trade, TradeType, AccountType } from '../types/Trade';
 import { v4 as uuidv4 } from 'uuid';
+import { formatDateKey } from '../utils/dateUtils';
 
 export interface TradeFormData {
   date: string;
@@ -40,11 +41,8 @@ function isTradeType(value: string): value is TradeType {
 
 // 型変換ユーティリティ関数
 function convertTradeToFormData(trade: Trade): TradeFormData {
-  // ローカルタイムゾーンで日付を取得
-  const localDate = new Date(trade.date.getTime() - trade.date.getTimezoneOffset() * 60000);
-  
   return {
-    date: localDate.toISOString().split('T')[0],
+    date: formatDateKey(trade.date),
     accountType: trade.accountType || '',
     stockName: trade.stockName || '',
     stockCode: trade.stockCode || '',

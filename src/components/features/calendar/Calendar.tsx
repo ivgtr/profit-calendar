@@ -3,6 +3,7 @@ import { DailySummary } from '../../../types/Trade';
 import { LoadingProps, DateHandler } from '../../../types/Common';
 import { formatCurrency } from '../../../utils/formatUtils';
 import { Button } from '../../ui/base/Button';
+import { formatDateKey } from '../../../utils/dateUtils';
 import './Calendar.css';
 
 interface CalendarProps extends LoadingProps {
@@ -114,7 +115,7 @@ const Calendar = memo(function Calendar({ onDateSelect, onMonthChange, monthlyTr
         ))}
 
         {days.map((date, index) => {
-          const dateKey = date.toISOString().split('T')[0];
+          const dateKey = formatDateKey(date);
           const summary = monthlyTrades.get(dateKey);
           const isCurrentMonth = date.getMonth() === currentDate.getMonth();
           const isToday = date.toDateString() === todayString;

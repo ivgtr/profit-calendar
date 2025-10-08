@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { db } from '../services/database';
 import { Trade } from '../types/Trade';
+import { formatDateKey } from '../utils/dateUtils';
 import { 
   calculateRiskAnalysis,
   calculateStreakAnalysis, 
@@ -80,7 +81,7 @@ export const useMonthlyStats = (
       // 日別損益マップを作成
       const dailyProfitMap = new Map<string, number>();
       trades.forEach(trade => {
-        const dateKey = trade.date.toISOString().split('T')[0];
+        const dateKey = formatDateKey(trade.date);
         const currentProfit = dailyProfitMap.get(dateKey) || 0;
         dailyProfitMap.set(dateKey, currentProfit + trade.realizedProfitLoss);
       });
