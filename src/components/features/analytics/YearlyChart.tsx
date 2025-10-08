@@ -237,8 +237,7 @@ const YearlyChart = memo(function YearlyChart({ databaseService, isDbReady }: Ye
     <div className="yearly-chart-container">
       <div className="chart-header-section">
         <div className="chart-title">
-          <h2>チャート</h2>
-          <span className="period-label">{getPeriodLabel()}</span>
+          <h2 className="period-label">{getPeriodLabel()}</h2>
         </div>
 
         <div className="period-selector">
