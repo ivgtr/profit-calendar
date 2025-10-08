@@ -39,18 +39,16 @@
 
 .period-button {
   flex: 1;
-  padding: 8px 16px;
-  border: none;
+  padding: 0 var(--spacing-md);
   background: transparent;
   color: var(--text-secondary);
   border-radius: 8px;
   font-size: var(--font-size-sm);
-  cursor: pointer;
   transition: all 0.3s ease;
   white-space: nowrap;
 }
 
-.period-button:hover {
+.period-button:hover:not(:disabled) {
   background: var(--bg-primary);
 }
 
@@ -208,17 +206,16 @@
 }
 
 .year-nav-button {
-  padding: 8px 16px;
   border: 1px solid var(--border-primary);
   background: transparent;
   color: var(--text-secondary);
   border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
   font-size: var(--font-size-sm);
+  padding: 0 var(--spacing-md);
+  transition: all 0.3s ease;
 }
 
-.year-nav-button:hover {
+.year-nav-button:hover:not(:disabled) {
   background: var(--bg-tertiary);
   color: var(--text-primary);
   border-color: var(--border-secondary);

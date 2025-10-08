@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { db } from '../../../services/database';
 import { useUI } from '../../../contexts/UIContext';
+import { Button } from '../../ui/base/Button';
 import './BulkDeleteTrades.css';
 
 interface BulkDeleteTradesProps {
@@ -157,24 +158,29 @@ export function BulkDeleteTrades({ onComplete }: BulkDeleteTradesProps) {
                 className="date-input"
               />
               {selectedDates.length > 1 && (
-                <button
+                <Button
                   type="button"
+                  variant="danger"
+                  size="small"
+                  className="date-remove-button"
                   onClick={() => handleRemoveDate(index)}
-                  className="remove-date-button"
                   title="この日付を削除"
                 >
                   ✕
-                </button>
+                </Button>
               )}
             </div>
           ))}
-          <button
+          <Button
             type="button"
-            onClick={handleAddDate}
+            variant="secondary"
+            size="small"
             className="add-date-button"
+            onClick={handleAddDate}
+            disabled={isDeleting}
           >
-            + 日付を追加
-          </button>
+            ＋ 日付を追加
+          </Button>
         </div>
       )}
 
@@ -200,22 +206,20 @@ export function BulkDeleteTrades({ onComplete }: BulkDeleteTradesProps) {
       )}
 
       <div className="action-buttons">
-        <button
+        <Button
           type="button"
+          variant="danger"
+          size="large"
+          loading={isDeleting}
           onClick={
             mode === 'all' ? handleDeleteAll :
             mode === 'dates' ? handleDeleteByDates :
             handleResetAll
           }
-          disabled={isDeleting}
-          className="delete-button"
+          className="bulk-action-button"
         >
-          {isDeleting ? (
-            mode === 'reset' ? '初期化中...' : '削除中...'
-          ) : (
-            mode === 'reset' ? '完全初期化実行' : '削除実行'
-          )}
-        </button>
+          {mode === 'reset' ? '完全初期化実行' : '削除実行'}
+        </Button>
       </div>
     </div>
   );

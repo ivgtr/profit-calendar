@@ -99,14 +99,17 @@ export default function TradeForm({ trade, onSave, onCancel, onDelete }: TradeFo
         {/* 詳細項目セクション */}
         <div className="details-section">
           <div className="details-header">
-            <button 
-              type="button" 
-              className="details-toggle"
+            <Button
+              type="button"
+              className={`details-toggle ${showDetails ? 'open' : ''}`.trim()}
               onClick={() => setShowDetails(!showDetails)}
+              variant="secondary"
+              size="small"
+              iconPosition="right"
+              icon={<span className={`chevron ${showDetails ? 'open' : ''}`}>▼</span>}
             >
-              <span>詳細入力</span>
-              <span className={`chevron ${showDetails ? 'open' : ''}`}>▼</span>
-            </button>
+              詳細入力
+            </Button>
           </div>
           
           <div className={`details-content ${showDetails ? 'open' : ''}`}>
@@ -249,27 +252,31 @@ export default function TradeForm({ trade, onSave, onCancel, onDelete }: TradeFo
       <div className="form-actions">
         <div className="form-actions-left">
           {trade && trade.id && onDelete && (
-            <button 
-              type="button" 
-              onClick={handleDelete} 
+            <Button
+              type="button"
+              onClick={handleDelete}
               className="delete-button"
               title="この取引を削除"
+              variant="danger"
+              size="medium"
             >
               削除
-            </button>
+            </Button>
           )}
         </div>
         <div className="form-actions-right">
-          <button type="button" onClick={onCancel} className="cancel-button">
+          <Button type="button" onClick={onCancel} className="cancel-button" variant="ghost" size="medium">
             キャンセル
-          </button>
-          <button 
-            type="submit" 
+          </Button>
+          <Button
+            type="submit"
             form="trade-form-inner"
             className="save-button"
+            variant="primary"
+            size="medium"
           >
             {trade && trade.id ? '更新' : '追加'}
-          </button>
+          </Button>
         </div>
       </div>
     </div>

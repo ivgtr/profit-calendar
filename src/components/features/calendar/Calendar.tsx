@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useMemo, memo } from 'react';
 import { DailySummary } from '../../../types/Trade';
 import { LoadingProps, DateHandler } from '../../../types/Common';
 import { formatCurrency } from '../../../utils/formatUtils';
+import { Button } from '../../ui/base/Button';
 import './Calendar.css';
 
 interface CalendarProps extends LoadingProps {
@@ -78,10 +79,31 @@ const Calendar = memo(function Calendar({ onDateSelect, onMonthChange, monthlyTr
   return (
     <div className="calendar">
       <div className="calendar-header">
-        <button onClick={handlePrevMonth} className="nav-button">←</button>
+        <Button
+          onClick={handlePrevMonth}
+          className="calendar-nav-button"
+          variant="secondary"
+          size="medium"
+          icon="←"
+          iconOnly
+        />
         <h2>{currentDate.getFullYear()}年 {currentDate.getMonth() + 1}月</h2>
-        <button onClick={handleNextMonth} className="nav-button">→</button>
-        <button onClick={handleToday} className="today-button">今日</button>
+        <Button
+          onClick={handleNextMonth}
+          className="calendar-nav-button"
+          variant="secondary"
+          size="medium"
+          icon="→"
+          iconOnly
+        />
+        <Button
+          onClick={handleToday}
+          className="today-button"
+          variant="outline"
+          size="medium"
+        >
+          今日
+        </Button>
       </div>
 
       <div className="calendar-grid">
