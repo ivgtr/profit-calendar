@@ -20,7 +20,10 @@ function AppInner() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [dailyTrades, setDailyTrades] = useState<Trade[]>([]);
   const [isDbReady, setIsDbReady] = useState(false);
-  const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
+  const [currentMonth, setCurrentMonth] = useState<Date>(() => {
+    const now = new Date();
+    return new Date(now.getFullYear(), now.getMonth(), 1);
+  });
   const [dataVersion, setDataVersion] = useState(0);
   const [pendingImportFile, setPendingImportFile] = useState<File | null>(null);
   

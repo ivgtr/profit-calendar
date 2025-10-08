@@ -35,7 +35,7 @@ export function useTradeHandlers({
 
   // 月変更ハンドラー
   const handleMonthChange = useCallback((date: Date) => {
-    setCurrentMonth(date);
+    setCurrentMonth(new Date(date.getFullYear(), date.getMonth(), 1));
   }, [setCurrentMonth]);
 
   // データ更新の共通処理
