@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { ImportResult } from '../types/Trade';
 import { HeaderAction } from '../types/HeaderActions';
 import { ModalType } from './useModalManager';
 
@@ -50,8 +51,10 @@ export function useTradeHandlers({
   }, [selectedDate, loadDailyTrades, setDataVersion, closeModal]);
 
   // インポート完了ハンドラー
-  const handleImportComplete = useCallback(() => {
-    handleDataUpdate();
+  const handleImportComplete = useCallback((result: ImportResult) => {
+    if (result.success) {
+      handleDataUpdate();
+    }
   }, [handleDataUpdate]);
 
   // 履歴更新ハンドラー

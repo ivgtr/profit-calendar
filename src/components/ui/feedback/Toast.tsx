@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { Icon } from '../base/Icon';
+import { Button } from '../base/Button';
 import './Toast.css';
 
 export type ToastType = 'success' | 'error' | 'info' | 'warning';
@@ -46,9 +47,15 @@ const ToastItem: React.FC<{ toast: ToastMessage; onRemove: () => void }> = ({
     <div className={`toast-item toast-${toast.type}`}>
       <span className="toast-icon">{getIcon()}</span>
       <span className="toast-message">{toast.message}</span>
-      <button className="toast-close" onClick={onRemove} aria-label="通知を閉じる">
-        <Icon name="close" size="small" />
-      </button>
+      <Button
+        className="toast-close"
+        onClick={onRemove}
+        aria-label="通知を閉じる"
+        variant="ghost"
+        size="small"
+        icon={<Icon name="close" size="small" />}
+        iconOnly
+      />
     </div>
   );
 };

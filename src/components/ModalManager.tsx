@@ -21,6 +21,8 @@ import { Database } from '../services/database';
 interface ModalManagerProps {
   isModalOpen: (modalType: ModalType) => boolean;
   closeModal: () => void;
+  pendingImportFile?: File | null;
+  onPendingImportFileHandled?: () => void;
   // Data-dependent props
   editingTrade?: Trade | null;
   currentMonth?: Date;
@@ -45,7 +47,9 @@ export const ModalManager: React.FC<ModalManagerProps> = ({
   onImportComplete,
   onTradeSave,
   onTradeDelete,
-  onBulkDeleteComplete
+  onBulkDeleteComplete,
+  pendingImportFile,
+  onPendingImportFileHandled
 }) => {
   return (
     <>
@@ -56,7 +60,11 @@ export const ModalManager: React.FC<ModalManagerProps> = ({
         title="CSVインポート"
         size="medium"
       >
-        <CSVImporter onImportComplete={onImportComplete} />
+        <CSVImporter 
+          onImportComplete={onImportComplete}
+          initialFile={pendingImportFile || undefined}
+          onInitialFileHandled={onPendingImportFileHandled}
+        />
       </Modal>
 
       {/* 取引フォームモーダル */}

@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { HeaderAction } from '../../../types/HeaderActions';
+import { Button, ButtonProps } from '../../ui/base/Button';
+import { Icon } from '../base/Icon';
 import './Header.css';
 
 interface HeaderProps {
@@ -7,6 +9,20 @@ interface HeaderProps {
 }
 
 type MenuCategory = 'main' | 'data' | 'analytics' | 'settings' | 'legal';
+
+const MenuButton = ({ className = '', variant = 'ghost', size = 'medium', children, icon, ...props }: ButtonProps) => (
+  <Button
+    type="button"
+    variant={variant}
+    size={size}
+    className={`menu-item ${className}`.trim()}
+    iconPosition="left"
+    icon={icon}
+    {...props}
+  >
+    {children}
+  </Button>
+);
 
 export function Header({ onAction }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -36,209 +52,197 @@ export function Header({ onAction }: HeaderProps) {
       case 'main':
         return (
           <>
-            <button 
-              className="menu-item"
+            <MenuButton
               onClick={() => handleMenuItemClick({ type: 'OPEN_TRADE_FORM_MODAL' })}
+              icon={<Icon name="add" size="medium" className="menu-icon" />}
             >
-              <span className="menu-icon">➕</span>
               新規取引入力
-            </button>
+            </MenuButton>
             
             <hr className="menu-divider" />
             
-            <button 
-              className="menu-item"
+            <MenuButton
               onClick={() => handleCategoryClick('data')}
+              icon={<Icon name="download" size="medium" className="menu-icon" />}
             >
-              <span className="menu-icon">💾</span>
-              データ管理
+              <span className="menu-label">データ管理</span>
               <span className="menu-arrow">→</span>
-            </button>
+            </MenuButton>
             
-            <button 
-              className="menu-item"
+            <MenuButton
               onClick={() => handleCategoryClick('analytics')}
+              icon={<Icon name="chart" size="medium" className="menu-icon" />}
             >
-              <span className="menu-icon">📊</span>
-              分析・レポート
+              <span className="menu-label">分析・レポート</span>
               <span className="menu-arrow">→</span>
-            </button>
+            </MenuButton>
             
-            <button 
-              className="menu-item"
+            <MenuButton
               onClick={() => handleCategoryClick('settings')}
+              icon={<Icon name="settings" size="medium" className="menu-icon" />}
             >
-              <span className="menu-icon">⚙️</span>
-              設定・ヘルプ
+              <span className="menu-label">設定・ヘルプ</span>
               <span className="menu-arrow">→</span>
-            </button>
+            </MenuButton>
             
-            <button 
-              className="menu-item"
+            <MenuButton
               onClick={() => handleCategoryClick('legal')}
+              icon={<Icon name="info" size="medium" className="menu-icon" />}
             >
-              <span className="menu-icon">📋</span>
-              法的情報
+              <span className="menu-label">法的情報</span>
               <span className="menu-arrow">→</span>
-            </button>
+            </MenuButton>
           </>
         );
       
       case 'data':
         return (
           <>
-            <button 
-              className="menu-item menu-back"
+            <MenuButton
+              className="menu-back"
               onClick={handleBackClick}
+              icon={<Icon name="chevron-left" size="medium" className="menu-icon" />}
             >
-              <span className="menu-icon">←</span>
               戻る
-            </button>
+            </MenuButton>
             
             <hr className="menu-divider" />
             
-            <button 
-              className="menu-item"
+            <MenuButton
               onClick={() => handleMenuItemClick({ type: 'OPEN_IMPORT_MODAL' })}
+              icon={<Icon name="upload" size="medium" className="menu-icon" />}
             >
-              <span className="menu-icon">📁</span>
               CSVインポート
-            </button>
+            </MenuButton>
             
-            <button 
-              className="menu-item"
+            <MenuButton
               onClick={() => handleMenuItemClick({ type: 'OPEN_HISTORY_MODAL' })}
+              icon={<Icon name="info" size="medium" className="menu-icon" />}
             >
-              <span className="menu-icon">📋</span>
               インポート履歴
-            </button>
+            </MenuButton>
             
-            <button 
-              className="menu-item"
+            <MenuButton
               onClick={() => handleMenuItemClick({ type: 'OPEN_BACKUP_RESTORE_MODAL' })}
+              icon={<Icon name="download" size="medium" className="menu-icon" />}
             >
-              <span className="menu-icon">📦</span>
               バックアップ・復元
-            </button>
+            </MenuButton>
             
             <hr className="menu-divider" />
             
-            <button 
-              className="menu-item danger"
+            <MenuButton
+              className="danger"
               onClick={() => handleMenuItemClick({ type: 'OPEN_BULK_DELETE_MODAL' })}
+              icon={<Icon name="delete" size="medium" className="menu-icon" />}
             >
-              <span className="menu-icon">🗑️</span>
               取引の一括削除
-            </button>
+            </MenuButton>
           </>
         );
       
       case 'analytics':
         return (
           <>
-            <button 
-              className="menu-item menu-back"
+            <MenuButton
+              className="menu-back"
               onClick={handleBackClick}
+              icon={<Icon name="chevron-left" size="medium" className="menu-icon" />}
             >
-              <span className="menu-icon">←</span>
               戻る
-            </button>
+            </MenuButton>
             
             <hr className="menu-divider" />
             
-            <button 
-              className="menu-item"
+            <MenuButton
               onClick={() => handleMenuItemClick({ type: 'OPEN_MONTHLY_REPORT_MODAL' })}
+              icon={<Icon name="chart" size="medium" className="menu-icon" />}
             >
-              <span className="menu-icon">📊</span>
               月別レポート
-            </button>
+            </MenuButton>
             
-            <button 
-              className="menu-item"
+            <MenuButton
               onClick={() => handleMenuItemClick({ type: 'OPEN_YEARLY_CHART_MODAL' })}
+              icon={<Icon name="chart" size="medium" className="menu-icon" />}
             >
-              <span className="menu-icon">📈</span>
               年間推移グラフ
-            </button>
+            </MenuButton>
             
-            <button 
-              className="menu-item"
+            <MenuButton
               onClick={() => handleMenuItemClick({ type: 'OPEN_STATISTICS_EXPORT_MODAL' })}
+              icon={<Icon name="download" size="medium" className="menu-icon" />}
             >
-              <span className="menu-icon">🤖</span>
               AI分析用データ出力
-            </button>
+            </MenuButton>
           </>
         );
       
       case 'settings':
         return (
           <>
-            <button 
-              className="menu-item menu-back"
+            <MenuButton
+              className="menu-back"
               onClick={handleBackClick}
+              icon={<Icon name="chevron-left" size="medium" className="menu-icon" />}
             >
-              <span className="menu-icon">←</span>
               戻る
-            </button>
+            </MenuButton>
             
             <hr className="menu-divider" />
             
-            <button 
-              className="menu-item"
+            <MenuButton
               onClick={() => handleMenuItemClick({ type: 'OPEN_THEME_SETTINGS_MODAL' })}
+              icon={<Icon name="settings" size="medium" className="menu-icon" />}
             >
-              <span className="menu-icon">🎨</span>
               テーマ設定
-            </button>
+            </MenuButton>
             
-            <button 
-              className="menu-item help"
+            <MenuButton
+              className="help"
               onClick={() => handleMenuItemClick({ type: 'OPEN_USER_GUIDE_MODAL' })}
+              icon={<Icon name="info" size="medium" className="menu-icon" />}
             >
-              <span className="menu-icon">❓</span>
               使い方ガイド
-            </button>
+            </MenuButton>
           </>
         );
       
       case 'legal':
         return (
           <>
-            <button 
-              className="menu-item menu-back"
+            <MenuButton
+              className="menu-back"
               onClick={handleBackClick}
+              icon={<Icon name="chevron-left" size="medium" className="menu-icon" />}
             >
-              <span className="menu-icon">←</span>
               戻る
-            </button>
+            </MenuButton>
             
             <hr className="menu-divider" />
             
-            <button 
-              className="menu-item info"
+            <MenuButton
+              className="info"
               onClick={() => handleMenuItemClick({ type: 'OPEN_TERMS_MODAL' })}
+              icon={<Icon name="info" size="medium" className="menu-icon" />}
             >
-              <span className="menu-icon">📄</span>
               利用規約
-            </button>
-            
-            <button 
-              className="menu-item info"
+            </MenuButton>
+
+            <MenuButton
+              className="info"
               onClick={() => handleMenuItemClick({ type: 'OPEN_PRIVACY_MODAL' })}
+              icon={<Icon name="lock" size="medium" className="menu-icon" />}
             >
-              <span className="menu-icon">🔒</span>
               プライバシーポリシー
-            </button>
-            
-            <button 
-              className="menu-item info"
+            </MenuButton>
+
+            <MenuButton
+              className="info"
               onClick={() => handleMenuItemClick({ type: 'OPEN_DISCLAIMER_MODAL' })}
+              icon={<Icon name="warning" size="medium" className="menu-icon" />}
             >
-              <span className="menu-icon">⚠️</span>
               免責事項
-            </button>
+            </MenuButton>
           </>
         );
       
@@ -253,13 +257,15 @@ export function Header({ onAction }: HeaderProps) {
         <h1>利益カレンダー</h1>
         
         <div className="header-menu">
-          <button 
+          <Button
             className="menu-toggle"
             onClick={toggleMenu}
             aria-label="メニューを開く"
-          >
-            ☰
-          </button>
+            variant="ghost"
+            size="small"
+            icon={<Icon name="menu" size="medium" />}
+            iconOnly
+          />
           
           {isMenuOpen && (
             <div className="menu-dropdown">

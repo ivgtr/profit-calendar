@@ -19,48 +19,40 @@
   font-size: var(--font-size-2xl);
 }
 
-.nav-button {
+.calendar-nav-button {
   background: var(--bg-primary);
   color: var(--accent-primary);
   border: 2px solid var(--accent-primary);
-  border-radius: 8px;
-  width: 40px;
-  height: 40px;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
   font-size: var(--font-size-lg);
-  font-weight: bold;
-  cursor: pointer;
+  font-weight: 600;
   transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   box-shadow: var(--shadow-primary);
+  padding: 0;
 }
 
-.nav-button:hover {
+.calendar-nav-button:hover:not(:disabled) {
   background: var(--accent-primary);
   color: var(--text-inverse);
   transform: translateY(-2px) scale(1.05);
   box-shadow: var(--shadow-secondary);
 }
 
-.nav-button:active {
-  transform: translateY(0) scale(0.95);
-  box-shadow: var(--shadow-primary);
-}
-
 .today-button {
-  padding: 8px 16px;
+  padding: 0 var(--spacing-md);
   border: 2px solid var(--accent-secondary);
   background: var(--bg-primary);
   color: var(--accent-secondary);
   border-radius: 8px;
-  cursor: pointer;
   transition: all 0.3s ease;
   font-weight: 600;
   box-shadow: var(--shadow-primary);
 }
 
-.today-button:hover {
+.today-button:hover:not(:disabled) {
   background: var(--accent-secondary);
   color: var(--text-inverse);
   transform: translateY(-2px);
@@ -227,14 +219,15 @@
     gap: 15px;
   }
 
-  .nav-button {
+  .calendar-nav-button {
     width: 36px;
     height: 36px;
+    min-width: 36px;
     font-size: var(--font-size-base);
   }
 
   .today-button {
-    padding: 6px 12px;
+    padding: 0 var(--spacing-sm);
     font-size: var(--font-size-sm);
   }
 

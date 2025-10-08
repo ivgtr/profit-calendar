@@ -25,7 +25,8 @@ export type IconName =
   | 'chevron-down'
   | 'search'
   | 'menu'
-  | 'home';
+  | 'home'
+  | 'lock';
 
 export type IconSize = 'small' | 'medium' | 'large' | 'xlarge';
 
@@ -61,6 +62,7 @@ const iconPaths: Record<IconName, string> = {
   search: 'M21 21l-6-6m2-5a7 7 0 1 1-14 0 7 7 0 0 1 14 0z',
   menu: 'M4 6h16M4 12h16M4 18h16',
   home: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 0 0 1 1h3m10-11l2 2m-2-2v10a1 1 0 0 1-1 1h-3m-6 0a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1m-6 0h6',
+  lock: 'M7 11V7a5 5 0 0 1 10 0v4m-9 0h8a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2zm4 4v3',
 };
 
 const sizeMap: Record<IconSize, number> = {

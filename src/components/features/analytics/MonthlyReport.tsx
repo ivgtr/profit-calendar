@@ -7,6 +7,7 @@ import { RiskAnalysisSection } from './MonthlyReport/RiskAnalysisSection';
 import { StockAnalysisSection } from './MonthlyReport/StockAnalysisSection';
 import { TrendAnalysisSection } from './MonthlyReport/TrendAnalysisSection';
 import { Tooltip } from '../../ui/feedback/Tooltip';
+import { Button } from '../../ui/base/Button';
 import './MonthlyReport.css';
 
 interface MonthlyReportProps {
@@ -52,7 +53,9 @@ const MonthlyReport = memo(function MonthlyReport({ currentMonth, refreshTrigger
     return (
       <div className="monthly-report error">
         <p>エラー: {error}</p>
-        <button onClick={() => window.location.reload()}>再試行</button>
+        <Button onClick={() => window.location.reload()} variant="primary" size="medium">
+          再試行
+        </Button>
       </div>
     );
   }
@@ -62,28 +65,32 @@ const MonthlyReport = memo(function MonthlyReport({ currentMonth, refreshTrigger
       <div className="monthly-report">
         <div className="report-header">
           <div className="month-navigation">
-            <button 
-              className="nav-button prev"
+            <Button
+              className="month-nav-button prev"
               onClick={handlePrevMonth}
               aria-label="前の月"
-            >
-              ←
-            </button>
+              variant="secondary"
+              size="small"
+              icon="←"
+              iconOnly
+            />
             <h2 className="report-title">
               {formatMonthYear(reportMonth)}の取引レポート
             </h2>
-            <button 
-              className="nav-button next"
+            <Button
+              className="month-nav-button next"
               onClick={handleNextMonth}
               aria-label="次の月"
-            >
-              →
-            </button>
+              variant="secondary"
+              size="small"
+              icon="→"
+              iconOnly
+            />
           </div>
           {reportMonth.getTime() !== currentMonth.getTime() && (
-            <button onClick={resetToCurrentMonth} className="current-month-button">
+            <Button onClick={resetToCurrentMonth} className="current-month-button" variant="outline" size="small">
               現在の月に戻る
-            </button>
+            </Button>
           )}
         </div>
         
@@ -98,28 +105,32 @@ const MonthlyReport = memo(function MonthlyReport({ currentMonth, refreshTrigger
     <div className="monthly-report">
       <div className="report-header">
         <div className="month-navigation">
-          <button 
-            className="nav-button prev"
+          <Button
+            className="month-nav-button prev"
             onClick={handlePrevMonth}
             aria-label="前の月"
-          >
-            ←
-          </button>
+            variant="secondary"
+            size="small"
+            icon="←"
+            iconOnly
+          />
           <h2 className="report-title">
             {formatMonthYear(reportMonth)}の取引レポート
           </h2>
-          <button 
-            className="nav-button next"
+          <Button
+            className="month-nav-button next"
             onClick={handleNextMonth}
             aria-label="次の月"
-          >
-            →
-          </button>
+            variant="secondary"
+            size="small"
+            icon="→"
+            iconOnly
+          />
         </div>
         {reportMonth.getTime() !== currentMonth.getTime() && (
-          <button onClick={resetToCurrentMonth} className="current-month-button">
+          <Button onClick={resetToCurrentMonth} className="current-month-button" variant="outline" size="small">
             現在の月に戻る
-          </button>
+          </Button>
         )}
       </div>
 

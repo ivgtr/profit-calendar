@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useCallback } from 'react';
 import { Toast, ToastMessage, ToastType } from '../components/ui/feedback/Toast';
 import { ConfirmDialog } from '../components/ui/feedback/ConfirmDialog';
 import { Modal } from '../components/ui/feedback/Modal';
+import { Button } from '../components/ui/base/Button';
 
 interface ConfirmOptions {
   title?: string;
@@ -122,21 +123,9 @@ export const UIProvider: React.FC<{ children: React.ReactNode }> = ({ children }
             <p style={{ margin: 0, lineHeight: 1.5 }}>{alertDialog.options.message}</p>
           </div>
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <button
-              onClick={handleAlertClose}
-              style={{
-                padding: '0.5rem 1.25rem',
-                borderRadius: '6px',
-                fontSize: '0.95rem',
-                fontWeight: 500,
-                cursor: 'pointer',
-                border: 'none',
-                backgroundColor: 'var(--color-primary, #007bff)',
-                color: 'white'
-              }}
-            >
+            <Button onClick={handleAlertClose} variant="primary">
               {alertDialog.options.confirmText || 'OK'}
-            </button>
+            </Button>
           </div>
         </Modal>
       )}

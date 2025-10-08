@@ -13,6 +13,7 @@ import { Bar } from 'react-chartjs-2';
 import { Database } from '../../../services/database';
 import { DatabaseProps } from '../../../types/Common';
 import { StockTop3 } from './StockTop3';
+import { Button, ButtonProps } from '../../../components/ui/base/Button';
 import './YearlyChart.css';
 
 // Chart.jsのコンポーネントを登録
@@ -30,6 +31,18 @@ interface YearlyChartProps extends Omit<DatabaseProps, 'databaseService'> {
 }
 
 type PeriodType = '7days' | '30days' | '12months';
+
+type PeriodButtonProps = ButtonProps & { isActive: boolean };
+
+const PeriodButton = ({ isActive, className = '', ...props }: PeriodButtonProps) => (
+  <Button
+    type="button"
+    variant="secondary"
+    size="medium"
+    className={`period-button ${isActive ? 'active' : ''} ${className}`.trim()}
+    {...props}
+  />
+);
 
 interface ChartDataItem {
   label: string;
@@ -229,24 +242,24 @@ const YearlyChart = memo(function YearlyChart({ databaseService, isDbReady }: Ye
         </div>
 
         <div className="period-selector">
-          <button
-            className={`period-button ${periodType === '7days' ? 'active' : ''}`}
+          <PeriodButton
+            isActive={periodType === '7days'}
             onClick={() => handlePeriodChange('7days')}
           >
             過去7日間
-          </button>
-          <button
-            className={`period-button ${periodType === '30days' ? 'active' : ''}`}
+          </PeriodButton>
+          <PeriodButton
+            isActive={periodType === '30days'}
             onClick={() => handlePeriodChange('30days')}
           >
             過去30日間
-          </button>
-          <button
-            className={`period-button ${periodType === '12months' ? 'active' : ''}`}
+          </PeriodButton>
+          <PeriodButton
+            isActive={periodType === '12months'}
             onClick={() => handlePeriodChange('12months')}
           >
             過去12か月間
-          </button>
+          </PeriodButton>
         </div>
       </div>
 
@@ -307,12 +320,24 @@ const YearlyChart = memo(function YearlyChart({ databaseService, isDbReady }: Ye
 
       {periodType === '12months' && (
         <div className="year-navigation">
-          <button onClick={() => setCurrentYear(prev => prev - 1)} className="year-nav-button">
+          <Button
+            type="button"
+            variant="ghost"
+            size="medium"
+            onClick={() => setCurrentYear(prev => prev - 1)}
+            className="year-nav-button"
+          >
             ← {currentYear - 1}年
-          </button>
-          <button onClick={() => setCurrentYear(prev => prev + 1)} className="year-nav-button">
+          </Button>
+          <Button
+            type="button"
+            variant="ghost"
+            size="medium"
+            onClick={() => setCurrentYear(prev => prev + 1)}
+            className="year-nav-button"
+          >
             {currentYear + 1}年 →
-          </button>
+          </Button>
         </div>
       )}
     </div>

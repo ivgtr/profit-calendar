@@ -1,15 +1,19 @@
+import { useEffect } from 'react';
 import { DataUpdateHandler } from '../../../types/Common';
 import { ImportResult } from '../../../types/Trade';
 import { useCSVImporter } from '../../../hooks/useCSVImporter';
 import { Modal } from '../../ui/feedback/Modal';
+import { Button } from '../../ui/base/Button';
 import { formatStockDisplay } from '../../../utils/stockUtils';
 import './CSVImporter.css';
 
 interface CSVImporterProps {
   onImportComplete?: DataUpdateHandler<ImportResult>;
+  initialFile?: File;
+  onInitialFileHandled?: () => void;
 }
 
-export function CSVImporter({ onImportComplete }: CSVImporterProps) {
+export function CSVImporter({ onImportComplete, initialFile, onInitialFileHandled }: CSVImporterProps) {
   const {
     isDragging,
     isImporting,
@@ -22,7 +26,34 @@ export function CSVImporter({ onImportComplete }: CSVImporterProps) {
     handleFileSelect,
     handleApproveImport,
     handleRejectImport,
+    handleProcessFile,
   } = useCSVImporter({ onImportComplete });
+
+  useEffect(() => {
+    if (!initialFile) {
+      return;
+    }
+
+    let isMounted = true;
+
+    const process = async () => {
+      await handleProcessFile(initialFile);
+      if (isMounted) {
+        onInitialFileHandled?.();
+      }
+    };
+
+    process().catch((error) => {
+      console.error('Failed to process initial CSV file:', error);
+      if (isMounted) {
+        onInitialFileHandled?.();
+      }
+    });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [initialFile, handleProcessFile, onInitialFileHandled]);
 
   return (
     <div className="csv-importer">
@@ -38,6 +69,12 @@ export function CSVImporter({ onImportComplete }: CSVImporterProps) {
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
+        {isImporting && !showPreview && (
+          <div className="drop-zone-loading">
+            <div className="drop-zone-loading__spinner" />
+            <p className="drop-zone-loading__text">CSVを解析しています...</p>
+          </div>
+        )}
         <div className="drop-zone-content">
           <div className="upload-icon">📊</div>
           <h3>CSVファイルをインポート</h3>
@@ -124,20 +161,25 @@ export function CSVImporter({ onImportComplete }: CSVImporterProps) {
           </div>
 
           <div className="preview-actions">
-            <button 
-              onClick={handleRejectImport} 
+            <Button
+              onClick={handleRejectImport}
               disabled={isImporting}
               className="reject-button"
+              variant="ghost"
+              size="medium"
             >
               キャンセル
-            </button>
-            <button 
-              onClick={handleApproveImport} 
+            </Button>
+            <Button
+              onClick={handleApproveImport}
               disabled={isImporting}
               className="confirm-button"
+              variant="primary"
+              size="medium"
+              loading={isImporting}
             >
               {isImporting ? 'インポート中...' : `${previewTrades.length}件の取引をインポート`}
-            </button>
+            </Button>
           </div>
         </div>
       </Modal>
