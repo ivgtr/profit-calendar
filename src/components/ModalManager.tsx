@@ -97,11 +97,11 @@ export const ModalManager: React.FC<ModalManagerProps> = ({
         />
       </Modal>
 
-      {/* 年次チャートモーダル */}
+      {/* 収益チャートモーダル */}
       <Modal
         isOpen={isModalOpen('yearlyChart')}
         onClose={closeModal}
-        title="年間収益チャート"
+        title="収益チャート"
         size="large"
       >
         <YearlyChart 

@@ -4,6 +4,7 @@ import { ExportOptions, AIPromptTemplate, StatisticsExport as StatisticsData } f
 import { AI_PROMPTS, PROMPT_DESCRIPTIONS } from '../../constants/aiPrompts';
 import { useUI } from '../../contexts/UIContext';
 import { Button } from '../ui/base/Button';
+import { formatDateKey } from '../../utils/dateUtils';
 import './StatisticsExport.css';
 
 export const StatisticsExport: React.FC = () => {
@@ -12,8 +13,8 @@ export const StatisticsExport: React.FC = () => {
 
   const [dateRange, setDateRange] = useState<ExportOptions['dateRange']>('all');
   const [customRange, setCustomRange] = useState({
-    start: new Date().toISOString().split('T')[0],
-    end: new Date().toISOString().split('T')[0]
+    start: formatDateKey(new Date()),
+    end: formatDateKey(new Date())
   });
   
   const [exportOptions, setExportOptions] = useState<Omit<ExportOptions, 'dateRange' | 'customRange'>>({

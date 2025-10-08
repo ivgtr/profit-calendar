@@ -1,5 +1,6 @@
 import { db } from './database';
 import { Trade } from '../types/Trade';
+import { formatDateKey } from '../utils/dateUtils';
 import {
   StatisticsExport,
   ExportOptions,
@@ -108,7 +109,7 @@ export class StatisticsService {
 
   private getDateRange(trades: Trade[]): { start: string; end: string } {
     if (trades.length === 0) {
-      const today = new Date().toISOString().split('T')[0];
+      const today = formatDateKey(new Date());
       return { start: today, end: today };
     }
 
@@ -117,8 +118,8 @@ export class StatisticsService {
     const maxDate = new Date(Math.max(...dates));
 
     return {
-      start: minDate.toISOString().split('T')[0],
-      end: maxDate.toISOString().split('T')[0]
+      start: formatDateKey(minDate),
+      end: formatDateKey(maxDate)
     };
   }
 
@@ -387,13 +388,13 @@ export class StatisticsService {
         riskContribution: totalRisk > 0 ? (stockRisk / totalRisk) * 100 : 0,
         bestTrade: mostProfitable 
           ? {
-              date: mostProfitable.date.toISOString().split('T')[0],
+              date: formatDateKey(mostProfitable.date),
               profit: mostProfitable.realizedProfitLoss
             }
           : { date: '', profit: 0 },
         worstTrade: worstTrade
           ? {
-              date: worstTrade.date.toISOString().split('T')[0],
+              date: formatDateKey(worstTrade.date),
               loss: worstTrade.realizedProfitLoss
             }
           : { date: '', loss: 0 }
@@ -607,7 +608,7 @@ export class StatisticsService {
       // 日次データの計算
       const dailyProfits = new Map<string, { profit: number; trades: number }>();
       monthTrades.forEach(trade => {
-        const dateKey = trade.date.toISOString().split('T')[0];
+        const dateKey = formatDateKey(trade.date);
         const current = dailyProfits.get(dateKey) || { profit: 0, trades: 0 };
         dailyProfits.set(dateKey, {
           profit: current.profit + trade.realizedProfitLoss,
@@ -685,7 +686,7 @@ export class StatisticsService {
     const dailyProfits = new Map<string, number>();
     
     trades.forEach(trade => {
-      const dateKey = trade.date.toISOString().split('T')[0];
+      const dateKey = formatDateKey(trade.date);
       dailyProfits.set(dateKey, (dailyProfits.get(dateKey) || 0) + trade.realizedProfitLoss);
     });
 
@@ -696,7 +697,7 @@ export class StatisticsService {
     const dailyTrades = new Map<string, Trade[]>();
     
     trades.forEach(trade => {
-      const dateKey = trade.date.toISOString().split('T')[0];
+      const dateKey = formatDateKey(trade.date);
       if (!dailyTrades.has(dateKey)) {
         dailyTrades.set(dateKey, []);
       }
@@ -713,7 +714,7 @@ export class StatisticsService {
     const dailyTrades = new Map<string, number>();
     
     trades.forEach(trade => {
-      const dateKey = trade.date.toISOString().split('T')[0];
+      const dateKey = formatDateKey(trade.date);
       dailyTrades.set(dateKey, (dailyTrades.get(dateKey) || 0) + 1);
     });
 

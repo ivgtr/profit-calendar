@@ -1,5 +1,6 @@
 import { Trade } from '../types/Trade';
 import { ImportHistory, ImportTradeRelation } from '../types/ImportHistory';
+import { formatDateKey } from '../utils/dateUtils';
 
 const DB_NAME = 'ProfitCalendarDB';
 const DB_VERSION = 2;
@@ -313,7 +314,7 @@ class Database {
 
     // 全ての日付を初期化
     for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
-      const dateKey = d.toISOString().split('T')[0];
+      const dateKey = formatDateKey(d);
       dailyMap.set(dateKey, {
         date: new Date(d),
         totalProfit: 0,
@@ -325,7 +326,7 @@ class Database {
 
     // 取引データを集計
     trades.forEach(trade => {
-      const dateKey = trade.date.toISOString().split('T')[0];
+      const dateKey = formatDateKey(trade.date);
       const dayData = dailyMap.get(dateKey);
       
       if (dayData) {
@@ -339,6 +340,85 @@ class Database {
           dayData.tradeCount++;
         }
       }
+    });
+
+    return Array.from(dailyMap.values()).sort((a, b) => a.date.getTime() - b.date.getTime());
+  }
+
+  // 取引が存在する直近の日別収益データを取得
+  async getRecentDailyProfits(daysWithData: number): Promise<{
+    date: Date;
+    totalProfit: number;
+    spotProfit: number;
+    marginProfit: number;
+    tradeCount: number;
+  }[]> {
+    if (!this.db) {
+      throw new Error('データベースが初期化されていません');
+    }
+
+    const db = this.getDB();
+    const transaction = db.transaction([STORES.TRADES], 'readonly');
+    const store = transaction.objectStore(STORES.TRADES);
+    const index = store.index('date');
+
+    const dailyMap = new Map<string, {
+      date: Date;
+      totalProfit: number;
+      spotProfit: number;
+      marginProfit: number;
+      tradeCount: number;
+    }>();
+
+    await new Promise<void>((resolve, reject) => {
+      const request = index.openCursor(null, 'prev');
+
+      request.onsuccess = (event) => {
+        const cursor = (event.target as IDBRequest<IDBCursorWithValue>).result as IDBCursorWithValue | null;
+
+        if (!cursor) {
+          resolve();
+          return;
+        }
+
+        const trade = cursor.value as Trade;
+        const tradeDate = new Date(trade.date);
+        tradeDate.setHours(0, 0, 0, 0);
+        const dateKey = formatDateKey(tradeDate);
+
+        let dayData = dailyMap.get(dateKey);
+
+        if (!dayData) {
+          if (dailyMap.size >= daysWithData) {
+            resolve();
+            return;
+          }
+
+          dayData = {
+            date: new Date(tradeDate),
+            totalProfit: 0,
+            spotProfit: 0,
+            marginProfit: 0,
+            tradeCount: 0,
+          };
+
+          dailyMap.set(dateKey, dayData);
+        }
+
+        if (trade.tradeType && ['売却', '現物売'].includes(trade.tradeType)) {
+          dayData.spotProfit += trade.realizedProfitLoss;
+          dayData.totalProfit += trade.realizedProfitLoss;
+          dayData.tradeCount++;
+        } else if (trade.tradeType && ['返済売', '返済買'].includes(trade.tradeType)) {
+          dayData.marginProfit += trade.realizedProfitLoss;
+          dayData.totalProfit += trade.realizedProfitLoss;
+          dayData.tradeCount++;
+        }
+
+        cursor.continue();
+      };
+
+      request.onerror = () => reject(new Error('日別収益の取得に失敗しました'));
     });
 
     return Array.from(dailyMap.values()).sort((a, b) => a.date.getTime() - b.date.getTime());

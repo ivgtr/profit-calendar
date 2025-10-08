@@ -165,7 +165,7 @@ export function Header({ onAction }: HeaderProps) {
               onClick={() => handleMenuItemClick({ type: 'OPEN_YEARLY_CHART_MODAL' })}
               icon={<Icon name="chart" size="medium" className="menu-icon" />}
             >
-              年間推移グラフ
+              収益チャート
             </MenuButton>
             
             <MenuButton

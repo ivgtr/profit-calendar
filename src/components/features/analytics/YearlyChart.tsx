@@ -84,20 +84,16 @@ const YearlyChart = memo(function YearlyChart({ databaseService, isDbReady }: Ye
       } else {
         // 日別データ
         const days = periodType === '7days' ? 7 : 30;
-        const dailyData = await databaseService.getDailyProfits(days);
-        const items: ChartDataItem[] = dailyData.map((d: {
-          date: Date;
-          totalProfit: number;
-          spotProfit: number;
-          marginProfit: number;
-          tradeCount: number;
-        }) => ({
-          label: `${d.date.getMonth() + 1}/${d.date.getDate()}`,
-          totalProfit: d.totalProfit,
-          spotProfit: d.spotProfit,
-          marginProfit: d.marginProfit,
-          tradeCount: d.tradeCount
-        }));
+        const dailyData = await databaseService.getRecentDailyProfits(days);
+        const items: ChartDataItem[] = dailyData
+          .filter(d => d.tradeCount > 0) // 念のため無取引日は除外
+          .map(d => ({
+            label: `${d.date.getMonth() + 1}/${d.date.getDate()}`,
+            totalProfit: d.totalProfit,
+            spotProfit: d.spotProfit,
+            marginProfit: d.marginProfit,
+            tradeCount: d.tradeCount
+          }));
         setChartDataItems(items);
       }
     } catch (error) {
@@ -237,8 +233,7 @@ const YearlyChart = memo(function YearlyChart({ databaseService, isDbReady }: Ye
     <div className="yearly-chart-container">
       <div className="chart-header-section">
         <div className="chart-title">
-          <h2>チャート</h2>
-          <span className="period-label">{getPeriodLabel()}</span>
+          <h2 className="period-label">{getPeriodLabel()}</h2>
         </div>
 
         <div className="period-selector">
@@ -258,7 +253,7 @@ const YearlyChart = memo(function YearlyChart({ databaseService, isDbReady }: Ye
             isActive={periodType === '12months'}
             onClick={() => handlePeriodChange('12months')}
           >
-            過去12か月間
+            {currentYear}年
           </PeriodButton>
         </div>
       </div>

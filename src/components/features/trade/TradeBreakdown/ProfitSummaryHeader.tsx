@@ -32,7 +32,7 @@ export function ProfitSummaryHeader({
           {totalProfit >= 0 ? '+' : ''}
           {formatCurrency(totalProfit)}円
         </span>
-        <span className="trade-count">({tradeCount}件)</span>
+        <span className="trade-count">{tradeCount}件</span>
       </div>
     </div>
   );
