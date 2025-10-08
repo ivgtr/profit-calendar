@@ -32,8 +32,13 @@
   font-size: var(--font-size-2xl);
   width: 44px;
   height: 44px;
-  border-radius: 50%;
   padding: 0;
+}
+
+.menu-toggle:focus-visible {
+  outline: 3px solid rgba(255, 255, 255, 0.6);
+  outline-offset: 2px;
+  background-color: rgba(255, 255, 255, 0.15);
 }
 
 .menu-toggle:hover:not(:disabled) {

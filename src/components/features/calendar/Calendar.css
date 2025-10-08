@@ -23,6 +23,8 @@
   width: 44px;
   height: 44px;
   min-width: 44px;
+  min-height: 44px;
+  aspect-ratio: 1 / 1;
   font-size: var(--font-size-lg);
   font-weight: 600;
   transition: all 0.3s ease;
@@ -30,6 +32,12 @@
   padding: 0;
   flex: 0 0 auto;
   align-self: center;
+}
+
+.calendar-nav-button:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--accent-primary) 60%, transparent);
+  outline-offset: 2px;
+  box-shadow: var(--shadow-secondary);
 }
 
 .calendar-nav-button:hover:not(:disabled) {
@@ -54,6 +62,12 @@
   background: var(--accent-secondary);
   color: var(--text-inverse);
   transform: translateY(-2px);
+  box-shadow: var(--shadow-secondary);
+}
+
+.today-button:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--accent-secondary) 60%, transparent);
+  outline-offset: 3px;
   box-shadow: var(--shadow-secondary);
 }
 
@@ -217,6 +231,8 @@
     width: 36px;
     height: 36px;
     min-width: 36px;
+    min-height: 36px;
+    aspect-ratio: 1 / 1;
     font-size: var(--font-size-base);
   }
 
