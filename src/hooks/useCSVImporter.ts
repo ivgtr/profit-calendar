@@ -6,6 +6,21 @@ import { ImportHistory, ImportTradeRelation } from '../types/ImportHistory';
 import { v4 as uuidv4 } from 'uuid';
 import { useUI } from '../contexts/UIContext';
 
+const MIN_PROCESS_DELAY_MS = 250;
+
+function sleep(ms: number) {
+  return new Promise<void>((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
+async function ensureMinimumProcessingTime(startTime: number) {
+  const elapsed = Date.now() - startTime;
+  if (elapsed < MIN_PROCESS_DELAY_MS) {
+    await sleep(MIN_PROCESS_DELAY_MS - elapsed);
+  }
+}
+
 export interface UseCSVImporterProps {
   onImportComplete?: (result: ImportResult) => void;
 }
@@ -21,6 +36,7 @@ export function useCSVImporter({ onImportComplete }: UseCSVImporterProps) {
   const [currentFileName, setCurrentFileName] = useState<string>('');
 
   const processFile = useCallback(async (file: File) => {
+    const processStartTime = Date.now();
     setIsImporting(true);
     setImportResult(null);
     setCurrentFileName(file.name);
@@ -28,6 +44,7 @@ export function useCSVImporter({ onImportComplete }: UseCSVImporterProps) {
     try {
       const text = await readFileAsText(file);
       const { trades, summary, result } = await parseCSV(text);
+      await ensureMinimumProcessingTime(processStartTime);
       
       if (result.success && trades.length > 0) {
         // プレビュー表示
@@ -41,6 +58,7 @@ export function useCSVImporter({ onImportComplete }: UseCSVImporterProps) {
         onImportComplete?.(result);
       }
     } catch (error) {
+      await ensureMinimumProcessingTime(processStartTime);
       const errorResult: ImportResult = {
         success: false,
         totalRecords: 0,
@@ -200,6 +218,7 @@ export function useCSVImporter({ onImportComplete }: UseCSVImporterProps) {
     handleFileSelect,
     handleApproveImport,
     handleRejectImport,
+    handleProcessFile: processFile,
     resetImporter,
   };
 }

@@ -1,5 +1,9 @@
 import React, { useEffect } from 'react';
+import { Button } from '../base/Button';
 import './Modal.css';
+
+let openModalCount = 0;
+let previousBodyOverflow: string | null = null;
 
 export type ModalSize = 'small' | 'medium' | 'large' | 'xlarge' | 'fullscreen';
 
@@ -43,18 +47,34 @@ export const Modal: React.FC<ModalProps> = ({
 
     if (isOpen) {
       document.addEventListener('keydown', handleEscape);
-      document.body.style.overflow = 'hidden';
+      openModalCount += 1;
+      if (openModalCount === 1) {
+        previousBodyOverflow = document.body.style.overflow;
+        document.body.style.overflow = 'hidden';
+      }
       
       // フォーカス管理
       const modalElement = document.querySelector('.modal-content') as HTMLElement;
       if (modalElement) {
         modalElement.focus();
       }
+
+      return () => {
+        document.removeEventListener('keydown', handleEscape);
+        openModalCount = Math.max(openModalCount - 1, 0);
+        if (openModalCount === 0) {
+          document.body.style.overflow = previousBodyOverflow ?? '';
+          previousBodyOverflow = null;
+        }
+      };
     }
 
     return () => {
       document.removeEventListener('keydown', handleEscape);
-      document.body.style.overflow = '';
+      if (!isOpen && openModalCount === 0) {
+        document.body.style.overflow = previousBodyOverflow ?? '';
+        previousBodyOverflow = null;
+      }
     };
   }, [isOpen, onClose, closeOnEscape, preventEscapeWhenEditing]);
 
@@ -83,14 +103,15 @@ export const Modal: React.FC<ModalProps> = ({
           <div className="modal-header">
             {title && <h2 className="modal-title">{title}</h2>}
             {showCloseButton && (
-              <button
+              <Button
                 className="modal-close-button"
                 onClick={onClose}
                 aria-label="モーダルを閉じる"
-                type="button"
-              >
-                ×
-              </button>
+                icon="×"
+                iconOnly
+                size="small"
+                variant="ghost"
+              />
             )}
           </div>
         )}

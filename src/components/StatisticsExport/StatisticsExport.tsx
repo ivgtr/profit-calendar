@@ -3,6 +3,7 @@ import { StatisticsService } from '../../services/statisticsService';
 import { ExportOptions, AIPromptTemplate, StatisticsExport as StatisticsData } from '../../types/statistics';
 import { AI_PROMPTS, PROMPT_DESCRIPTIONS } from '../../constants/aiPrompts';
 import { useUI } from '../../contexts/UIContext';
+import { Button } from '../ui/base/Button';
 import './StatisticsExport.css';
 
 export const StatisticsExport: React.FC = () => {
@@ -247,22 +248,26 @@ export const StatisticsExport: React.FC = () => {
       <div className="step-section">
         <h3>Step 1: 統計データファイルの生成</h3>
         <div className="step-actions">
-          <button
+          <Button
             onClick={handleGeneratePreview}
             disabled={isExporting}
-            className="btn btn-preview"
+            className="stats-button stats-button--preview"
+            variant="secondary"
+            size="large"
+            icon="👁️"
           >
-            <span className="btn-icon">👁️</span>
             {isExporting ? '生成中...' : 'データを確認'}
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={handleDownloadJSON}
             disabled={isExporting}
-            className="btn btn-download"
+            className="stats-button stats-button--download"
+            variant="primary"
+            size="large"
+            icon="💾"
           >
-            <span className="btn-icon">💾</span>
             {isExporting ? 'ダウンロード中...' : 'JSONファイルをダウンロード'}
-          </button>
+          </Button>
         </div>
         
         {showPreview && previewData && (
@@ -305,13 +310,15 @@ export const StatisticsExport: React.FC = () => {
         </div>
         
         <div className="prompt-action">
-          <button
+          <Button
             onClick={handleCopyPrompt}
-            className="btn btn-copy-prompt"
+            className="stats-button stats-button--copy"
+            variant="secondary"
+            size="large"
+            icon="📋"
           >
-            <span className="btn-icon">📋</span>
             分析プロンプトをコピー
-          </button>
+          </Button>
         </div>
       </div>
 

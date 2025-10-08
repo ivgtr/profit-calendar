@@ -9,7 +9,10 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   size?: ButtonSize;
   loading?: boolean;
   icon?: React.ReactNode;
-  children: React.ReactNode;
+  iconPosition?: 'left' | 'right';
+  fullWidth?: boolean;
+  iconOnly?: boolean;
+  children?: React.ReactNode;
 }
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -18,6 +21,9 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     size = 'medium', 
     loading = false,
     icon,
+    iconPosition = 'left',
+    fullWidth = false,
+    iconOnly = false,
     children, 
     className = '', 
     disabled,
@@ -27,7 +33,10 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const variantClass = `btn--${variant}`;
     const sizeClass = `btn--${size}`;
     const loadingClass = loading ? 'btn--loading' : '';
-    const classes = [baseClass, variantClass, sizeClass, loadingClass, className]
+    const fullWidthClass = fullWidth ? 'btn--full' : '';
+    const iconOnlyClass = iconOnly ? 'btn--icon-only' : '';
+
+    const classes = [baseClass, variantClass, sizeClass, loadingClass, fullWidthClass, iconOnlyClass, className]
       .filter(Boolean)
       .join(' ');
 
@@ -39,8 +48,15 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {...props}
       >
         {loading && <span className="btn__spinner" />}
-        {icon && !loading && <span className="btn__icon">{icon}</span>}
-        <span className="btn__text">{children}</span>
+        {icon && !loading && iconPosition === 'left' && (
+          <span className="btn__icon btn__icon--left">{icon}</span>
+        )}
+        {children && (
+          <span className="btn__text">{children}</span>
+        )}
+        {icon && !loading && iconPosition === 'right' && (
+          <span className="btn__icon btn__icon--right">{icon}</span>
+        )}
       </button>
     );
   }

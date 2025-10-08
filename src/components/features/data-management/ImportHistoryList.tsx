@@ -3,6 +3,7 @@ import { db } from '../../../services/database';
 import { ImportHistory } from '../../../types/ImportHistory';
 import { formatCurrency } from '../../../utils/formatUtils';
 import { useUI } from '../../../contexts/UIContext';
+import { Button } from '../../ui/base/Button';
 import './ImportHistoryList.css';
 
 interface ImportHistoryListProps {
@@ -203,12 +204,14 @@ export function ImportHistoryList({ onHistoryUpdate }: ImportHistoryListProps) {
 
               {history.status === 'active' && (
                 <div className="actions">
-                  <button 
+                  <Button
                     onClick={() => handleReject(history)}
                     className="reject-button"
+                    variant="danger"
+                    size="medium"
                   >
                     このインポートを取り消す
-                  </button>
+                  </Button>
                 </div>
               )}
             </div>

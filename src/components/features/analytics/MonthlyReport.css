@@ -34,59 +34,30 @@
   min-width: 280px;
 }
 
-.nav-button {
-  background: var(--bg-primary);
-  color: var(--accent-primary);
-  border: 2px solid var(--accent-primary);
+.month-nav-button {
   border-radius: 50%;
-  width: 45px;
-  height: 45px;
-  font-size: var(--font-size-xl);
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  padding: 0;
   box-shadow: var(--shadow-primary);
+  font-size: var(--font-size-lg);
+  font-weight: 600;
 }
 
-.nav-button:hover {
-  background: var(--accent-primary);
-  color: var(--text-inverse);
+.month-nav-button:hover:not(:disabled) {
   transform: translateY(-2px) scale(1.05);
   box-shadow: var(--shadow-secondary);
 }
 
-.nav-button:active {
-  transform: translateY(0) scale(0.95);
-  box-shadow: var(--shadow-primary);
-}
-
 .current-month-button {
-  background: var(--bg-primary);
-  color: var(--accent-primary);
-  border: 1px solid var(--border-primary);
-  border-radius: 6px;
-  padding: 8px 16px;
-  font-size: var(--font-size-sm);
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
   margin-top: 10px;
   box-shadow: var(--shadow-primary);
 }
 
-.current-month-button:hover {
-  background: var(--accent-primary);
-  color: var(--text-inverse);
+.current-month-button:hover:not(:disabled) {
   transform: translateY(-1px);
   box-shadow: var(--shadow-secondary);
-}
-
-.current-month-button:active {
-  transform: translateY(0);
-  box-shadow: var(--shadow-primary);
 }
 
 .no-data {

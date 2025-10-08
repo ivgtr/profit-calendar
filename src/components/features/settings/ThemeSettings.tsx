@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useTheme } from '../../../hooks/useTheme';
 import { ThemeMode } from '../../../types/Theme';
+import { Button } from '../../ui/base/Button';
 import './ThemeSettings.css';
 
 export function ThemeSettings() {
@@ -26,18 +27,22 @@ export function ThemeSettings() {
       </div>
 
       <div className="theme-tabs">
-        <button
+        <Button
           className={`tab-button ${activeTab === 'mode' ? 'active' : ''}`}
           onClick={() => setActiveTab('mode')}
+          variant={activeTab === 'mode' ? 'primary' : 'secondary'}
+          size="medium"
         >
           テーマモード
-        </button>
-        <button
+        </Button>
+        <Button
           className={`tab-button ${activeTab === 'custom' ? 'active' : ''}`}
           onClick={() => setActiveTab('custom')}
+          variant={activeTab === 'custom' ? 'primary' : 'secondary'}
+          size="medium"
         >
           カスタマイズ
-        </button>
+        </Button>
       </div>
 
       {activeTab === 'mode' && (
@@ -234,13 +239,15 @@ export function ThemeSettings() {
               </div>
             </div>
 
-            <button
+            <Button
               className="reset-button"
               onClick={resetCustomTheme}
               disabled={themeMode !== 'custom'}
+              variant="outline"
+              size="medium"
             >
               デフォルトに戻す
-            </button>
+            </Button>
           </div>
         </div>
       )}

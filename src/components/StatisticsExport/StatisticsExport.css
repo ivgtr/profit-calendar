@@ -440,80 +440,64 @@
   margin-bottom: var(--spacing-sm);
 }
 
-.btn {
-  display: flex;
+.stats-button {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: var(--spacing-sm);
-  padding: var(--spacing-md) var(--spacing-lg);
-  border: none;
+  padding: var(--spacing-sm) var(--spacing-lg);
   border-radius: var(--radius-md);
   font-size: var(--font-md);
   font-weight: 600;
-  cursor: pointer;
-  transition: all var(--transition-fast);
   min-width: 160px;
-  position: relative;
-  overflow: hidden;
+  transition: all var(--transition-fast);
 }
 
-.btn:disabled {
+.stats-button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
   transform: none !important;
+  box-shadow: none !important;
 }
 
-.btn-icon {
+.stats-button .btn__icon {
   font-size: var(--font-lg);
 }
 
-.btn-preview {
+.stats-button--preview {
   background: linear-gradient(135deg, #4f46e5, #6366f1);
   color: white;
   border: none;
 }
 
-.btn-preview:hover:not(:disabled) {
+.stats-button--preview:hover:not(:disabled) {
   background: linear-gradient(135deg, #4338ca, #4f46e5);
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(79, 70, 229, 0.3);
 }
 
-.btn-download {
+.stats-button--download {
   background: linear-gradient(135deg, #059669, #10b981);
   color: white;
   border: none;
 }
 
-.btn-download:hover:not(:disabled) {
+.stats-button--download:hover:not(:disabled) {
   background: linear-gradient(135deg, #047857, #059669);
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(5, 150, 105, 0.3);
 }
 
-.btn-copy-prompt {
+.stats-button--copy {
   background: linear-gradient(135deg, #dc2626, #f87171);
   color: white;
   border: none;
 }
 
-.btn-copy-prompt:hover:not(:disabled) {
+.stats-button--copy:hover:not(:disabled) {
   background: linear-gradient(135deg, #b91c1c, #dc2626);
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(220, 38, 38, 0.3);
-}
-
-.btn-secondary {
-  background: var(--bg-secondary);
-  color: var(--text-primary);
-  border: 2px solid var(--border-color);
-}
-
-.btn-secondary:hover:not(:disabled) {
-  background: var(--bg-primary);
-  border-color: var(--primary);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-sm);
 }
 
 .step-final {
@@ -622,7 +606,7 @@
     flex-direction: column;
   }
 
-  .btn {
+  .stats-button {
     width: 100%;
     min-width: auto;
   }

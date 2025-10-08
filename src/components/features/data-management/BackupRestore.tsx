@@ -1,4 +1,5 @@
 import { useBackupRestore } from '../../../hooks/useBackupRestore';
+import { Button } from '../../ui/base/Button';
 import './BackupRestore.css';
 
 export function BackupRestore() {
@@ -22,27 +23,39 @@ export function BackupRestore() {
     <div className="backup-restore-container">
       <div className="tab-container">
         <div className="tab-buttons">
-          <button 
+          <Button
             className={`tab-button ${activeTab === 'backup' ? 'active' : ''}`}
             onClick={() => setActiveTab('backup')}
             disabled={isLoading}
+            variant={activeTab === 'backup' ? 'primary' : 'secondary'}
+            size="medium"
           >
             📤 バックアップ
-          </button>
-          <button 
+          </Button>
+          <Button
             className={`tab-button ${activeTab === 'restore' ? 'active' : ''}`}
             onClick={() => setActiveTab('restore')}
             disabled={isLoading}
+            variant={activeTab === 'restore' ? 'primary' : 'secondary'}
+            size="medium"
           >
             📥 復元
-          </button>
+          </Button>
         </div>
       </div>
 
       {message && (
         <div className={`message ${message.type}`}>
           <span>{message.text}</span>
-          <button onClick={clearMessage} className="message-close">×</button>
+          <Button
+            onClick={clearMessage}
+            className="message-close"
+            variant="ghost"
+            size="small"
+            icon="×"
+            iconOnly
+            aria-label="通知を閉じる"
+          />
         </div>
       )}
 
@@ -58,13 +71,16 @@ export function BackupRestore() {
               <li>設定情報</li>
             </ul>
           </div>
-            <button 
+            <Button
               className="primary-button"
               onClick={handleExportBackup}
               disabled={isLoading}
+              variant="primary"
+              size="large"
+              loading={isLoading}
             >
-              {isLoading ? '作成中...' : 'バックアップファイルをダウンロード'}
-            </button>
+              バックアップファイルをダウンロード
+            </Button>
 
             <div className="security-warning">
               <h4>⚠️ 重要なセキュリティ警告</h4>
@@ -125,13 +141,16 @@ export function BackupRestore() {
               </div>
             )}
 
-            <button 
+            <Button
               className="primary-button"
               onClick={handleRestoreFromFile}
               disabled={!selectedFile || isLoading}
+              variant="primary"
+              size="large"
+              loading={isLoading}
             >
-              {isLoading ? '復元中...' : 'ファイルから復元'}
-            </button>
+              ファイルから復元
+            </Button>
 
             <h4>URLから復元</h4>
             <div className="url-input-container">
@@ -144,13 +163,16 @@ export function BackupRestore() {
                 className="url-input"
               />
             </div>
-            <button 
+            <Button
               className="primary-button"
               onClick={handleRestoreFromUrl}
               disabled={!restoreUrl.trim() || isLoading}
+              variant="primary"
+              size="large"
+              loading={isLoading}
             >
-              {isLoading ? '復元中...' : 'URLから復元'}
-            </button>
+              URLから復元
+            </Button>
 
             <div className="privacy-warning">
               <h4>🚨 プライバシーに関する重要な注意</h4>
