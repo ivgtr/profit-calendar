@@ -12,6 +12,8 @@ import { useModalManager } from './hooks/useModalManager';
 import { useTradeCRUD } from './hooks/useTradeCRUD';
 import { useTradeHandlers } from './hooks/useTradeHandlers';
 import { UIProvider, useUI } from './contexts/UIContext';
+import { useGlobalCSVImportOverlay } from './hooks/useGlobalCSVImportOverlay';
+import { GlobalDragOverlay } from './components/ui/feedback/GlobalDragOverlay';
 import './styles/App.css';
 
 function AppInner() {
@@ -20,6 +22,7 @@ function AppInner() {
   const [isDbReady, setIsDbReady] = useState(false);
   const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
   const [dataVersion, setDataVersion] = useState(0);
+  const [pendingImportFile, setPendingImportFile] = useState<File | null>(null);
   
   // UIContext hooks
   const { showAlert } = useUI();
@@ -36,6 +39,22 @@ function AppInner() {
   
   // モーダル状態管理（統一化）
   const { openModal, closeModal, isModalOpen } = useModalManager();
+
+  const triggerImportWithFile = useCallback((file: File) => {
+    setPendingImportFile(file);
+    openModal('import');
+  }, [openModal]);
+
+  const handlePendingFileHandled = useCallback(() => {
+    setPendingImportFile(null);
+  }, []);
+
+  const importModalOpen = isModalOpen('import');
+  const { isGlobalDragActive } = useGlobalCSVImportOverlay({
+    isImportModalOpen: importModalOpen,
+    triggerImportWithFile,
+    showAlert,
+  });
 
   // データベースの初期化
   useEffect(() => {
@@ -118,6 +137,12 @@ function AppInner() {
     <div className="app">
       <Header onAction={handleHeaderAction} />
 
+      <GlobalDragOverlay
+        visible={isGlobalDragActive && !importModalOpen}
+        icon="📊"
+        message="CSVファイルをドロップしてインポート"
+      />
+
       <main className="app-main">
         <MonthlyProfit currentMonth={currentMonth} refreshTrigger={dataVersion} isDbReady={isDbReady} />
         
@@ -145,6 +170,8 @@ function AppInner() {
       <ModalManager
         isModalOpen={isModalOpen}
         closeModal={closeModal}
+        pendingImportFile={pendingImportFile}
+        onPendingImportFileHandled={handlePendingFileHandled}
         editingTrade={editingTrade}
         currentMonth={currentMonth}
         refreshTrigger={dataVersion}

@@ -30,6 +30,40 @@ section h2 {
   color: var(--text-primary);
 }
 
+.global-dnd-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  pointer-events: none;
+  backdrop-filter: blur(2px);
+}
+
+.global-dnd-overlay__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 32px 48px;
+  border-radius: 16px;
+  border: 2px dashed var(--accent-primary);
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+  color: var(--text-primary);
+}
+
+.global-dnd-overlay__icon {
+  font-size: 2.5rem;
+}
+
+.global-dnd-overlay__text {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+}
+
 
 .daily-trades-header {
   display: flex;
