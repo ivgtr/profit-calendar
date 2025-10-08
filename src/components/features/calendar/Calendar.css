@@ -8,11 +8,37 @@
   justify-content: center;
   gap: 20px;
   margin-bottom: 20px;
+  position: relative;
 }
 
-.calendar-header h2 {
-  margin: 0;
+.calendar-header__label {
+  border: none;
+  background: none;
+  color: var(--text-primary);
   font-size: var(--font-size-2xl);
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.calendar-header__label:hover,
+.calendar-header__label:focus-visible {
+  background-color: var(--bg-secondary);
+  outline: none;
+}
+
+.calendar__date-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  border: 0;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  overflow: hidden;
 }
 
 .calendar-nav-button {
@@ -90,6 +116,7 @@
   overflow: hidden;
 }
 
+
 .calendar-day {
   background: var(--bg-primary);
   min-height: 120px;
@@ -106,6 +133,10 @@
   justify-content: space-between;
   align-items: center;
   overflow: hidden;
+}
+
+.calendar-day:focus-visible {
+  background: color-mix(in srgb, var(--accent-primary) 15%, var(--bg-primary));
 }
 
 .calendar-day:hover {
