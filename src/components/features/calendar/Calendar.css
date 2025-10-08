@@ -1,8 +1,4 @@
 .calendar {
-  background: var(--bg-primary);
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: var(--shadow-primary);
   position: relative;
 }
 
@@ -32,6 +28,8 @@
   transition: all 0.3s ease;
   box-shadow: var(--shadow-primary);
   padding: 0;
+  flex: 0 0 auto;
+  align-self: center;
 }
 
 .calendar-nav-button:hover:not(:disabled) {
@@ -136,7 +134,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
+  gap: 8px;
   flex: 1;
   justify-content: center;
   width: 100%;
@@ -211,10 +209,6 @@
 }
 
 @media (max-width: 768px) {
-  .calendar {
-    padding: 10px;
-  }
-
   .calendar-header {
     gap: 15px;
   }
@@ -242,13 +236,13 @@
   }
 
   .calendar-day .profit-loss {
-    font-size: var(--font-size-2xs);
+    font-size: var(--font-size-xs);
     line-height: var(--line-height-tight);
   }
 
   .calendar-day .profit-loss.profit,
   .calendar-day .profit-loss.loss {
-    font-size: var(--font-size-2xs);
+    font-size: var(--font-size-xs);
   }
 
   .calendar-day .trade-count {
