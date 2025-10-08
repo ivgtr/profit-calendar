@@ -3,6 +3,7 @@ import { Trade, TradeType, AccountType } from '../../../types/Trade';
 import { DataUpdateHandler, DataDeleteHandler } from '../../../types/Common';
 import { useTradeForm } from '../../../hooks/useTradeForm';
 import { useUI } from '../../../contexts/UIContext';
+import { Button } from '../../ui/base/Button';
 import './TradeForm.css';
 
 interface TradeFormProps {
