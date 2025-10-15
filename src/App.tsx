@@ -155,6 +155,7 @@ function AppInner() {
             onDateSelect={handleDateSelect} 
             onMonthChange={handleMonthChange}
             monthlyTrades={monthlyTrades}
+            onAddTrade={(date) => handleOpenTradeForm(undefined, date)}
             isLoading={isCalendarLoading}
           />
         </section>
