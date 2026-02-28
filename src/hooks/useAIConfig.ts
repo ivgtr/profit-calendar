@@ -27,7 +27,11 @@ export function useAIConfig() {
 
   return {
     config,
-    isConfigured: config !== null && config.apiKey.length > 0,
+    isConfigured:
+      config !== null &&
+      config.apiKey.length > 0 &&
+      config.model.length > 0 &&
+      (config.provider !== 'openai-compatible' || (config.customEndpoint ?? '').length > 0),
     saveConfig,
     clearConfig,
   } as const;

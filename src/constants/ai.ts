@@ -30,6 +30,12 @@ export const AI_PROVIDERS: AIProviderMeta[] = [
     ],
     defaultModel: 'gemini-2.5-flash',
   },
+  {
+    id: 'openai-compatible',
+    name: 'OpenAI互換',
+    models: [],
+    defaultModel: '',
+  },
 ];
 
 export const AI_CONFIG_STORAGE_KEY = 'profit-calendar-ai-config';

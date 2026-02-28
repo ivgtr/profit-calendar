@@ -81,6 +81,27 @@
   border-color: var(--accent-primary);
 }
 
+.ai-settings__custom-model-toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-sm);
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.ai-settings__custom-model-toggle input[type="checkbox"] {
+  accent-color: var(--accent-primary);
+}
+
+.ai-settings__hint {
+  margin: var(--spacing-xs) 0 0;
+  font-size: var(--font-size-xs);
+  color: var(--text-tertiary);
+  line-height: 1.5;
+}
+
 .ai-settings__actions {
   display: flex;
   gap: var(--spacing-sm);
