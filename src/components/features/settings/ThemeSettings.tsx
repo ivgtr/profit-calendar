@@ -22,10 +22,6 @@ export function ThemeSettings() {
 
   return (
     <div className="theme-settings">
-      <div className="theme-header">
-        <h2>テーマ設定</h2>
-      </div>
-
       <div className="theme-tabs">
         <Button
           className={`tab-button ${activeTab === 'mode' ? 'active' : ''}`}

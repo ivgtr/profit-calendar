@@ -10,7 +10,7 @@ export type ModalType =
   | 'bulkDelete'
   | 'monthlyReport'
   | 'yearlyChart'
-  | 'themeSettings'
+  | 'settings'
   | 'userGuide'
   | 'terms'
   | 'privacy'

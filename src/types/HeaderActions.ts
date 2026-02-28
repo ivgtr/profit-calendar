@@ -8,7 +8,7 @@ export type HeaderActionType =
   | 'OPEN_MONTHLY_REPORT_MODAL'
   | 'OPEN_YEARLY_CHART_MODAL'
   | 'OPEN_USER_GUIDE_MODAL'
-  | 'OPEN_THEME_SETTINGS_MODAL'
+  | 'OPEN_SETTINGS_MODAL'
   | 'OPEN_BACKUP_RESTORE_MODAL'
   | 'OPEN_STATISTICS_EXPORT_MODAL'
   | 'OPEN_TERMS_MODAL'
@@ -29,7 +29,7 @@ export const headerActions = {
   openMonthlyReportModal: (): HeaderAction => ({ type: 'OPEN_MONTHLY_REPORT_MODAL' }),
   openYearlyChartModal: (): HeaderAction => ({ type: 'OPEN_YEARLY_CHART_MODAL' }),
   openUserGuideModal: (): HeaderAction => ({ type: 'OPEN_USER_GUIDE_MODAL' }),
-  openThemeSettingsModal: (): HeaderAction => ({ type: 'OPEN_THEME_SETTINGS_MODAL' }),
+  openSettingsModal: (): HeaderAction => ({ type: 'OPEN_SETTINGS_MODAL' }),
   openBackupRestoreModal: (): HeaderAction => ({ type: 'OPEN_BACKUP_RESTORE_MODAL' }),
   openStatisticsExportModal: (): HeaderAction => ({ type: 'OPEN_STATISTICS_EXPORT_MODAL' }),
   openTermsModal: (): HeaderAction => ({ type: 'OPEN_TERMS_MODAL' }),
