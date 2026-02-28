@@ -12,21 +12,51 @@ export function AISettings() {
   const [provider, setProvider] = useState<AIProvider>(config?.provider ?? 'openai');
   const [apiKey, setApiKey] = useState(config?.apiKey ?? '');
   const [model, setModel] = useState(config?.model ?? getProviderMeta('openai').defaultModel);
+  const [customEndpoint, setCustomEndpoint] = useState(config?.customEndpoint ?? '');
+  const [useCustomModel, setUseCustomModel] = useState(() => {
+    if (!config) return false;
+    const meta = getProviderMeta(config.provider);
+    if (meta.models.length === 0) return false;
+    return !meta.models.some((m) => m.id === config.model);
+  });
   const [showKey, setShowKey] = useState(false);
   const [testStatus, setTestStatus] = useState<'idle' | 'testing' | 'success' | 'error'>('idle');
   const [testError, setTestError] = useState('');
 
   const providerMeta = getProviderMeta(provider);
+  const isOpenAICompatible = provider === 'openai-compatible';
+  const hasPresetModels = providerMeta.models.length > 0;
 
   const handleProviderChange = (newProvider: AIProvider) => {
     setProvider(newProvider);
     const meta = getProviderMeta(newProvider);
-    setModel(meta.defaultModel);
+    if (meta.models.length > 0) {
+      setModel(meta.defaultModel);
+      setUseCustomModel(false);
+    } else {
+      setModel('');
+      setUseCustomModel(false);
+    }
+    setTestStatus('idle');
+  };
+
+  const handleCustomModelToggle = (checked: boolean) => {
+    setUseCustomModel(checked);
+    if (!checked && hasPresetModels) {
+      setModel(providerMeta.defaultModel);
+    } else if (checked) {
+      setModel('');
+    }
     setTestStatus('idle');
   };
 
   const handleSave = () => {
-    saveConfig({ provider, apiKey, model });
+    saveConfig({
+      provider,
+      apiKey,
+      model,
+      ...(isOpenAICompatible ? { customEndpoint } : {}),
+    });
     setTestStatus('idle');
   };
 
@@ -35,6 +65,8 @@ export function AISettings() {
     setApiKey('');
     setProvider('openai');
     setModel(getProviderMeta('openai').defaultModel);
+    setCustomEndpoint('');
+    setUseCustomModel(false);
     setShowKey(false);
     setTestStatus('idle');
   };
@@ -44,13 +76,20 @@ export function AISettings() {
     setTestStatus('testing');
     setTestError('');
     try {
-      await testConnection({ provider, apiKey, model });
+      await testConnection({
+        provider,
+        apiKey,
+        model,
+        ...(isOpenAICompatible ? { customEndpoint } : {}),
+      });
       setTestStatus('success');
     } catch (err) {
       setTestStatus('error');
       setTestError(err instanceof Error ? err.message : '接続に失敗しました');
     }
   };
+
+  const canSave = apiKey && model && (!isOpenAICompatible || customEndpoint);
 
   return (
     <div className="ai-settings">
@@ -71,6 +110,22 @@ export function AISettings() {
           ))}
         </div>
       </div>
+
+      {isOpenAICompatible && (
+        <div className="ai-settings__section">
+          <h3 className="ai-settings__section-title">エンドポイントURL</h3>
+          <input
+            type="text"
+            value={customEndpoint}
+            onChange={(e) => { setCustomEndpoint(e.target.value); setTestStatus('idle'); }}
+            placeholder="https://openrouter.ai/api/v1"
+            className="ai-settings__input"
+          />
+          <p className="ai-settings__hint">
+            OpenAI互換の /v1/chat/completions エンドポイントを持つサービスのベースURLを入力してください。
+          </p>
+        </div>
+      )}
 
       <div className="ai-settings__section">
         <h3 className="ai-settings__section-title">APIキー</h3>
@@ -95,15 +150,35 @@ export function AISettings() {
 
       <div className="ai-settings__section">
         <h3 className="ai-settings__section-title">モデル</h3>
-        <select
-          value={model}
-          onChange={(e) => { setModel(e.target.value); setTestStatus('idle'); }}
-          className="ai-settings__select"
-        >
-          {providerMeta.models.map((m) => (
-            <option key={m.id} value={m.id}>{m.name}</option>
-          ))}
-        </select>
+        {hasPresetModels && (
+          <label className="ai-settings__custom-model-toggle">
+            <input
+              type="checkbox"
+              checked={useCustomModel}
+              onChange={(e) => handleCustomModelToggle(e.target.checked)}
+            />
+            <span>その他（自由入力）</span>
+          </label>
+        )}
+        {hasPresetModels && !useCustomModel ? (
+          <select
+            value={model}
+            onChange={(e) => { setModel(e.target.value); setTestStatus('idle'); }}
+            className="ai-settings__select"
+          >
+            {providerMeta.models.map((m) => (
+              <option key={m.id} value={m.id}>{m.name}</option>
+            ))}
+          </select>
+        ) : (
+          <input
+            type="text"
+            value={model}
+            onChange={(e) => { setModel(e.target.value); setTestStatus('idle'); }}
+            placeholder="モデルIDを入力（例: gpt-4o, claude-sonnet-4-20250514）"
+            className="ai-settings__input"
+          />
+        )}
       </div>
 
       <div className="ai-settings__actions">
@@ -111,7 +186,7 @@ export function AISettings() {
           variant="outline"
           size="medium"
           onClick={handleTest}
-          disabled={!apiKey || testStatus === 'testing'}
+          disabled={!canSave || testStatus === 'testing'}
         >
           {testStatus === 'testing' ? '接続テスト中...' : '接続テスト'}
         </Button>
@@ -119,7 +194,7 @@ export function AISettings() {
           variant="primary"
           size="medium"
           onClick={handleSave}
-          disabled={!apiKey}
+          disabled={!canSave}
         >
           保存
         </Button>

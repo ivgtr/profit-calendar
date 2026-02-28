@@ -4,7 +4,8 @@ interface ProviderStrategy {
   buildRequest(
     prompt: string,
     model: string,
-    apiKey: string
+    apiKey: string,
+    customEndpoint?: string
   ): { url: string; init: RequestInit };
   parseResponse(json: unknown): string;
 }
@@ -99,11 +100,41 @@ const gemini: ProviderStrategy = {
   },
 };
 
+// ---------- OpenAI Compatible ----------
+const openaiCompatible: ProviderStrategy = {
+  buildRequest(prompt, model, apiKey, customEndpoint) {
+    const baseUrl = (customEndpoint ?? '').replace(/\/+$/, '');
+    if (!baseUrl) throw new Error('OpenAI互換: エンドポイントURLが設定されていません');
+
+    const url = baseUrl.endsWith('/chat/completions')
+      ? baseUrl
+      : `${baseUrl}/chat/completions`;
+
+    return {
+      url,
+      init: {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify({
+          model,
+          messages: [{ role: 'user', content: prompt }],
+          temperature: 0.7,
+        }),
+      },
+    };
+  },
+  parseResponse: openai.parseResponse,
+};
+
 // ---------- Strategy Map ----------
 const strategies: Record<AIProvider, ProviderStrategy> = {
   openai,
   anthropic,
   gemini,
+  'openai-compatible': openaiCompatible,
 };
 
 // ---------- Public API ----------
@@ -115,7 +146,7 @@ export async function analyzeWithAI(
 ): Promise<string> {
   const strategy = strategies[config.provider];
   const fullPrompt = `${promptText}\n\n## 統計データ (JSON)\n\`\`\`json\n${statisticsJson}\n\`\`\``;
-  const { url, init } = strategy.buildRequest(fullPrompt, config.model, config.apiKey);
+  const { url, init } = strategy.buildRequest(fullPrompt, config.model, config.apiKey, config.customEndpoint);
 
   const response = await fetch(url, init);
   const json: unknown = await response.json();
@@ -133,7 +164,7 @@ export async function analyzeWithAI(
 
 export async function testConnection(config: AIConfig): Promise<void> {
   const strategy = strategies[config.provider];
-  const { url, init } = strategy.buildRequest('Hello', config.model, config.apiKey);
+  const { url, init } = strategy.buildRequest('Hello', config.model, config.apiKey, config.customEndpoint);
 
   const response = await fetch(url, init);
   const json: unknown = await response.json();
