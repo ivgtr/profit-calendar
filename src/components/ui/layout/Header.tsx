@@ -191,10 +191,10 @@ export function Header({ onAction }: HeaderProps) {
             <hr className="menu-divider" />
             
             <MenuButton
-              onClick={() => handleMenuItemClick({ type: 'OPEN_THEME_SETTINGS_MODAL' })}
+              onClick={() => handleMenuItemClick({ type: 'OPEN_SETTINGS_MODAL' })}
               icon={<Icon name="settings" size="medium" className="menu-icon" />}
             >
-              テーマ設定
+              設定
             </MenuButton>
             
             <MenuButton

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal } from './ui/feedback/Modal';
-import { ThemeSettings } from './features/settings/ThemeSettings';
+import { Settings } from './features/settings/Settings';
 import { UserGuide } from './pages/UserGuide';
 import { PrivacyPolicy } from './pages/PrivacyPolicy';
 import { TermsOfService } from './pages/TermsOfService';
@@ -151,15 +151,15 @@ export const ModalManager: React.FC<ModalManagerProps> = ({
       </Modal>
 
 
-      {/* テーマ設定モーダル */}
+      {/* 設定モーダル */}
       <Modal
-        isOpen={isModalOpen('themeSettings')}
+        isOpen={isModalOpen('settings')}
         onClose={closeModal}
         title=""
         size="medium"
         preventEscapeWhenEditing={true}
       >
-        <ThemeSettings />
+        <Settings />
       </Modal>
 
       {/* 使い方ガイドモーダル */}

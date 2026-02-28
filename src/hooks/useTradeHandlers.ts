@@ -94,8 +94,8 @@ export function useTradeHandlers({
       case 'OPEN_YEARLY_CHART_MODAL':
         openModal('yearlyChart');
         break;
-      case 'OPEN_THEME_SETTINGS_MODAL':
-        openModal('themeSettings');
+      case 'OPEN_SETTINGS_MODAL':
+        openModal('settings');
         break;
       case 'OPEN_USER_GUIDE_MODAL':
         openModal('userGuide');

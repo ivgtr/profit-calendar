@@ -3,7 +3,10 @@ import { StatisticsService } from '../../services/statisticsService';
 import { ExportOptions, AIPromptTemplate, StatisticsExport as StatisticsData } from '../../types/statistics';
 import { AI_PROMPTS, PROMPT_DESCRIPTIONS } from '../../constants/aiPrompts';
 import { useUI } from '../../contexts/UIContext';
+import { useAIConfig } from '../../hooks/useAIConfig';
+import { analyzeWithAI } from '../../services/aiService';
 import { Button } from '../ui/base/Button';
+import { AIAnalysisResult } from '../features/ai-analysis/AIAnalysisResult';
 import { formatDateKey } from '../../utils/dateUtils';
 import './StatisticsExport.css';
 
@@ -31,6 +34,11 @@ export const StatisticsExport: React.FC = () => {
   const [isExporting, setIsExporting] = useState(false);
   const [previewData, setPreviewData] = useState<StatisticsData | null>(null);
   const [showPreview, setShowPreview] = useState(false);
+
+  const { config, isConfigured } = useAIConfig();
+  const [analysisResult, setAnalysisResult] = useState<string | null>(null);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [analysisError, setAnalysisError] = useState<string | null>(null);
 
   const getExportOptions = useCallback((): ExportOptions => {
     return {
@@ -91,6 +99,25 @@ export const StatisticsExport: React.FC = () => {
       showToast('プロンプトのコピーに失敗しました', 'error');
     }
   }, [selectedPrompt, showToast]);
+
+  const handleRunAnalysis = useCallback(async () => {
+    if (!config) return;
+    setIsAnalyzing(true);
+    setAnalysisError(null);
+    setAnalysisResult(null);
+    try {
+      const options = getExportOptions();
+      const stats = await statsService.generateStatistics(options);
+      const statsJson = JSON.stringify(stats, null, 2);
+      const promptText = AI_PROMPTS[selectedPrompt];
+      const result = await analyzeWithAI(config, statsJson, promptText);
+      setAnalysisResult(result);
+    } catch (err) {
+      setAnalysisError(err instanceof Error ? err.message : 'AI分析に失敗しました');
+    } finally {
+      setIsAnalyzing(false);
+    }
+  }, [config, getExportOptions, statsService, selectedPrompt]);
 
   return (
     <div className="statistics-export">
@@ -325,33 +352,56 @@ export const StatisticsExport: React.FC = () => {
 
       <div className="step-section step-final">
         <h3>Step 3: AI分析の実行</h3>
-        <div className="ai-steps">
-          <div className="ai-step">
-            <div className="step-number">1</div>
-            <div className="step-content">
-              <p><strong>AIツール</strong>を開く<br/>
-              <small>ChatGPT、Claude、Gemini等</small></p>
+        {isConfigured ? (
+          <>
+            <div className="step-actions">
+              <Button
+                onClick={handleRunAnalysis}
+                disabled={isAnalyzing}
+                className="stats-button stats-button--analyze"
+                variant="primary"
+                size="large"
+                icon="🤖"
+              >
+                {isAnalyzing ? '分析中...' : 'AI分析を実行'}
+              </Button>
             </div>
-          </div>
-          <div className="ai-step">
-            <div className="step-number">2</div>
-            <div className="step-content">
-              <p><strong>JSONファイル</strong>をアップロード</p>
+            <AIAnalysisResult
+              content={analysisResult}
+              isLoading={isAnalyzing}
+              error={analysisError}
+              onRetry={handleRunAnalysis}
+            />
+          </>
+        ) : (
+          <>
+            <div className="ai-steps">
+              <div className="ai-step">
+                <div className="step-number">1</div>
+                <div className="step-content">
+                  <p><strong>AIツール</strong>を開く<br/>
+                  <small>ChatGPT、Claude、Gemini等</small></p>
+                </div>
+              </div>
+              <div className="ai-step">
+                <div className="step-number">2</div>
+                <div className="step-content">
+                  <p><strong>JSONファイル</strong>をアップロード</p>
+                </div>
+              </div>
+              <div className="ai-step">
+                <div className="step-number">3</div>
+                <div className="step-content">
+                  <p><strong>プロンプト</strong>を送信<br/>
+                  <small>分析結果が返されます</small></p>
+                </div>
+              </div>
             </div>
-          </div>
-          <div className="ai-step">
-            <div className="step-number">3</div>
-            <div className="step-content">
-              <p><strong>プロンプト</strong>を送信<br/>
-              <small>分析結果が返されます</small></p>
+            <div className="ai-config-hint">
+              ヘッダーメニューの「設定」→「AI連携」タブでAPIキーを設定すると、ここから直接AI分析を実行できます。
             </div>
-          </div>
-        </div>
-        
-        <div className="success-note">
-          <span className="success-icon">✨</span>
-          <p>AIが詳細な投資分析結果を生成します</p>
-        </div>
+          </>
+        )}
       </div>
     </div>
   );

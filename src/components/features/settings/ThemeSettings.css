@@ -4,12 +4,6 @@
   margin: 0 auto;
 }
 
-.theme-header h2 {
-  margin: 0 0 var(--spacing-lg);
-  color: var(--text-primary);
-  font-size: var(--font-size-2xl);
-}
-
 .theme-tabs {
   display: flex;
   gap: var(--spacing-xs);
