@@ -106,6 +106,9 @@ export function useTradeHandlers({
       case 'OPEN_STATISTICS_EXPORT_MODAL':
         openModal('statisticsExport');
         break;
+      case 'OPEN_AI_ANALYSIS_HISTORY_MODAL':
+        openModal('aiAnalysisHistory');
+        break;
       case 'OPEN_TERMS_MODAL':
         openModal('terms');
         break;

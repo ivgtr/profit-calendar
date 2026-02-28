@@ -6,6 +6,7 @@ import { BasicMetricsSection } from './MonthlyReport/BasicMetricsSection';
 import { RiskAnalysisSection } from './MonthlyReport/RiskAnalysisSection';
 import { StockAnalysisSection } from './MonthlyReport/StockAnalysisSection';
 import { TrendAnalysisSection } from './MonthlyReport/TrendAnalysisSection';
+import { AIAnalysisSection } from './MonthlyReport/AIAnalysisSection';
 import { Tooltip } from '../../ui/feedback/Tooltip';
 import { Button } from '../../ui/base/Button';
 import './MonthlyReport.css';
@@ -302,6 +303,9 @@ const MonthlyReport = memo(function MonthlyReport({ currentMonth, refreshTrigger
             </Tooltip>
           </div>
         </div>
+
+        {/* AI分析セクション */}
+        <AIAnalysisSection stats={stats} reportMonth={reportMonth} />
       </div>
     </div>
   );

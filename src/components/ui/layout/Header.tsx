@@ -174,9 +174,16 @@ export function Header({ onAction }: HeaderProps) {
             >
               AI分析用データ出力
             </MenuButton>
+
+            <MenuButton
+              onClick={() => handleMenuItemClick({ type: 'OPEN_AI_ANALYSIS_HISTORY_MODAL' })}
+              icon={<Icon name="info" size="medium" className="menu-icon" />}
+            >
+              AI分析履歴
+            </MenuButton>
           </>
         );
-      
+
       case 'settings':
         return (
           <>

@@ -13,6 +13,7 @@ import { BackupRestore } from './features/data-management/BackupRestore';
 import { StatisticsExport } from './StatisticsExport/StatisticsExport';
 import { BulkDeleteTrades } from './features/data-management/BulkDeleteTrades';
 import { ImportHistoryList } from './features/data-management/ImportHistoryList';
+import { AIAnalysisHistory } from './features/ai-analysis/AIAnalysisHistory';
 import { Trade, ImportResult } from '../types/Trade';
 import { ModalType } from '../hooks/useModalManager';
 import { Database } from '../services/database';
@@ -150,6 +151,16 @@ export const ModalManager: React.FC<ModalManagerProps> = ({
         <ImportHistoryList />
       </Modal>
 
+
+      {/* AI分析履歴モーダル */}
+      <Modal
+        isOpen={isModalOpen('aiAnalysisHistory')}
+        onClose={closeModal}
+        title=""
+        size="large"
+      >
+        <AIAnalysisHistory />
+      </Modal>
 
       {/* 設定モーダル */}
       <Modal
