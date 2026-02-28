@@ -11,6 +11,7 @@ export type HeaderActionType =
   | 'OPEN_SETTINGS_MODAL'
   | 'OPEN_BACKUP_RESTORE_MODAL'
   | 'OPEN_STATISTICS_EXPORT_MODAL'
+  | 'OPEN_AI_ANALYSIS_HISTORY_MODAL'
   | 'OPEN_TERMS_MODAL'
   | 'OPEN_PRIVACY_MODAL'
   | 'OPEN_DISCLAIMER_MODAL';
@@ -32,6 +33,7 @@ export const headerActions = {
   openSettingsModal: (): HeaderAction => ({ type: 'OPEN_SETTINGS_MODAL' }),
   openBackupRestoreModal: (): HeaderAction => ({ type: 'OPEN_BACKUP_RESTORE_MODAL' }),
   openStatisticsExportModal: (): HeaderAction => ({ type: 'OPEN_STATISTICS_EXPORT_MODAL' }),
+  openAIAnalysisHistoryModal: (): HeaderAction => ({ type: 'OPEN_AI_ANALYSIS_HISTORY_MODAL' }),
   openTermsModal: (): HeaderAction => ({ type: 'OPEN_TERMS_MODAL' }),
   openPrivacyModal: (): HeaderAction => ({ type: 'OPEN_PRIVACY_MODAL' }),
   openDisclaimerModal: (): HeaderAction => ({ type: 'OPEN_DISCLAIMER_MODAL' }),

@@ -192,7 +192,7 @@ export interface ExportOptions {
   useRelativeValues: boolean;
 }
 
-export type AIPromptTemplate = 'basic' | 'detailed' | 'stock' | 'score';
+export type AIPromptTemplate = 'basic' | 'detailed' | 'stock' | 'monthly' | 'score';
 
 export interface AIPromptConfig {
   template: AIPromptTemplate;

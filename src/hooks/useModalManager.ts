@@ -3,9 +3,9 @@ import { useState, useCallback } from 'react';
 /**
  * モーダル管理用の型定義
  */
-export type ModalType = 
+export type ModalType =
   | 'import'
-  | 'history' 
+  | 'history'
   | 'tradeForm'
   | 'bulkDelete'
   | 'monthlyReport'
@@ -16,7 +16,8 @@ export type ModalType =
   | 'privacy'
   | 'disclaimer'
   | 'backupRestore'
-  | 'statisticsExport';
+  | 'statisticsExport'
+  | 'aiAnalysisHistory';
 
 /**
  * モーダル状態管理のカスタムフック
